@@ -1,58 +1,65 @@
 // ============================================================
 // editor.js
-// Envoltura DOM de la hoja (<textarea>, texto plano).
+// Envoltura DOM de la hoja (<textarea>, texto plano), consciente del
+// CURSOR: el dictado y los comandos insertan/borran en la posición del
+// cursor (no siempre al final). El interino se muestra en esa posición
+// y se reemplaza al confirmarse.
 //
-// Mantiene `committed` (confirmado) e `interim` (lo que se está
-// reconociendo) por separado: la textarea muestra committed + interim
-// para que las palabras aparezcan vivas, y el interino se reemplaza
-// en su lugar al confirmarse. La lógica de strings vive en text-ops.js;
-// acá solo se renderiza, se mueve el caret y se hace scroll.
-// El motor de comandos (engine.js) orquesta usando estos métodos.
+// La pantalla solo se desplaza lo mínimo para mantener el cursor a la
+// vista (sin saltar al fondo), lo que evita el "sube y baja".
 // ============================================================
 
 import * as ops from "./text-ops.js";
 
 export class Editor {
-  /**
-   * @param {HTMLTextAreaElement} textarea
-   * @param {Object} [opts]
-   * @param {()=>void} [opts.onChange]
-   * @param {HTMLElement} [opts.scrollEl]
-   */
   constructor(textarea, opts = {}) {
     this.el = textarea;
     this.onChange = opts.onChange || (() => {});
     this.scrollEl = opts.scrollEl || null;
 
-    this.committed = "";
-    this.interim = "";
+    this.text = "";     // texto confirmado
+    this.caret = 0;     // posición de inserción dentro de `text`
+    this.interim = "";  // texto provisional (en el cursor)
     this._programmatic = false;
+    this._mirror = null;
 
-    // Edición manual con teclado: sincronizamos `committed`.
+    // Edición manual con teclado.
     this.el.addEventListener("input", () => {
-      if (this._programmatic) return;
-      if (this.interim) return; // evitamos hornear texto provisional
-      this.committed = this.el.value;
+      if (this._programmatic || this.interim) return;
+      this.text = this.el.value;
+      this.caret = this.el.selectionStart;
       this._autoGrow();
       this.onChange();
     });
+
+    // Reposicionar el punto de dictado al hacer clic o navegar con teclas.
+    const sync = () => {
+      if (this._programmatic || this.interim) return;
+      this.caret = this.el.selectionStart;
+    };
+    this.el.addEventListener("click", sync);
+    this.el.addEventListener("keyup", sync);
   }
 
-  // --- Render interno ---
-  _render(keepCaretAtEnd) {
-    const value = this.interim
-      ? this.committed + ops.joiner(this.committed, this.interim) + this.interim
-      : this.committed;
+  // --- Render ---
+  _value() {
+    return this.interim
+      ? this.text.slice(0, this.caret) + this.interim + this.text.slice(this.caret)
+      : this.text;
+  }
+
+  _render({ ensureVisible = true } = {}) {
+    const value = this._value();
+    const pos = this.caret + this.interim.length;
 
     this._programmatic = true;
     this.el.value = value;
+    // Fijar el cursor explícitamente: si no, asignar value lo manda al final.
+    this.el.setSelectionRange(pos, pos);
     this._programmatic = false;
 
-    if (keepCaretAtEnd) {
-      const end = value.length;
-      this.el.setSelectionRange(end, end);
-    }
     this._autoGrow();
+    if (ensureVisible) this._ensureCaretVisible();
     this.onChange();
   }
 
@@ -61,42 +68,95 @@ export class Editor {
     this.el.style.height = this.el.scrollHeight + "px";
   }
 
-  _scrollToCaret() {
-    if (this.scrollEl) this.scrollEl.scrollTop = this.scrollEl.scrollHeight;
+  // Desplaza el contenedor SOLO si el cursor quedó fuera de la vista.
+  _ensureCaretVisible() {
+    if (!this.scrollEl) return;
+    try {
+      const cy = this._caretClientY();
+      if (cy == null) return;
+      const r = this.scrollEl.getBoundingClientRect();
+      const margin = 56;
+      if (cy < r.top + margin) {
+        this.scrollEl.scrollTop -= r.top + margin - cy;
+      } else if (cy > r.bottom - margin) {
+        this.scrollEl.scrollTop += cy - (r.bottom - margin);
+      }
+    } catch (_) {
+      /* si la medición falla, no desplazamos */
+    }
+  }
+
+  // Mide la coordenada Y (viewport) del cursor con un espejo del textarea.
+  _caretClientY() {
+    const el = this.el;
+    const cs = getComputedStyle(el);
+    const div = this._mirror || (this._mirror = document.createElement("div"));
+    const copy = [
+      "boxSizing", "width", "paddingTop", "paddingRight", "paddingBottom",
+      "paddingLeft", "borderTopWidth", "borderRightWidth", "borderBottomWidth",
+      "borderLeftWidth", "fontFamily", "fontSize", "fontWeight", "fontStyle",
+      "letterSpacing", "lineHeight", "textTransform", "wordSpacing", "tabSize",
+    ];
+    for (const p of copy) div.style[p] = cs[p];
+    div.style.position = "absolute";
+    div.style.visibility = "hidden";
+    div.style.whiteSpace = "pre-wrap";
+    div.style.overflowWrap = "break-word";
+    div.style.pointerEvents = "none";
+
+    const pos = this.caret + this.interim.length;
+    div.textContent = this._value().slice(0, pos);
+    const marker = document.createElement("span");
+    marker.textContent = "\u200b";
+    div.appendChild(marker);
+
+    document.body.appendChild(div);
+    const elRect = el.getBoundingClientRect();
+    div.style.left = elRect.left + window.scrollX + "px";
+    div.style.top = elRect.top + window.scrollY + "px";
+    const y = marker.getBoundingClientRect().top;
+    document.body.removeChild(div);
+    div.textContent = "";
+
+    return y + parseFloat(cs.lineHeight || cs.fontSize) / 2;
   }
 
   // --- API que usa el motor ---
 
-  setInterim(text) {
-    this.interim = (text || "").trim();
-    this._render(true);
-    if (this.interim) this._scrollToCaret();
+  setInterim(s) {
+    this.interim = (s || "").trim();
+    this._render();
   }
 
-  append(text) {
-    if (!text) return;
-    this.committed = ops.appendText(this.committed, text);
+  insertAtCaret(s) {
+    const r = ops.insertAt(this.text, this.caret, s);
+    this.text = r.text;
+    this.caret = r.caret;
     this.interim = "";
-    this._render(true);
-    this._scrollToCaret();
+    this._render();
   }
 
-  deleteLastWord() {
-    this.committed = ops.deleteLastWord(this.committed);
+  deleteWord() {
+    const r = ops.deleteWordBefore(this.text, this.caret);
+    this.text = r.text;
+    this.caret = r.caret;
     this.interim = "";
-    this._render(true);
+    this._render();
   }
 
-  deleteLastSentence() {
-    this.committed = ops.deleteLastSentence(this.committed);
+  deleteSentence() {
+    const r = ops.deleteSentenceBefore(this.text, this.caret);
+    this.text = r.text;
+    this.caret = r.caret;
     this.interim = "";
-    this._render(true);
+    this._render();
   }
 
   clear() {
-    this.committed = "";
+    this.text = "";
+    this.caret = 0;
     this.interim = "";
-    this._render(true);
+    this._render();
   }
 
   selectAll() {
@@ -105,17 +165,22 @@ export class Editor {
   }
 
   getText() {
-    return this.committed;
+    return this.text;
+  }
+
+  getContextBefore() {
+    return this.text.slice(0, this.caret);
   }
 
   setText(text) {
-    this.committed = text || "";
+    this.text = text || "";
+    this.caret = this.text.length;
     this.interim = "";
-    this._render(true);
+    this._render();
   }
 
   getWordCount() {
-    const t = this.committed.trim();
+    const t = this.text.trim();
     return t ? t.split(/\s+/).length : 0;
   }
 

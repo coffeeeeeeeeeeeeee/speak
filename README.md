@@ -24,6 +24,8 @@ python3 -m http.server 8000
 
 Abrí `http://localhost:8000` y permití el micrófono.
 
+El dictado inserta **en la posición del cursor**: hacé clic donde quieras dentro de la hoja y lo que dictes (y los comandos de edición) se aplican ahí, no al final.
+
 **Atajos:** dictar/detener `Ctrl/Cmd + J` · exportar `.txt` `Ctrl/Cmd + S` · deshacer/rehacer `Ctrl+Z` / `Ctrl+Shift+Z` · panel de comandos `Ctrl/Cmd + /`. El texto se **autoguarda** en el navegador y se recupera al recargar; *Copiar* y *Exportar* están en el encabezado.
 
 ## Comandos de voz (español)

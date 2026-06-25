@@ -32,7 +32,7 @@ export class CommandEngine {
         this._insertText(t.value);
       } else if (t.type === "insert") {
         this._snapshot();
-        this.editor.append(t.value);
+        this.editor.insertAtCaret(t.value);
       } else if (t.type === "command") {
         this._runCommand(t.action);
       }
@@ -51,22 +51,28 @@ export class CommandEngine {
     } else if (this.lowerNext) {
       out = ops.lowercaseFirst(out);
       this.lowerNext = false;
-    } else if (this.capNext || ops.endsSentence(this.editor.getText())) {
+    } else if (this.capNext || ops.endsSentence(this.editor.getContextBefore())) {
       out = ops.capitalizeFirst(out);
+    } else {
+      // El reconocedor a veces capitaliza el inicio de cada segmento por su
+      // cuenta (sobre todo tras reiniciarse en una pausa). Si no estamos en
+      // inicio de oración, corregimos esa mayúscula espuria. Para forzar una
+      // mayúscula a propósito (un nombre propio) está el comando "mayúscula".
+      out = ops.lowercaseFirst(out);
     }
     this.capNext = false;
-    this.editor.append(out);
+    this.editor.insertAtCaret(out);
   }
 
   _runCommand(action) {
     switch (action) {
       case "deleteWord":
         this._snapshot();
-        this.editor.deleteLastWord();
+        this.editor.deleteWord();
         break;
       case "deleteSentence":
         this._snapshot();
-        this.editor.deleteLastSentence();
+        this.editor.deleteSentence();
         break;
       case "deleteAll":
         this._snapshot();

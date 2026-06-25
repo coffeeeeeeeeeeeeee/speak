@@ -71,3 +71,26 @@ export function tidy(text) {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
+
+// --- Operaciones en una posición de cursor (caret) ---
+// Devuelven { text, caret }.
+
+export function insertAt(text, caret, s) {
+  if (!s) return { text, caret };
+  const before = text.slice(0, caret);
+  const after = text.slice(caret);
+  const lsep = joiner(before, s);
+  const left = before + lsep + s;
+  const rsep = after ? joiner(left, after) : "";
+  return { text: left + rsep + after, caret: left.length };
+}
+
+export function deleteWordBefore(text, caret) {
+  const before = deleteLastWord(text.slice(0, caret));
+  return { text: before + text.slice(caret), caret: before.length };
+}
+
+export function deleteSentenceBefore(text, caret) {
+  const before = deleteLastSentence(text.slice(0, caret));
+  return { text: before + text.slice(caret), caret: before.length };
+}
