@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>speakly — voz a texto para escritores</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <!-- Aviso cuando el navegador no soporta el reconocimiento de voz -->
+  <div id="unsupported" class="unsupported" hidden>
+    <p>
+      Tu navegador no soporta el reconocimiento de voz.
+      Usá <strong>Chrome</strong> o <strong>Edge</strong> de escritorio para dictar.
+    </p>
+  </div>
+
+  <div class="app" id="app">
+    <header class="topbar">
+      <span class="brand">speakly</span>
+      <div class="actions">
+        <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
+        <button class="action" id="helpBtn" type="button" aria-haspopup="dialog">Comandos</button>
+        <button class="action" id="copyBtn" type="button">Copiar</button>
+        <button class="action" id="exportBtn" type="button">Exportar</button>
+        <span class="lang-tag" id="langTag" data-label="idioma">es</span>
+      </div>
+    </header>
+
+    <main class="sheet" id="sheet">
+      <div class="sheet-column">
+        <textarea
+          id="editor"
+          class="editor"
+          aria-label="Hoja de escritura por voz"
+          placeholder="Pulsá «Dictar» y empezá a hablar. El texto aparece acá."
+          spellcheck="true"
+          autocomplete="off"
+          autocapitalize="off"
+        ></textarea>
+      </div>
+    </main>
+
+    <footer class="hud">
+      <div class="hud-status">
+        <span class="dot" id="dot" data-state="idle" aria-hidden="true"></span>
+        <span class="status-text" id="statusText" role="status" aria-live="polite">en pausa</span>
+      </div>
+
+      <div class="hud-meta">
+        <span class="count" id="count" data-label="palabras">0</span>
+      </div>
+
+      <button class="mic" id="micBtn" type="button" aria-pressed="false">
+        <span class="mic-label" id="micLabel">Dictar</span>
+      </button>
+    </footer>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+
+  <!-- Panel de comandos -->
+  <div class="help" id="help" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="help-backdrop" data-close></div>
+    <div class="help-panel">
+      <div class="help-head">
+        <h2 id="helpTitle">Comandos de voz</h2>
+        <button class="action help-close" id="helpClose" type="button" aria-label="Cerrar panel">Cerrar</button>
+      </div>
+      <p class="help-intro">
+        Se detectan automáticamente mientras dictás. Para escribir una
+        palabra-comando tal cual, antepené <strong>«literal»</strong>
+        (ej.: «literal punto» escribe la palabra <em>punto</em>). Si algo se
+        dispara sin querer, decí <strong>«deshacer»</strong> o usá Ctrl+Z.
+        La mayúscula tras punto y al inicio de párrafo es automática.
+      </p>
+      <div class="help-body" id="helpBody"></div>
+    </div>
+  </div>
+
+  <!-- Aviso efímero -->
+  <div class="toast" id="toast" hidden role="status" aria-live="polite">
+    <span class="toast-msg" id="toastMsg"></span>
+    <button class="toast-close" id="toastClose" type="button" aria-label="Cerrar aviso">×</button>
+  </div>
+</body>
+</html>
