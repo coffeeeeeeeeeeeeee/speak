@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>speakly — tests</title>
+</head>
+<body>
+  <pre id="output">corriendo…</pre>
+  <script type="module">
+    import { run } from "./tiny-test.js";
+    import "./text-ops.test.js";
+    import "./parser.test.js";
+
+    const results = await run();
+    const failed = results.filter((r) => !r.pass);
+
+    const lines = results.map(
+      (r) => (r.pass ? "OK   " : "FAIL ") + r.name + (r.error ? ` — ${r.error}` : "")
+    );
+    lines.push("");
+    lines.push(
+      `${results.length - failed.length}/${results.length} pasaron` +
+        (failed.length ? `, ${failed.length} fallaron` : "")
+    );
+
+    document.getElementById("output").textContent = lines.join("\n");
+  </script>
+</body>
+</html>

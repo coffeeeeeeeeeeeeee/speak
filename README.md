@@ -48,6 +48,17 @@ fin mayúsculas.
 
 La mayúscula inicial tras punto, signo de cierre y salto de párrafo es automática.
 
+## Tests
+
+```bash
+tests/run.sh
+```
+
+Corre `text-ops.js` y el parser en Chrome/Chromium headless (sin Node ni
+dependencias, para no sumarle un build step al proyecto). Levanta un server
+efímero, ejecuta `tests/index.html` y vuelca el resultado a la terminal con
+código de salida 1 si algo falla.
+
 ## Estructura
 
 ```
@@ -67,6 +78,12 @@ js/
     engine.js       aplica los comandos al editor
     parser.js       segmenta dictado vs comandos
     lang/es.js      léxico español
+tests/
+  tiny-test.js      test-runner casero (test/assertEqual/run)
+  text-ops.test.js  suite de text-ops.js
+  parser.test.js    suite del parser de comandos
+  index.html        arma y corre las suites en el navegador
+  run.sh            arranca un server, corre index.html en headless y reporta
 ```
 
 ## Notas

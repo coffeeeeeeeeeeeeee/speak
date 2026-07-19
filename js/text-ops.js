@@ -87,10 +87,17 @@ export function insertAt(text, caret, s) {
 
 export function deleteWordBefore(text, caret) {
   const before = deleteLastWord(text.slice(0, caret));
-  return { text: before + text.slice(caret), caret: before.length };
+  const after = text.slice(caret);
+  // deleteLastWord ya se comió el espacio separador junto con la palabra: si
+  // el cursor estaba pegado al inicio de `after` (caso típico de hacer clic
+  // justo antes de una palabra), sin esto quedarían las dos mitades pegadas.
+  const sep = after ? joiner(before, after) : "";
+  return { text: before + sep + after, caret: before.length };
 }
 
 export function deleteSentenceBefore(text, caret) {
   const before = deleteLastSentence(text.slice(0, caret));
-  return { text: before + text.slice(caret), caret: before.length };
+  const after = text.slice(caret);
+  const sep = after ? joiner(before, after) : "";
+  return { text: before + sep + after, caret: before.length };
 }
