@@ -18,7 +18,7 @@
       var PAPER_INK = {
         light: ["#F2F3F0", "#1B1C1E"],
         dark: ["#242524", "#ECEDE9"],
-        neon: ["#150A24", "#22E6E6"],
+        neon: ["#150A24", "#FFFFFF"],
         sepia: ["#F4ECD8", "#3B2F22"],
         highContrast: ["#FFFFFF", "#000000"],
         natural: ["#E7F0DC", "#16240F"],
@@ -95,21 +95,42 @@
           ></button>
           <ul class="export-menu" id="exportMenu" role="menu" hidden></ul>
         </div>
-        <button
-          class="action icon-btn lang-tag"
-          id="langTag"
-          type="button"
-          title="Idioma: Español"
-          aria-label="Cambiar idioma de dictado"
-        ></button>
-        <button
-          class="action icon-btn lang-tag"
-          id="variantTag"
-          type="button"
-          title="Región: España"
-          aria-label="Cambiar variante regional"
-        ></button>
-        <button class="action icon-btn" id="themeBtn" type="button" title="Claro" aria-label="Cambiar tema"></button>
+        <div class="export-wrap">
+          <button
+            class="action icon-btn lang-tag"
+            id="langTag"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            title="Idioma: Español"
+            aria-label="Cambiar idioma de dictado"
+          ></button>
+          <ul class="export-menu" id="langMenu" role="menu" hidden></ul>
+        </div>
+        <div class="export-wrap">
+          <button
+            class="action icon-btn lang-tag"
+            id="variantTag"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            title="Región: España"
+            aria-label="Cambiar variante regional"
+          ></button>
+          <ul class="export-menu" id="variantMenu" role="menu" hidden></ul>
+        </div>
+        <div class="export-wrap">
+          <button
+            class="action icon-btn"
+            id="themeBtn"
+            type="button"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            title="Claro"
+            aria-label="Cambiar tema"
+          ></button>
+          <ul class="export-menu" id="themeMenu" role="menu" hidden></ul>
+        </div>
         <button class="action icon-btn" id="fullscreenBtn" type="button" title="Completa" aria-label="Completa"></button>
       </div>
     </header>

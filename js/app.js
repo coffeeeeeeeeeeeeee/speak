@@ -30,9 +30,10 @@ import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
 import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
-import { currentTheme, nextTheme, themeLabel } from "./theme.js";
+import { currentTheme, setTheme, themeLabel } from "./theme.js";
 import { themes } from "./themes.js";
 import { prependIcon, iconMarkup } from "./icons.js";
+import { createDropdown, renderMenuItems } from "./dropdown.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -59,8 +60,11 @@ function initApp() {
     count: document.getElementById("count"),
     micBtn: document.getElementById("micBtn"),
     langTag: document.getElementById("langTag"),
+    langMenu: document.getElementById("langMenu"),
     variantTag: document.getElementById("variantTag"),
+    variantMenu: document.getElementById("variantMenu"),
     themeBtn: document.getElementById("themeBtn"),
+    themeMenu: document.getElementById("themeMenu"),
     themeColorMeta: document.getElementById("themeColorMeta"),
     fullscreenBtn: document.getElementById("fullscreenBtn"),
     topbarToggle: document.getElementById("topbarToggle"),
@@ -97,7 +101,7 @@ function initApp() {
     docsBtn: "files",
     helpBtn: "command",
     copyBtn: "copy",
-    readBtn: "volume-2",
+    readBtn: "play",
     exportBtn: "download",
     langTag: "languages",
     variantTag: "map-pin",
@@ -120,6 +124,13 @@ function initApp() {
   }
   function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+  // Reemplaza el ícono de un botón por otro (ej. play↔pause,
+  // maximize↔minimize) según cambia su estado.
+  function swapIcon(btn, name) {
+    btn.querySelector(".icon")?.replaceWith(
+      document.createRange().createContextualFragment(iconMarkup(name))
+    );
   }
 
   // --- Idioma activo: familia (léxico/interfaz) + variante regional
@@ -287,6 +298,7 @@ function initApp() {
       const readingNow = state === "reading";
       setTitle(els.readBtn, readingNow ? t.stop : t.read);
       els.readBtn.setAttribute("aria-pressed", String(readingNow));
+      swapIcon(els.readBtn, readingNow ? "pause" : "play");
       els.micBtn.disabled = readingNow; // evita que el mic capte la lectura
       if (!readingNow) editor.clearSelection();
     },
@@ -312,11 +324,13 @@ function initApp() {
     document.title = t.title;
     els.langTag.title = `${capitalize(t.langLabel)}: ${family().label}`;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
+    buildLangMenu();
 
     const v = variant();
     els.variantTag.title = `${capitalize(t.variantLabel)}: ${v.label}`;
     els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
     els.variantTag.hidden = family().variants.length <= 1;
+    buildVariantMenu();
 
     setTitle(els.themeBtn, themeLabel(currentTheme()));
     setTitle(els.docsBtn, t.docs);
@@ -338,20 +352,42 @@ function initApp() {
     variantStorage.save(JSON.stringify(variantPrefs));
   }
 
-  // --- Selector de familia de idioma (cicla es→en→fr→...→es) ---
-  els.langTag.addEventListener("click", () => {
-    const next = familyKeys[(familyKeys.indexOf(familyKey) + 1) % familyKeys.length];
-    switchFamily(next);
-  });
+  // --- Selector de idioma: desplegable con todas las familias, igual
+  // que "Exportar" (antes ciclaba es→en→fr→...→es con cada click). ---
+  const langDropdown = createDropdown({ toggle: els.langTag, menu: els.langMenu });
+  function buildLangMenu() {
+    renderMenuItems(
+      els.langMenu,
+      familyKeys.map((key) => ({ key, label: config.families[key].label })),
+      {
+        isCurrent: (key) => key === familyKey,
+        onSelect: (key) => {
+          langDropdown.close();
+          switchFamily(key);
+        },
+      }
+    );
+  }
 
-  // --- Selector de variante regional (cicla dentro de la familia activa) ---
-  els.variantTag.addEventListener("click", () => {
-    const n = family().variants.length;
-    variantIndex = (variantIndex + 1) % n;
-    applyUiStrings();
-    speech.setLang(variant().code);
-    persistLanguage();
-  });
+  // --- Selector de variante regional: desplegable con las variantes
+  // de la familia activa (se reconstruye al cambiar de idioma). ---
+  const variantDropdown = createDropdown({ toggle: els.variantTag, menu: els.variantMenu });
+  function buildVariantMenu() {
+    renderMenuItems(
+      els.variantMenu,
+      family().variants.map((v, i) => ({ key: String(i), label: v.label })),
+      {
+        isCurrent: (key) => Number(key) === variantIndex,
+        onSelect: (key) => {
+          variantDropdown.close();
+          variantIndex = Number(key);
+          applyUiStrings();
+          speech.setLang(variant().code);
+          persistLanguage();
+        },
+      }
+    );
+  }
 
   function switchFamily(newFamilyKey) {
     if (!config.families[newFamilyKey]) return;
@@ -419,16 +455,30 @@ function initApp() {
   }
   els.toastClose.addEventListener("click", hideToast);
 
-  // --- Tema ---
+  // --- Tema: desplegable con todos los temas, igual que "Exportar"
+  // (antes ciclaba con cada click). ---
   function applyThemeColorMeta() {
     els.themeColorMeta.content = themes[currentTheme()].colors.paper;
   }
   applyThemeColorMeta();
-  els.themeBtn.addEventListener("click", () => {
-    nextTheme();
-    setTitle(els.themeBtn, themeLabel(currentTheme()));
-    applyThemeColorMeta();
-  });
+  const themeDropdown = createDropdown({ toggle: els.themeBtn, menu: els.themeMenu });
+  function buildThemeMenu() {
+    renderMenuItems(
+      els.themeMenu,
+      Object.keys(themes).map((id) => ({ key: id, label: themes[id].label })),
+      {
+        isCurrent: (key) => key === currentTheme(),
+        onSelect: (key) => {
+          themeDropdown.close();
+          setTheme(key);
+          setTitle(els.themeBtn, themeLabel(currentTheme()));
+          applyThemeColorMeta();
+          buildThemeMenu();
+        },
+      }
+    );
+  }
+  buildThemeMenu();
 
   // --- Acordeón de acciones (pantallas chicas) ---
   els.topbarToggle.addEventListener("click", () => {
@@ -443,9 +493,7 @@ function initApp() {
   function updateFullscreenBtn() {
     const full = isFullscreen();
     setTitle(els.fullscreenBtn, full ? t.exitFullscreen : t.fullscreen);
-    els.fullscreenBtn.querySelector(".icon")?.replaceWith(
-      document.createRange().createContextualFragment(iconMarkup(full ? "minimize" : "maximize"))
-    );
+    swapIcon(els.fullscreenBtn, full ? "minimize" : "maximize");
   }
   els.fullscreenBtn.addEventListener("click", () => {
     if (isFullscreen()) document.exitFullscreen?.();

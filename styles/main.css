@@ -89,8 +89,13 @@ body {
 
 
 /* Botón "▾" que abre el acordeón de acciones en pantallas chicas.
-   Oculto salvo bajo el breakpoint (ver Responsive). */
-.topbar-toggle {
+   Oculto salvo bajo el breakpoint (ver Responsive). El selector va
+   con .icon-btn (0-2-0) y no solo .topbar-toggle (0-1-0) para
+   garantizar que le gane a `.action { display: inline-flex }` de más
+   abajo sin depender del orden en el archivo — si no, esa regla (misma
+   especificidad, pero después en el CSS) pisaba el display:none y la
+   flecha quedaba visible siempre, no solo por debajo del breakpoint. */
+.icon-btn.topbar-toggle {
   display: none;
   font-size: 0.9rem;
   padding: 0.3rem 0.6rem;
@@ -123,7 +128,12 @@ body {
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.03em;
-  color: var(--bar-ink, var(--ink-soft));
+  /* El color afecta al ícono vía currentColor (no hay texto visible
+     dentro del botón, ver js/app.js). --bar-btn-ink es aparte de
+     --bar-ink: un tema puede querer texto de barra claro pero el
+     ícono de sus botones oscuro, a juego con el color de la hoja (ej.
+     "neon": botones amarillos con ícono azul oscuro = --paper). */
+  color: var(--bar-btn-ink, var(--bar-ink, var(--ink-soft)));
   background: var(--bar-btn, transparent);
   border: none;
   border-radius: 4px;
@@ -133,7 +143,7 @@ body {
 }
 .action:hover,
 .action:focus-visible {
-  color: var(--bar-ink, var(--ink));
+  color: var(--bar-btn-ink, var(--bar-ink, var(--ink)));
   background: var(--bar-btn-hover, var(--accent-dim));
 }
 .action:disabled {
@@ -573,6 +583,7 @@ body {
 }
 .export-item:hover,
 .export-item:focus-visible { background: var(--accent-dim); }
+.export-item.is-current { color: var(--accent); }
 
 /* ---------- Toast de avisos ---------- */
 .toast[hidden] { display: none; }
@@ -620,7 +631,7 @@ body {
 /* Bajo este ancho, las acciones del encabezado se pliegan en un
    acordeón: el botón "▾" las muestra/oculta apiladas. */
 @media (max-width: 720px) {
-  .topbar-toggle { display: inline-flex; }
+  .icon-btn.topbar-toggle { display: inline-flex; }
   .actions {
     display: none;
     width: 100%;

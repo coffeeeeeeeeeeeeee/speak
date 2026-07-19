@@ -72,12 +72,6 @@ export function setTheme(id) {
   }
 }
 
-export function nextTheme() {
-  const next = ORDER[(ORDER.indexOf(currentTheme()) + 1) % ORDER.length];
-  setTheme(next);
-  return next;
-}
-
 export function themeLabel(id) {
   return themes[id]?.label ?? id;
 }

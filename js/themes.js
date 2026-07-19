@@ -16,10 +16,11 @@
 //   - mic-active-ink: color del ícono de "Dictar" mientras escucha,
 //     cuando el color de resaltado (accent2) es muy claro y el blanco
 //     por defecto no alcanzaría de contraste.
-//   - bar/bar-ink/bar-btn/bar-btn-hover: para temas donde la barra
-//     superior e inferior necesitan un color propio distinto de la
-//     hoja (fondo/texto-e-íconos/fondo-de-botón/hover), en vez de
-//     heredar paper/ink/transparente como el resto de los temas.
+//   - bar/bar-ink/bar-btn/bar-btn-hover/bar-btn-ink: para temas donde
+//     la barra superior e inferior necesitan un color propio distinto
+//     de la hoja (fondo/texto/fondo-de-botón/hover-de-botón/ícono-de-
+//     botón), en vez de heredar paper/ink/transparente/ink como el
+//     resto de los temas.
 // `fonts` es opcional: si un tema no lo define, hereda la tipografía
 // del primer tema del registro (el "default").
 // ============================================================
@@ -64,9 +65,9 @@ export const themes = {
   neon: {
     label: "Neón",
     colors: {
-      paper: "#150A24", // hoja: violeta casi negro, para que el celeste resalte
+      paper: "#150A24", // hoja: violeta casi negro
       canvas: "#22E6E6", // fondo detrás de la hoja: celeste llamativo
-      ink: "#22E6E6", // letra: mismo celeste
+      ink: "#FFFFFF", // letra de la hoja: blanco
       "ink-soft": "#8FDDE0",
       ghost: "#6E5B9E",
       line: "#3A2A5C",
@@ -76,9 +77,10 @@ export const themes = {
       "accent-dim": "rgba(255, 47, 212, 0.18)",
       danger: "#FF4D6D",
       bar: "#FF2FD4", // barras (topbar/hud): magenta pleno
-      "bar-ink": "#FFFFFF", // texto e íconos de las barras: blanco
-      "bar-btn": "#FFE600", // botones dentro de las barras: amarillo
+      "bar-ink": "#FFFFFF", // texto de las barras (ej. "speakly", contador): blanco
+      "bar-btn": "#FFE600", // fondo de los botones: amarillo
       "bar-btn-hover": "#FFF066", // variante clara para el hover
+      "bar-btn-ink": "#150A24", // ícono de los botones: mismo azul oscuro que la hoja (--paper)
       "mic-active-ink": "#150A24", // ícono oscuro sobre el amarillo pleno al escuchar
     },
     fonts: {

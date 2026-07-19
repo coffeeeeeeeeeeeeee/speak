@@ -42,14 +42,16 @@ El dictado inserta **en la posición del cursor**: hacé clic donde quieras dent
 
 ### Idiomas y variantes
 
-El botón **IDIOMA** (ES · EN · FR · PT · DE · IT · ZH · JA, en ese orden)
-cambia la familia de idioma: léxico de comandos, reconocimiento de voz e
-interfaz. El botón **REGIÓN**, al lado, cicla las variantes regionales de la
-familia activa (afecta solo el código que recibe SpeechRecognition, útil para
-mejorar la precisión según el acento — es-ES/AR/MX/US, en-US/GB/AU/IN,
-fr-FR/CA, pt-BR/PT, de-DE/AT/CH, it-IT/CH; se oculta si el idioma tiene una
-sola variante, como chino/japonés). Ambos quedan guardados por separado, así
-cambiar de idioma no resetea la región que ya habías elegido en cada uno.
+El botón **IDIOMA** abre un desplegable (igual que "Exportar") con todas las
+familias (Español · English · Français · Português · Deutsch · Italiano ·
+中文 · 日本語): elegir una cambia léxico de comandos, reconocimiento de voz e
+interfaz. El botón **REGIÓN**, al lado, abre otro desplegable con las
+variantes regionales de la familia activa (afecta solo el código que recibe
+SpeechRecognition, útil para mejorar la precisión según el acento —
+es-ES/AR/MX/US, en-US/GB/AU/IN, fr-FR/CA, pt-BR/PT, de-DE/AT/CH, it-IT/CH; se
+oculta si el idioma tiene una sola variante, como chino/japonés). Ambos
+quedan guardados por separado, así cambiar de idioma no resetea la región
+que ya habías elegido en cada uno.
 
 También podés cambiar de idioma **dictando**: cada léxico tiene una frase
 distintiva para eso (ver la sección "Idiomas" del panel de comandos), por
@@ -76,7 +78,9 @@ de documento resetea el deshacer/rehacer del anterior.
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
 usa la síntesis de voz del navegador para releer el documento en voz alta —
 se bloquea mutuamente con el dictado (no tiene sentido que el micrófono capte
-la propia lectura). Mientras lee, va **seleccionando** (selección nativa del
+la propia lectura). Su ícono alterna entre "play" y "pause" según si está
+leyendo o no, igual que "Completa"/"Salir" alternan maximize/minimize en
+pantalla completa. Mientras lee, va **seleccionando** (selección nativa del
 `<textarea>`, no un resaltado con color aparte) la palabra que se está
 diciendo en cada momento, tipo karaoke, usando el evento `boundary` de
 `SpeechSynthesis`. Si la voz activa no da límites por palabra (pasa con
@@ -93,9 +97,10 @@ cambia solo a "Salir" si se sale con Esc en vez de tocarlo de nuevo.
 ### Íconos
 
 Los botones usan íconos de [Lucide](https://lucide.dev) — pero no cargando
-su librería por CDN: `js/icons.js` tiene el SVG de cada uno inline (bajado
-de `unpkg.com/lucide-static`), sin dependencia de red en tiempo de
-ejecución. Cada ícono usa `stroke="currentColor"`, así que hereda el color
+su librería por CDN: `js/icons.js` tiene el SVG de cada uno inline (siempre
+sacado de lucide.dev/el repo del que sale: `github.com/lucide-icons/lucide`),
+sin dependencia de red en tiempo de ejecución. Cada ícono usa
+`stroke="currentColor"`, así que hereda el color
 de texto automáticamente en los 6 temas sin código extra por tema. Se
 insertan una sola vez al arrancar (no cambian entre idiomas).
 
@@ -112,10 +117,12 @@ pliegan en un acordeón: el botón **▾** las muestra apiladas.
 
 ## Temas
 
-El botón de tema (en el encabezado) cicla entre 6 temas: **Claro**,
+El botón de tema (en el encabezado) abre un desplegable (igual que
+"Exportar") con los 6 temas: **Claro**,
 **Oscuro**, **Neón** (magenta de acento, amarillo como color de resaltado,
-celeste para la letra y el fondo detrás de la hoja, tipografía mono para
-todo), **Sepia** (lectura cálida, serif clásica), **Alto contraste**
+letra blanca sobre hoja violeta casi negra, celeste en el fondo detrás de
+la hoja, tipografía mono para todo), **Sepia** (lectura cálida, serif
+clásica), **Alto contraste**
 (blanco y negro puros, sin grises intermedios, sans del sistema) y
 **Naturaleza** (verdes saturados, calma). Sin elegir ninguno, sigue la
 preferencia de color del sistema (claro/oscuro). La elección queda
@@ -325,8 +332,10 @@ js/
   config.js         familias de idioma + sus variantes regionales
   i18n.js           textos de interfaz por idioma (no el léxico de comandos)
   themes.js         registro de temas — sumar uno nuevo es solo agregarlo acá
-  theme.js          aplica/cicla temas (custom properties en runtime, persistido)
+  theme.js          aplica un tema (custom properties en runtime, persistido)
   icons.js          íconos de Lucide inline (SVG a mano, sin cargar su librería)
+  dropdown.js       abrir/cerrar accesible + armado de opciones, compartido por
+                     los desplegables de Exportar/Idioma/Región/Tema
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   text-ops.js       operaciones puras de texto (testeable)
@@ -357,7 +366,7 @@ js/
     markdown.js     .md (escapa sintaxis accidental, no es Markdown de origen)
     print.js        "PDF" vía diálogo de impresión del navegador (#printSheet)
     formats.js       registro de formatos que arma el menú
-    menu.js          menú desplegable del botón Exportar (abrir/cerrar accesible)
+    menu.js          arma los <li> del menú de Exportar sobre dropdown.js
 tests/
   tiny-test.js      test-runner casero (test/assertEqual/run)
   text-ops.test.js  suite de text-ops.js
