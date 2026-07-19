@@ -12,6 +12,8 @@ edición.
   deshacer/rehacer y `literal`, con detección automática (sin palabra clave).
 - ✅ **Fase 6 — Persistencia:** autoguardado local, exportar `.txt`, copiar.
 - ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de espaciado, accesibilidad.
+- ✅ **Multi-idioma:** español + inglés (léxico de comandos y toda la interfaz),
+  selector en el encabezado, preferencia persistida.
 
 ## Cómo ejecutarlo
 
@@ -28,11 +30,18 @@ El dictado inserta **en la posición del cursor**: hacé clic donde quieras dent
 
 **Atajos:** dictar/detener `Ctrl/Cmd + J` · exportar `.txt` `Ctrl/Cmd + S` · deshacer/rehacer `Ctrl+Z` / `Ctrl+Shift+Z` · panel de comandos `Ctrl/Cmd + /`. El texto se **autoguarda** en el navegador y se recupera al recargar; *Copiar* y *Exportar* están en el encabezado.
 
-## Comandos de voz (español)
+El botón **ES · EN** del encabezado cambia el idioma de dictado (léxico de
+comandos, reconocimiento de voz y toda la interfaz). La elección queda
+guardada y se recupera al volver a abrir la hoja.
+
+## Comandos de voz
 
 Se detectan automáticamente mientras dictás. Para escribir una palabra-comando
-literal, antepené **«literal»** (ej.: decir «literal punto» escribe la palabra
-*punto*). Si un comando se dispara sin querer, decí **«deshacer»** o usá `Ctrl+Z`.
+literal, antepené **«literal»** (ej.: decir «literal punto» / «literal period»
+escribe la palabra *punto* / *period*). Si un comando se dispara sin querer,
+decí **«deshacer»** / **«undo»** o usá `Ctrl+Z`.
+
+### Español
 
 **Puntuación:** punto · punto y seguido · punto y aparte · coma · dos puntos ·
 punto y coma · puntos suspensivos · abre/cierra interrogación · abre/cierra
@@ -48,16 +57,32 @@ fin mayúsculas.
 
 La mayúscula inicial tras punto, signo de cierre y salto de párrafo es automática.
 
+### English
+
+**Punctuation:** period / full stop · comma · colon · semicolon · ellipsis /
+dot dot dot · question mark · exclamation mark / exclamation point · new
+line / newline · new paragraph · dash / hyphen · em dash · quote / quotation
+mark · open/close parenthesis.
+
+**Editing:** delete word · delete sentence · delete all / clear all · select all.
+
+**Casing:** capitalize / capital (next word) · lowercase · all caps / caps on ·
+caps off / end caps.
+
+**History:** undo · redo (also `Ctrl+Z` / `Ctrl+Shift+Z`).
+
+The initial capital after a period, a closing sign, and a paragraph break is automatic.
+
 ## Tests
 
 ```bash
 tests/run.sh
 ```
 
-Corre `text-ops.js` y el parser en Chrome/Chromium headless (sin Node ni
-dependencias, para no sumarle un build step al proyecto). Levanta un server
-efímero, ejecuta `tests/index.html` y vuelca el resultado a la terminal con
-código de salida 1 si algo falla.
+Corre `text-ops.js` y el parser (español e inglés) en Chrome/Chromium headless
+(sin Node ni dependencias, para no sumarle un build step al proyecto). Levanta
+un server efímero, ejecuta `tests/index.html` y vuelca el resultado a la
+terminal con código de salida 1 si algo falla.
 
 ## Estructura
 
@@ -65,8 +90,9 @@ código de salida 1 si algo falla.
 index.html
 styles/main.css
 js/
-  app.js            orquestación
-  config.js         idioma e i18n
+  app.js            orquestación, incluye el selector de idioma
+  config.js         idiomas disponibles
+  i18n.js           textos de interfaz por idioma (no el léxico de comandos)
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   text-ops.js       operaciones puras de texto (testeable)
@@ -78,10 +104,12 @@ js/
     engine.js       aplica los comandos al editor
     parser.js       segmenta dictado vs comandos
     lang/es.js      léxico español
+    lang/en.js      léxico inglés
 tests/
   tiny-test.js      test-runner casero (test/assertEqual/run)
   text-ops.test.js  suite de text-ops.js
-  parser.test.js    suite del parser de comandos
+  parser.test.js    suite del parser (léxico español)
+  parser-en.test.js suite del parser (léxico inglés)
   index.html        arma y corre las suites en el navegador
   run.sh            arranca un server, corre index.html en headless y reporta
 ```

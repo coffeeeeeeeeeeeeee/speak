@@ -15,11 +15,17 @@
   <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
-  <!-- Aviso cuando el navegador no soporta el reconocimiento de voz -->
+  <!-- Aviso cuando el navegador no soporta el reconocimiento de voz.
+       Bilingüe a propósito: en este punto todavía no sabemos el idioma
+       preferido del usuario (se resuelve recién dentro de initApp). -->
   <div id="unsupported" class="unsupported" hidden>
     <p>
       Tu navegador no soporta el reconocimiento de voz.
       Usá <strong>Chrome</strong> o <strong>Edge</strong> de escritorio para dictar.
+    </p>
+    <p lang="en">
+      Your browser doesn't support speech recognition.
+      Use desktop <strong>Chrome</strong> or <strong>Edge</strong> to dictate.
     </p>
   </div>
 
@@ -31,7 +37,13 @@
         <button class="action" id="helpBtn" type="button" aria-haspopup="dialog">Comandos</button>
         <button class="action" id="copyBtn" type="button">Copiar</button>
         <button class="action" id="exportBtn" type="button">Exportar</button>
-        <span class="lang-tag" id="langTag" data-label="idioma">es</span>
+        <button
+          class="action lang-tag"
+          id="langTag"
+          type="button"
+          data-label="idioma"
+          aria-label="Cambiar idioma de dictado"
+        >es</button>
       </div>
     </header>
 
@@ -75,7 +87,7 @@
         <h2 id="helpTitle">Comandos de voz</h2>
         <button class="action help-close" id="helpClose" type="button" aria-label="Cerrar panel">Cerrar</button>
       </div>
-      <p class="help-intro">
+      <p class="help-intro" id="helpIntro">
         Se detectan automáticamente mientras dictás. Para escribir una
         palabra-comando tal cual, antepené <strong>«literal»</strong>
         (ej.: «literal punto» escribe la palabra <em>punto</em>). Si algo se

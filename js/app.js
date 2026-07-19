@@ -1,22 +1,24 @@
 // ============================================================
 // app.js
 // Orquestación completa: andamiaje + dictado continuo + comandos +
-// persistencia + panel de ayuda + avisos.
+// persistencia + panel de ayuda + avisos + selector de idioma.
 // ============================================================
 
 import { config } from "./config.js";
+import { strings } from "./i18n.js";
 import { SpeechController, isSupported } from "./recognition.js";
 import { Editor } from "./editor.js";
 import { History } from "./history.js";
 import { createParser } from "./commands/parser.js";
 import { CommandEngine } from "./commands/engine.js";
 import { es } from "./commands/lang/es.js";
+import { en } from "./commands/lang/en.js";
 import { Storage } from "./storage.js";
 import { exportTxt, copyText } from "./exporter.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 
-const LEXICONS = { es };
+const LEXICONS = { es, en };
 
 if (!isSupported()) {
   document.getElementById("unsupported").hidden = false;
@@ -41,16 +43,21 @@ function initApp() {
     helpBtn: document.getElementById("helpBtn"),
     help: document.getElementById("help"),
     helpBody: document.getElementById("helpBody"),
+    helpTitle: document.getElementById("helpTitle"),
+    helpIntro: document.getElementById("helpIntro"),
     helpClose: document.getElementById("helpClose"),
     toast: document.getElementById("toast"),
     toastMsg: document.getElementById("toastMsg"),
     toastClose: document.getElementById("toastClose"),
   };
 
-  const lang = config.languages[config.defaultLang];
-  els.langTag.textContent = lang.short;
+  // --- Idioma activo (persistido; si no hay uno guardado, el default) ---
+  const langStorage = new Storage({ key: "speakly:lang" });
+  const savedCode = langStorage.load();
+  let lang = config.languages[savedCode] || config.languages[config.defaultLang];
+  let t = strings[lang.lexicon];
 
-  // --- Persistencia ---
+  // --- Persistencia del documento ---
   const storage = new Storage();
 
   // --- Editor ---
@@ -59,28 +66,30 @@ function initApp() {
     onChange: () => {
       els.count.textContent = String(editor.getWordCount());
       if (storage.available) {
-        setSaveState("guardando…");
-        storage.saveDebounced(editor.getText(), () => setSaveState("guardado"));
+        setSaveState(t.savingState);
+        storage.saveDebounced(editor.getText(), () => setSaveState(t.savedState));
       }
     },
   });
 
   const saved = storage.load();
   if (saved) editor.setText(saved);
-  setSaveState(storage.available ? (saved ? "guardado" : "") : "sin guardado");
+  setSaveState(storage.available ? (saved ? t.savedState : "") : t.noSaveState);
 
   // --- Motor de comandos ---
   const history = new History(editor);
-  const lexicon = LEXICONS[lang.lexicon];
-  const parser = createParser(lexicon);
+  let parser = createParser(LEXICONS[lang.lexicon]);
   const engine = new CommandEngine({ editor, history, parser });
 
   // --- Panel de comandos ---
   const help = createHelp({
-    lexicon,
+    lexicon: LEXICONS[lang.lexicon],
+    t,
     els: {
       overlay: els.help,
       body: els.helpBody,
+      title: els.helpTitle,
+      intro: els.helpIntro,
       openBtn: els.helpBtn,
       closeBtn: els.helpClose,
     },
@@ -95,32 +104,66 @@ function initApp() {
     onError: (err) => handleError(err),
   });
 
+  // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
+  function applyUiStrings() {
+    document.title = t.title;
+    els.langTag.textContent = lang.short;
+    els.langTag.dataset.label = t.langLabel;
+    els.langTag.setAttribute("aria-label", t.langSwitchAria);
+    els.helpBtn.textContent = t.help;
+    els.copyBtn.textContent = t.copy;
+    els.exportBtn.textContent = t.export;
+    els.editor.placeholder = t.editorPlaceholder;
+    els.editor.setAttribute("aria-label", t.editorAriaLabel);
+    els.count.dataset.label = t.wordsLabel;
+    els.toastClose.setAttribute("aria-label", t.toastCloseAria);
+  }
+  applyUiStrings();
+
+  // --- Selector de idioma ---
+  els.langTag.addEventListener("click", () => {
+    const codes = Object.keys(config.languages);
+    const next = codes[(codes.indexOf(lang.code) + 1) % codes.length];
+    switchLanguage(next);
+  });
+
+  function switchLanguage(code) {
+    lang = config.languages[code] || config.languages[config.defaultLang];
+    t = strings[lang.lexicon];
+
+    applyUiStrings();
+    parser = createParser(LEXICONS[lang.lexicon]);
+    engine.parser = parser;
+    help.setLexicon(LEXICONS[lang.lexicon], t);
+    speech.setLang(lang.code);
+    setStatus(speech.listening ? "listening" : "idle");
+    langStorage.save(lang.code);
+  }
+
   // --- Estados ---
   function setStatus(state, message) {
     const labels = {
-      listening: "escuchando",
-      idle: "en pausa",
-      error: message || "error",
+      listening: t.statusListening,
+      idle: t.statusIdle,
+      error: message || t.statusError,
     };
     els.dot.dataset.state = state === "error" ? "error" : state;
     els.statusText.textContent = labels[state] || state;
 
     const listening = state === "listening";
     els.micBtn.setAttribute("aria-pressed", String(listening));
-    els.micLabel.textContent = listening ? "Detener" : "Dictar";
+    els.micLabel.textContent = listening ? t.stop : t.dictate;
   }
 
   function handleError(err) {
-    setStatus("error", "micrófono");
+    setStatus("error", t.micError);
     if (err.type === "permission") {
-      showToast(
-        "Permiso de micrófono denegado. Activalo en el ícono de la barra de direcciones y volvé a pulsar «Dictar».",
-        { persist: true }
-      );
+      showToast(t.permissionDenied, { persist: true });
     } else if (err.type === "network") {
-      showToast("Sin conexión: el reconocimiento necesita internet.");
+      showToast(t.networkError);
     } else {
-      showToast(err.message || "Error de reconocimiento.");
+      const detail = err.code ? ` (${err.code})` : "";
+      showToast(t.genericError + detail);
     }
   }
 
@@ -160,7 +203,7 @@ function initApp() {
   // --- Copiar / Exportar (con limpieza de espaciado) ---
   els.copyBtn.addEventListener("click", async () => {
     const ok = await copyText(tidy(editor.getText()));
-    flashLabel(els.copyBtn, ok ? "Copiado" : "No se pudo");
+    flashLabel(els.copyBtn, ok ? t.copied : t.copyFailed);
   });
 
   els.exportBtn.addEventListener("click", () => {

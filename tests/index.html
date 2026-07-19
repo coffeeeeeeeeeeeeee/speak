@@ -10,6 +10,7 @@
     import { run } from "./tiny-test.js";
     import "./text-ops.test.js";
     import "./parser.test.js";
+    import "./parser-en.test.js";
 
     const results = await run();
     const failed = results.filter((r) => !r.pass);

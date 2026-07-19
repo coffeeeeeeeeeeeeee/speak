@@ -1,28 +1,10 @@
 // ============================================================
 // help.js
-// Panel de comandos. Construye la lista a partir del léxico activo
-// (así nunca se desincroniza) y gestiona apertura/cierre accesibles.
+// Panel de comandos. Construye la lista a partir del léxico y los
+// textos de interfaz activos (así nunca se desincroniza), y gestiona
+// apertura/cierre accesibles. setLexicon() lo reconstruye si el
+// usuario cambia de idioma sin recrear el panel.
 // ============================================================
-
-// Descripciones legibles de cada acción (texto de interfaz).
-const ACTION_LABELS = {
-  deleteWord: "borra la última palabra",
-  deleteSentence: "borra la última oración",
-  deleteAll: "borra toda la hoja",
-  selectAll: "selecciona todo el texto",
-  capitalizeNext: "mayúscula en la siguiente palabra",
-  lowercaseNext: "minúscula en la siguiente palabra",
-  upperOn: "empieza a escribir TODO EN MAYÚSCULAS",
-  upperOff: "termina el modo mayúsculas",
-  undo: "deshace lo último",
-  redo: "rehace lo deshecho",
-};
-
-function symbolLabel(value) {
-  if (value === "\n\n") return "salto de párrafo";
-  if (value === "\n") return "salto de línea";
-  return value;
-}
 
 // Agrupa un mapa frase→valor en valor→[frases].
 function groupByValue(map) {
@@ -34,17 +16,28 @@ function groupByValue(map) {
   return out;
 }
 
-export function createHelp({ lexicon, els }) {
+export function createHelp({ lexicon, t, els }) {
   let lastFocus = null;
   build();
   wire();
 
+  function symbolLabel(value) {
+    if (value === "\n\n") return t.newParagraphLabel;
+    if (value === "\n") return t.newLineLabel;
+    return value;
+  }
+
   function build() {
+    els.title.textContent = t.helpTitle;
+    els.intro.innerHTML = t.helpIntroHtml;
+    els.closeBtn.textContent = t.helpClose;
+    els.closeBtn.setAttribute("aria-label", t.helpCloseAria);
+
     const sections = [
-      { title: "Puntuación", map: lexicon.punctuation, desc: symbolLabel },
-      { title: "Edición", map: lexicon.editing, desc: (v) => ACTION_LABELS[v] },
-      { title: "Mayúsculas", map: lexicon.casing, desc: (v) => ACTION_LABELS[v] },
-      { title: "Historial", map: lexicon.history, desc: (v) => ACTION_LABELS[v] },
+      { title: t.helpSections.punctuation, map: lexicon.punctuation, desc: symbolLabel },
+      { title: t.helpSections.editing, map: lexicon.editing, desc: (v) => t.actionLabels[v] },
+      { title: t.helpSections.casing, map: lexicon.casing, desc: (v) => t.actionLabels[v] },
+      { title: t.helpSections.history, map: lexicon.history, desc: (v) => t.actionLabels[v] },
     ];
 
     els.body.textContent = "";
@@ -74,6 +67,12 @@ export function createHelp({ lexicon, els }) {
       }
       els.body.appendChild(section);
     }
+  }
+
+  function setLexicon(newLexicon, newT) {
+    lexicon = newLexicon;
+    t = newT;
+    build();
   }
 
   function open() {
@@ -109,5 +108,5 @@ export function createHelp({ lexicon, els }) {
     });
   }
 
-  return { open, close, isOpen };
+  return { open, close, isOpen, setLexicon };
 }

@@ -23,7 +23,8 @@ export class SpeechController {
    * @param {(text:string)=>void} opts.onInterim  Texto provisional (gris).
    * @param {(text:string)=>void} opts.onFinal    Texto confirmado.
    * @param {(state:string)=>void} opts.onState   "listening" | "idle" | "error".
-   * @param {(err:{type:string,message:string})=>void} opts.onError
+   * @param {(err:{type:string,code?:string})=>void} opts.onError  Sin texto:
+   *   `type` es "permission" | "network" | otro; app.js localiza el mensaje.
    */
   constructor(opts) {
     this.opts = opts;
@@ -79,10 +80,7 @@ export class SpeechController {
         case "not-allowed":
         case "service-not-allowed":
           this.wantsToListen = false;
-          this.opts.onError?.({
-            type: "permission",
-            message: "Permiso de micrófono denegado.",
-          });
+          this.opts.onError?.({ type: "permission" });
           this.opts.onState?.("error");
           break;
         case "network":
@@ -90,10 +88,7 @@ export class SpeechController {
           // ~250ms en bucle. Escalamos el retraso mientras persista y
           // avisamos solo la primera vez para no floodear de toasts.
           if (this._networkRetryDelay === 0) {
-            this.opts.onError?.({
-              type: "network",
-              message: "Error de red en el reconocimiento.",
-            });
+            this.opts.onError?.({ type: "network" });
           }
           this._networkRetryDelay = Math.min(
             this._networkRetryDelay ? this._networkRetryDelay * 2 : 1000,
@@ -101,10 +96,9 @@ export class SpeechController {
           );
           break;
         default:
-          this.opts.onError?.({
-            type: event.error || "unknown",
-            message: "Error de reconocimiento: " + (event.error || "desconocido"),
-          });
+          // Sin mensaje en un idioma fijo: app.js arma el texto localizado
+          // a partir de `type`/`code`, este solo aporta el detalle técnico.
+          this.opts.onError?.({ type: event.error || "unknown", code: event.error });
       }
     };
 
