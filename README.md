@@ -103,7 +103,7 @@ Los botones son solo-ícono, sin texto visible: lo que hace cada uno vive en
 `title`/`aria-label` (aparece como tooltip nativo al pasar el mouse, y lo
 leen los lectores de pantalla). El botón **Dictar** se resalta con un color
 propio (`--mic`) distinto del acento general de la interfaz en los temas
-Claro, Oscuro, Sepia y Natural; Neón y Alto contraste no definen uno propio
+Claro, Oscuro, Sepia y Naturaleza; Neón y Alto contraste no definen uno propio
 y usan el acento general como color de "Dictar" (mismo mecanismo de
 fallback que `--accent-2`/`--accent-3`: `var(--mic, var(--accent))`).
 
@@ -117,7 +117,7 @@ El botón de tema (en el encabezado) cicla entre 6 temas: **Claro**,
 celeste para la letra y el fondo detrás de la hoja, tipografía mono para
 todo), **Sepia** (lectura cálida, serif clásica), **Alto contraste**
 (blanco y negro puros, sin grises intermedios, sans del sistema) y
-**Natural** (verdes saturados, calma). Sin elegir ninguno, sigue la
+**Naturaleza** (verdes saturados, calma). Sin elegir ninguno, sigue la
 preferencia de color del sistema (claro/oscuro). La elección queda
 guardada.
 

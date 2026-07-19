@@ -24,7 +24,13 @@
   --accent-dim: rgba(58, 91, 219, 0.12);
   --danger:     #B23A3A;  /* errores (permiso, etc.) */
   /* --accent-2 / --accent-3: opcionales, con fallback a --accent —
-     algunos temas (ej. "neon") tienen más de un color de acento. */
+     algunos temas (ej. "neon") tienen más de un color de acento.
+     --bar / --bar-ink / --bar-btn / --bar-btn-hover: opcionales, sin
+     valor por defecto (caen a --paper/--ink-soft/transparent/
+     --accent-dim más abajo) — para temas donde la barra superior e
+     inferior necesitan un color propio distinto de la hoja, con
+     botones de un color aparte (ej. "neon": barras magenta, texto e
+     íconos blancos, botones amarillos). */
 
   /* Tipografía (también la puede pisar un tema, ver js/themes.js) */
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
@@ -70,14 +76,15 @@ body {
   justify-content: space-between;
   padding: 0.5rem 1.5rem;
   /* Sin línea divisoria: la separación con la hoja la da el
-     contraste paper/canvas. */
+     contraste paper/canvas (o --bar si el tema define uno propio). */
+  background: var(--bar, var(--paper));
 }
 
 .brand {
   font-family: var(--serif);
   font-size: 1.05rem;
   letter-spacing: 0.01em;
-  color: var(--ink);
+  color: var(--bar-ink, var(--ink));
 }
 
 
@@ -104,7 +111,7 @@ body {
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.04em;
-  color: var(--ghost);
+  color: var(--bar-ink, var(--ghost));
   min-width: 4.5rem;
   text-align: right;
 }
@@ -116,8 +123,8 @@ body {
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.03em;
-  color: var(--ink-soft);
-  background: transparent;
+  color: var(--bar-ink, var(--ink-soft));
+  background: var(--bar-btn, transparent);
   border: none;
   border-radius: 4px;
   padding: 0.32rem 0.55rem;
@@ -126,8 +133,8 @@ body {
 }
 .action:hover,
 .action:focus-visible {
-  color: var(--ink);
-  background: var(--accent-dim);
+  color: var(--bar-ink, var(--ink));
+  background: var(--bar-btn-hover, var(--accent-dim));
 }
 .action:disabled {
   opacity: 0.4;
@@ -207,7 +214,7 @@ body {
   align-items: center;
   gap: 1.25rem;
   padding: 0 1.5rem;
-  background: var(--paper);
+  background: var(--bar, var(--paper));
 }
 
 .hud-status {
@@ -222,7 +229,7 @@ body {
   font-size: 0.72rem;
   text-transform: lowercase;
   letter-spacing: 0.04em;
-  color: var(--ink-soft);
+  color: var(--bar-ink, var(--ink-soft));
 }
 
 .dot {
@@ -252,12 +259,12 @@ body {
 .count {
   font-family: var(--mono);
   font-size: 0.72rem;
-  color: var(--ink-soft);
+  color: var(--bar-ink, var(--ink-soft));
   letter-spacing: 0.03em;
 }
 .count::after {
   content: " " attr(data-label);
-  color: var(--ghost);
+  color: var(--bar-ink, var(--ghost));
 }
 
 /* ---------- Medidor de nivel de audio ---------- */
@@ -310,17 +317,28 @@ body {
 }
 .mic .icon { width: 1.2rem; height: 1.2rem; }
 .mic:hover { background: var(--mic, var(--accent)); color: #fff; }
+/* Escuchando: color pleno (relleno sólido) con el color de RESALTE
+   (--accent-2, el mismo que usa el punto de estado), no el color
+   propio de "Dictar" — así el estado "encendido" es inconfundible,
+   sin depender de leer el ícono. --mic-active-ink cubre temas donde
+   ese resalte es muy claro (ej. "neon": amarillo) y el blanco por
+   defecto no tendría contraste suficiente. */
 .mic[aria-pressed="true"] {
-  background: var(--mic, var(--accent));
-  color: #fff;
+  background: var(--accent-2, var(--accent));
+  color: var(--mic-active-ink, #fff);
 }
-.mic[aria-pressed="true"]:hover { background: var(--mic, var(--accent)); opacity: 0.9; }
+.mic[aria-pressed="true"]:hover {
+  background: var(--accent-2, var(--accent));
+  opacity: 0.9;
+}
 .mic:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Estado "activo" genérico para botones de ícono que alternan on/off
    (ej. "Leer" mientras lee) — más sutil que .mic, que es la acción
-   principal de la app. */
-.icon-btn[aria-pressed="true"] {
+   principal de la app. :not(.mic) evita que esta regla le gane por
+   orden de cascada a .mic[aria-pressed="true"] de arriba (misma
+   especificidad, mic también trae la clase .icon-btn). */
+.icon-btn[aria-pressed="true"]:not(.mic) {
   background: var(--accent-dim);
   color: var(--accent);
 }
@@ -480,6 +498,7 @@ body {
 .docs-item.is-current .docs-item-title { color: var(--accent); }
 .docs-open {
   flex: 1 1 auto;
+  min-width: 0; /* si no, el título largo empuja el ancho en vez de truncar */
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -491,6 +510,8 @@ body {
   text-align: left;
 }
 .docs-item-title {
+  flex: 1 1 auto;
+  min-width: 0; /* ídem: permite que el ellipsis corte en vez de desbordar */
   font-family: var(--serif);
   font-size: 1rem;
   color: var(--ink);
@@ -615,7 +636,7 @@ body {
     right: 0;
     z-index: 25;
     padding: 0.75rem 1.5rem 1rem;
-    background: var(--paper);
+    background: var(--bar, var(--paper));
     box-shadow: 0 0.75rem 1.5rem rgba(27, 28, 30, 0.15);
   }
   .actions .action { text-align: left; width: 100%; }

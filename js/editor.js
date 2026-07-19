@@ -15,6 +15,11 @@ export class Editor {
   constructor(textarea, opts = {}) {
     this.el = textarea;
     this.onChange = opts.onChange || (() => {});
+    // Se dispara ANTES de aplicar una edición manual de teclado, con
+    // el texto/caret previos — el llamador (app.js) lo usa para
+    // tomar un snapshot de deshacer que la escritura a mano nunca
+    // generaba por sí sola.
+    this.onBeforeManualEdit = opts.onBeforeManualEdit || (() => {});
     this.scrollEl = opts.scrollEl || null;
 
     this.text = "";     // texto confirmado
@@ -26,6 +31,7 @@ export class Editor {
     // Edición manual con teclado.
     this.el.addEventListener("input", () => {
       if (this._programmatic || this.interim) return;
+      this.onBeforeManualEdit(this.text, this.caret);
       this.text = this.el.value;
       this.caret = this.el.selectionStart;
       this._autoGrow();

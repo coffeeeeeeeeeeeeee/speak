@@ -6,11 +6,20 @@
 //
 // `colors` es obligatorio y debe cubrir el set base (paper/canvas/
 // ink/ink-soft/ghost/line/accent/accent-dim/danger) para que todo el
-// CSS existente funcione. `accent2`/`accent3`/`mic` son opcionales:
-// unos pocos elementos los usan con fallback a `accent` (ej.
-// var(--mic, var(--accent))) para temas con más de un color de
-// acento, como "neon", o cuando el botón "Dictar" quiere resaltar
-// con un color propio en vez del acento genérico de la interfaz.
+// CSS existente funcione. El resto son opcionales, con fallback a los
+// colores base (ej. var(--mic, var(--accent))):
+//   - accent2/accent3: para temas con más de un color de acento (ej.
+//     "neon"), o el color de "resaltado" (dot al escuchar, medidor
+//     de audio, y el botón Dictar mientras escucha).
+//   - mic: color propio del botón "Dictar" en reposo, distinto del
+//     acento genérico de la interfaz.
+//   - mic-active-ink: color del ícono de "Dictar" mientras escucha,
+//     cuando el color de resaltado (accent2) es muy claro y el blanco
+//     por defecto no alcanzaría de contraste.
+//   - bar/bar-ink/bar-btn/bar-btn-hover: para temas donde la barra
+//     superior e inferior necesitan un color propio distinto de la
+//     hoja (fondo/texto-e-íconos/fondo-de-botón/hover), en vez de
+//     heredar paper/ink/transparente como el resto de los temas.
 // `fonts` es opcional: si un tema no lo define, hereda la tipografía
 // del primer tema del registro (el "default").
 // ============================================================
@@ -62,10 +71,15 @@ export const themes = {
       ghost: "#6E5B9E",
       line: "#3A2A5C",
       accent: "#FF2FD4", // magenta/fucsia
-      "accent-2": "#FFE600", // amarillo: color de resaltado (dot, etc.)
+      "accent-2": "#FFE600", // amarillo: color de resaltado (dot, mic al escuchar, etc.)
       "accent-3": "#FFE600", // amarillo también acá (medidor de audio)
       "accent-dim": "rgba(255, 47, 212, 0.18)",
       danger: "#FF4D6D",
+      bar: "#FF2FD4", // barras (topbar/hud): magenta pleno
+      "bar-ink": "#FFFFFF", // texto e íconos de las barras: blanco
+      "bar-btn": "#FFE600", // botones dentro de las barras: amarillo
+      "bar-btn-hover": "#FFF066", // variante clara para el hover
+      "mic-active-ink": "#150A24", // ícono oscuro sobre el amarillo pleno al escuchar
     },
     fonts: {
       // Todo en mono, con look de terminal — ver "no contornos" en
@@ -119,7 +133,7 @@ export const themes = {
   },
 
   natural: {
-    label: "Natural",
+    label: "Naturaleza",
     colors: {
       paper: "#E7F0DC",
       canvas: "#C3D9A8",

@@ -164,6 +164,10 @@ function initApp() {
   // --- Editor ---
   const editor = new Editor(els.editor, {
     scrollEl: els.sheet,
+    // Ver history.js: agrupa una ráfaga de tecleo continuo en un solo
+    // escalón de deshacer, así Ctrl+Z no salta directo al último
+    // comando de voz saltándose todo lo escrito a mano en el medio.
+    onBeforeManualEdit: (text, caret) => history.snapshot(text, caret, { coalesce: true }),
     onChange: () => {
       els.count.textContent = String(editor.getWordCount());
       if (docs.available && currentDocId) {
