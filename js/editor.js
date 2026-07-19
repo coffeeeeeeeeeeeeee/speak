@@ -172,9 +172,16 @@ export class Editor {
     return this.text.slice(0, this.caret);
   }
 
-  setText(text) {
+  getCaret() {
+    return this.caret;
+  }
+
+  // `caret` es opcional: si se omite (carga inicial, "borra todo"), el
+  // cursor va al final. Deshacer/rehacer sí lo pasan para no perder el
+  // punto de edición.
+  setText(text, caret) {
     this.text = text || "";
-    this.caret = this.text.length;
+    this.caret = caret == null ? this.text.length : Math.max(0, Math.min(caret, this.text.length));
     this.interim = "";
     this._render();
   }

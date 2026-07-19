@@ -40,7 +40,7 @@ export class CommandEngine {
   }
 
   _snapshot() {
-    this.history.snapshot(this.editor.getText());
+    this.history.snapshot(this.editor.getText(), this.editor.getCaret());
   }
 
   _insertText(text) {

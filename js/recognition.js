@@ -30,6 +30,7 @@ export class SpeechController {
     this.wantsToListen = false;
     this.recognition = null;
     this._restartTimer = null;
+    this._networkRetryDelay = 0; // 0 = reinicio normal; crece con errores de red seguidos
   }
 
   _build() {
@@ -38,6 +39,10 @@ export class SpeechController {
     rec.continuous = true;
     rec.interimResults = true;
     rec.maxAlternatives = 1;
+
+    rec.onstart = () => {
+      this._networkRetryDelay = 0; // el reconocedor arrancó bien: hay conexión
+    };
 
     rec.onresult = (event) => {
       let interim = "";
@@ -81,10 +86,19 @@ export class SpeechController {
           this.opts.onState?.("error");
           break;
         case "network":
-          this.opts.onError?.({
-            type: "network",
-            message: "Error de red en el reconocimiento.",
-          });
+          // Sin backoff, un corte de internet dispara un reinicio cada
+          // ~250ms en bucle. Escalamos el retraso mientras persista y
+          // avisamos solo la primera vez para no floodear de toasts.
+          if (this._networkRetryDelay === 0) {
+            this.opts.onError?.({
+              type: "network",
+              message: "Error de red en el reconocimiento.",
+            });
+          }
+          this._networkRetryDelay = Math.min(
+            this._networkRetryDelay ? this._networkRetryDelay * 2 : 1000,
+            8000
+          );
           break;
         default:
           this.opts.onError?.({
@@ -99,6 +113,8 @@ export class SpeechController {
 
   _scheduleRestart() {
     // Pequeña pausa para no entrar en bucle si el motor aún no se reinició.
+    // Si venimos de errores de red seguidos, _networkRetryDelay ya trae el
+    // backoff calculado en onerror.
     clearTimeout(this._restartTimer);
     this._restartTimer = setTimeout(() => {
       if (!this.wantsToListen) return;
@@ -108,12 +124,13 @@ export class SpeechController {
       } catch (_) {
         // InvalidStateError: ya está activo. Lo ignoramos.
       }
-    }, 250);
+    }, this._networkRetryDelay || 250);
   }
 
   start() {
     if (this.wantsToListen) return;
     this.wantsToListen = true;
+    this._networkRetryDelay = 0;
     this.recognition = this._build();
     try {
       this.recognition.start();
