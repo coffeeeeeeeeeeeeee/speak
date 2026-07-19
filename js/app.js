@@ -25,7 +25,7 @@ import { exportTxt } from "./export/txt.js";
 import { createFormats } from "./export/formats.js";
 import { createExportMenu } from "./export/menu.js";
 import { createHelp } from "./help.js";
-import { tidy } from "./text-ops.js";
+import { tidy, wordSpanAt } from "./text-ops.js";
 import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
 import { DocStore } from "./docs.js";
@@ -238,19 +238,32 @@ function initApp() {
     },
   });
 
-  // --- Leer en voz alta (SpeechSynthesis) ---
+  // --- Leer en voz alta (SpeechSynthesis), con resaltado por palabra ---
+  // Leemos el texto TAL CUAL está en el editor (no tidy()): los offsets
+  // que manda el evento `boundary` son posiciones dentro del string que
+  // le pasamos a speak(), y necesitamos que coincidan 1 a 1 con las
+  // posiciones reales del <textarea> para poder seleccionar ahí mismo.
   const reader = new Reader({
     onState: (state) => {
       const readingNow = state === "reading";
       els.readBtn.textContent = readingNow ? t.stop : t.read;
       els.micBtn.disabled = readingNow; // evita que el mic capte la lectura
+      if (!readingNow) editor.clearSelection();
+    },
+    onBoundary: ({ charIndex, charLength }) => {
+      if (charIndex == null) return;
+      const text = editor.getText();
+      const end = charLength
+        ? charIndex + charLength
+        : wordSpanAt(text, charIndex).end;
+      editor.selectRange(charIndex, Math.min(end, text.length));
     },
   });
   els.readBtn.addEventListener("click", () => {
     if (reader.speaking) {
       reader.stop();
     } else {
-      reader.speak(tidy(editor.getText()), variant().code);
+      reader.speak(editor.getText(), variant().code);
     }
   });
 

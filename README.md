@@ -76,10 +76,16 @@ de documento resetea el deshacer/rehacer del anterior.
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
 usa la síntesis de voz del navegador para releer el documento en voz alta —
 se bloquea mutuamente con el dictado (no tiene sentido que el micrófono capte
-la propia lectura). Al lado de "Dictar" también hay un **medidor de nivel de
-audio**: es aparte del reconocimiento en sí (Web Speech no expone el stream
-ni parámetros de audio como ganancia o cancelación de eco), solo confirma
-visualmente que el micrófono está captando algo.
+la propia lectura). Mientras lee, va **seleccionando** (selección nativa del
+`<textarea>`, no un resaltado con color aparte) la palabra que se está
+diciendo en cada momento, tipo karaoke, usando el evento `boundary` de
+`SpeechSynthesis`. Si la voz activa no da límites por palabra (pasa con
+algunas voces, sobre todo fuera de inglés) y solo da límites por oración,
+selecciona la oración completa en su lugar — degrada, no se rompe. Al lado
+de "Dictar" también hay un **medidor de nivel de audio**: es aparte del
+reconocimiento en sí (Web Speech no expone el stream ni parámetros de audio
+como ganancia o cancelación de eco), solo confirma visualmente que el
+micrófono está captando algo.
 
 En pantallas angostas (menos de 720px), las acciones del encabezado se
 pliegan en un acordeón: el botón **▾** las muestra apiladas.

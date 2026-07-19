@@ -59,7 +59,7 @@ export class Editor {
     this._programmatic = false;
 
     this._autoGrow();
-    if (ensureVisible) this._ensureCaretVisible();
+    if (ensureVisible) this._ensureVisible(this.caret + this.interim.length);
     this.onChange();
   }
 
@@ -68,11 +68,13 @@ export class Editor {
     this.el.style.height = this.el.scrollHeight + "px";
   }
 
-  // Desplaza el contenedor SOLO si el cursor quedó fuera de la vista.
-  _ensureCaretVisible() {
+  // Desplaza el contenedor SOLO si `pos` quedó fuera de la vista. Genérico
+  // en la posición (no siempre es el cursor de dictado): selectRange()
+  // también lo usa para mantener a la vista la palabra que se está leyendo.
+  _ensureVisible(pos) {
     if (!this.scrollEl) return;
     try {
-      const cy = this._caretClientY();
+      const cy = this._clientYAt(pos);
       if (cy == null) return;
       const r = this.scrollEl.getBoundingClientRect();
       const margin = 56;
@@ -86,8 +88,9 @@ export class Editor {
     }
   }
 
-  // Mide la coordenada Y (viewport) del cursor con un espejo del textarea.
-  _caretClientY() {
+  // Mide la coordenada Y (viewport) de una posición de texto con un
+  // espejo del textarea.
+  _clientYAt(pos) {
     const el = this.el;
     const cs = getComputedStyle(el);
     const div = this._mirror || (this._mirror = document.createElement("div"));
@@ -104,7 +107,6 @@ export class Editor {
     div.style.overflowWrap = "break-word";
     div.style.pointerEvents = "none";
 
-    const pos = this.caret + this.interim.length;
     div.textContent = this._value().slice(0, pos);
     const marker = document.createElement("span");
     marker.textContent = "\u200b";
@@ -162,6 +164,20 @@ export class Editor {
   selectAll() {
     this.el.focus();
     this.el.select();
+  }
+
+  // Selección nativa del textarea, no el cursor de dictado: la usa
+  // tts.js para ir marcando la palabra que se está leyendo en voz alta
+  // (mic y lectura son mutuamente excluyentes, así que no compiten por
+  // la selección real del elemento).
+  selectRange(start, end) {
+    this.el.setSelectionRange(start, end);
+    this._ensureVisible(end);
+  }
+
+  clearSelection() {
+    const pos = this.el.selectionStart;
+    this.el.setSelectionRange(pos, pos);
   }
 
   getText() {

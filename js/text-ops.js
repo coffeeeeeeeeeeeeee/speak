@@ -90,6 +90,17 @@ export function tidy(text) {
     .trim();
 }
 
+// Rango [start, end) de la corrida de no-espacios que arranca en
+// `index` — lo usa tts.js cuando el evento `boundary` de
+// SpeechSynthesis no trae charLength (pasa con algunas voces/
+// navegadores), para saber hasta dónde resaltar esa "palabra".
+export function wordSpanAt(text, index) {
+  const rest = text.slice(index);
+  const match = rest.match(/^\S*/);
+  const length = match ? match[0].length : 0;
+  return { start: index, end: index + Math.max(length, 1) };
+}
+
 // Divide en párrafos (separados por línea en blanco, tal como los deja
 // tidy()). Cada párrafo puede tener saltos de línea sueltos adentro
 // ("nueva línea", a diferencia de "nuevo párrafo") — lo usan los

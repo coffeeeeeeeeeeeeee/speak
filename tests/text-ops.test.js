@@ -158,6 +158,21 @@ test("tidy: texto nulo no rompe", () => {
   assertEqual(ops.tidy(null), "");
 });
 
+// --- wordSpanAt ---
+
+test("wordSpanAt: devuelve el rango de la corrida de no-espacios en index", () => {
+  assertEqual(ops.wordSpanAt("Hola mundo", 5), { start: 5, end: 10 });
+  assertEqual(ops.wordSpanAt("Hola mundo", 0), { start: 0, end: 4 });
+});
+
+test("wordSpanAt: si index cae en un espacio, da un rango mínimo de 1", () => {
+  assertEqual(ops.wordSpanAt("Hola mundo", 4), { start: 4, end: 5 });
+});
+
+test("wordSpanAt: al final del texto también da un rango mínimo de 1", () => {
+  assertEqual(ops.wordSpanAt("Hola", 4), { start: 4, end: 5 });
+});
+
 // --- insertAt (caret) ---
 
 // --- splitParagraphs ---
