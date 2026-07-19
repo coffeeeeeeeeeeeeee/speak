@@ -80,20 +80,6 @@ body {
   color: var(--ink);
 }
 
-.lang-tag {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--ink-soft);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.lang-tag::before {
-  content: attr(data-label) " · ";
-  color: var(--ghost);
-}
-/* El ícono va primero: ::before ya se ordena como 1er ítem del flex,
-   hay que forzarlo antes con order. */
-.lang-tag .icon { order: -1; }
 
 /* Botón "▾" que abre el acordeón de acciones en pantallas chicas.
    Oculto salvo bajo el breakpoint (ver Responsive). */
@@ -160,10 +146,10 @@ body {
 .action { font-size: 0.72rem; }
 .action .icon { width: 0.95rem; height: 0.95rem; }
 
-/* Botón solo-ícono (cerrar paneles, acordeón, etc.): cuadrado,
-   centrado, sin el gap/padding pensado para ícono+texto. */
+/* Botones solo-ícono: cuadrados, centrados. El texto (qué hace cada
+   uno) va en title/aria-label, no visible — ver js/app.js. */
 .icon-btn {
-  padding: 0.35rem;
+  padding: 0.4rem;
   gap: 0;
 }
 .icon-btn .icon { width: 1.05rem; height: 1.05rem; }
@@ -309,26 +295,35 @@ body {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  color: var(--ink);
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  /* Resalta aparte del resto de la interfaz: color propio por tema
+     (mic en themes.js), con fallback al acento general si el tema no
+     lo define (ver neon/highContrast). */
+  color: var(--mic, var(--accent));
   background: var(--line);
   border: none;
   border-radius: 999px;
-  padding: 0.5rem 1.25rem;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.mic .icon { width: 1rem; height: 1rem; }
-.mic:hover { background: var(--ink); color: var(--paper); }
+.mic .icon { width: 1.2rem; height: 1.2rem; }
+.mic:hover { background: var(--mic, var(--accent)); color: #fff; }
 .mic[aria-pressed="true"] {
-  background: var(--accent);
+  background: var(--mic, var(--accent));
   color: #fff;
 }
-.mic[aria-pressed="true"]:hover { background: var(--accent); opacity: 0.9; }
+.mic[aria-pressed="true"]:hover { background: var(--mic, var(--accent)); opacity: 0.9; }
 .mic:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Estado "activo" genérico para botones de ícono que alternan on/off
+   (ej. "Leer" mientras lee) — más sutil que .mic, que es la acción
+   principal de la app. */
+.icon-btn[aria-pressed="true"] {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
 
 /* ---------- Foco accesible ---------- */
 /* Una barra sólida (relleno), no un anillo alrededor del elemento. */

@@ -22,8 +22,8 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
 
   function build(currentId) {
     els.title.textContent = t.docsTitle;
-    const newLabel = els.newBtn.querySelector(".action-label");
-    if (newLabel) newLabel.textContent = t.docsNew;
+    els.newBtn.title = t.docsNew;
+    els.newBtn.setAttribute("aria-label", t.docsNew);
     els.closeBtn.setAttribute("aria-label", t.docsCloseAria);
 
     els.list.textContent = "";

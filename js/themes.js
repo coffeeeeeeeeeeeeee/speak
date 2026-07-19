@@ -6,11 +6,13 @@
 //
 // `colors` es obligatorio y debe cubrir el set base (paper/canvas/
 // ink/ink-soft/ghost/line/accent/accent-dim/danger) para que todo el
-// CSS existente funcione. `accent2`/`accent3` son opcionales: unos
-// pocos elementos los usan con fallback a `accent` (var(--accent-2,
-// var(--accent))) para temas con más de un color de acento, como
-// "neon". `fonts` es opcional: si un tema no lo define, hereda la
-// tipografía del primer tema del registro (el "default").
+// CSS existente funcione. `accent2`/`accent3`/`mic` son opcionales:
+// unos pocos elementos los usan con fallback a `accent` (ej.
+// var(--mic, var(--accent))) para temas con más de un color de
+// acento, como "neon", o cuando el botón "Dictar" quiere resaltar
+// con un color propio en vez del acento genérico de la interfaz.
+// `fonts` es opcional: si un tema no lo define, hereda la tipografía
+// del primer tema del registro (el "default").
 // ============================================================
 
 export const themes = {
@@ -26,6 +28,7 @@ export const themes = {
       accent: "#3A5BDB",
       "accent-dim": "rgba(58, 91, 219, 0.12)",
       danger: "#B23A3A",
+      mic: "#E0663B", // "Dictar" resalta aparte del acento general
     },
     fonts: {
       serif: "\"Newsreader\", Georgia, \"Times New Roman\", serif",
@@ -45,6 +48,7 @@ export const themes = {
       accent: "#6C8CFF",
       "accent-dim": "rgba(108, 140, 255, 0.18)",
       danger: "#E2726F",
+      mic: "#F2A93B",
     },
   },
 
@@ -83,6 +87,7 @@ export const themes = {
       accent: "#A85C2A",
       "accent-dim": "rgba(168, 92, 42, 0.14)",
       danger: "#A23B2E",
+      mic: "#B0442A",
     },
     fonts: {
       serif: "Georgia, \"Times New Roman\", serif",
@@ -123,6 +128,7 @@ export const themes = {
       accent: "#3E7A4B",
       "accent-dim": "rgba(62, 122, 75, 0.14)",
       danger: "#B5482E",
+      mic: "#C98A2B",
     },
   },
 };

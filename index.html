@@ -75,39 +75,42 @@
         type="button"
         aria-expanded="false"
         aria-controls="actions"
+        title="Mostrar acciones"
         aria-label="Mostrar acciones"
       ></button>
       <div class="actions" id="actions">
         <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
-        <button class="action" id="docsBtn" type="button" aria-haspopup="dialog"><span class="action-label">Documentos</span></button>
-        <button class="action" id="helpBtn" type="button" aria-haspopup="dialog"><span class="action-label">Comandos</span></button>
-        <button class="action" id="copyBtn" type="button"><span class="action-label">Copiar</span></button>
+        <button class="action icon-btn" id="docsBtn" type="button" aria-haspopup="dialog" title="Documentos" aria-label="Documentos"></button>
+        <button class="action icon-btn" id="helpBtn" type="button" aria-haspopup="dialog" title="Comandos" aria-label="Comandos"></button>
+        <button class="action icon-btn" id="copyBtn" type="button" title="Copiar" aria-label="Copiar"></button>
         <div class="export-wrap">
           <button
-            class="action"
+            class="action icon-btn"
             id="exportBtn"
             type="button"
             aria-haspopup="menu"
             aria-expanded="false"
-          ><span class="action-label">Exportar</span></button>
+            title="Exportar"
+            aria-label="Exportar"
+          ></button>
           <ul class="export-menu" id="exportMenu" role="menu" hidden></ul>
         </div>
         <button
-          class="action lang-tag"
+          class="action icon-btn lang-tag"
           id="langTag"
           type="button"
-          data-label="idioma"
+          title="Idioma: Español"
           aria-label="Cambiar idioma de dictado"
-        ><span class="action-label">es</span></button>
+        ></button>
         <button
-          class="action lang-tag"
+          class="action icon-btn lang-tag"
           id="variantTag"
           type="button"
-          data-label="región"
+          title="Región: España"
           aria-label="Cambiar variante regional"
-        ><span class="action-label">ES</span></button>
-        <button class="action" id="themeBtn" type="button"><span class="action-label">Claro</span></button>
-        <button class="action" id="fullscreenBtn" type="button"><span class="action-label">Completa</span></button>
+        ></button>
+        <button class="action icon-btn" id="themeBtn" type="button" title="Claro" aria-label="Cambiar tema"></button>
+        <button class="action icon-btn" id="fullscreenBtn" type="button" title="Completa" aria-label="Completa"></button>
       </div>
     </header>
 
@@ -140,10 +143,8 @@
       </div>
 
       <div class="hud-buttons">
-        <button class="action" id="readBtn" type="button"><span class="action-label">Leer</span></button>
-        <button class="mic" id="micBtn" type="button" aria-pressed="false">
-          <span class="mic-label" id="micLabel">Dictar</span>
-        </button>
+        <button class="action icon-btn" id="readBtn" type="button" title="Leer" aria-label="Leer"></button>
+        <button class="mic icon-btn" id="micBtn" type="button" aria-pressed="false" title="Dictar" aria-label="Dictar"></button>
       </div>
     </footer>
   </div>
@@ -160,7 +161,7 @@
     <div class="help-panel">
       <div class="help-head">
         <h2 id="helpTitle">Comandos de voz</h2>
-        <button class="action icon-btn help-close" id="helpClose" type="button" aria-label="Cerrar panel"></button>
+        <button class="action icon-btn help-close" id="helpClose" type="button" title="Cerrar" aria-label="Cerrar panel"></button>
       </div>
       <p class="help-intro" id="helpIntro">
         Se detectan automáticamente mientras dictás. Para escribir una
@@ -179,8 +180,8 @@
     <div class="docs-panel">
       <div class="docs-head">
         <h2 id="docsTitle">Documentos</h2>
-        <button class="action" id="docsNew" type="button"><span class="action-label">Nuevo</span></button>
-        <button class="action icon-btn docs-close" id="docsClose" type="button" aria-label="Cerrar"></button>
+        <button class="action icon-btn" id="docsNew" type="button" title="Nuevo" aria-label="Nuevo"></button>
+        <button class="action icon-btn docs-close" id="docsClose" type="button" title="Cerrar" aria-label="Cerrar"></button>
       </div>
       <ul class="docs-list" id="docsList"></ul>
     </div>
@@ -189,7 +190,7 @@
   <!-- Aviso efímero -->
   <div class="toast" id="toast" hidden role="status" aria-live="polite">
     <span class="toast-msg" id="toastMsg"></span>
-    <button class="toast-close icon-btn" id="toastClose" type="button" aria-label="Cerrar aviso"></button>
+    <button class="toast-close icon-btn" id="toastClose" type="button" title="Cerrar" aria-label="Cerrar aviso"></button>
   </div>
 </body>
 </html>

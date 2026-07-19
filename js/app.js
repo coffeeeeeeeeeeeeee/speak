@@ -58,7 +58,6 @@ function initApp() {
     statusText: document.getElementById("statusText"),
     count: document.getElementById("count"),
     micBtn: document.getElementById("micBtn"),
-    micLabel: document.getElementById("micLabel"),
     langTag: document.getElementById("langTag"),
     variantTag: document.getElementById("variantTag"),
     themeBtn: document.getElementById("themeBtn"),
@@ -91,9 +90,9 @@ function initApp() {
 
   // --- Íconos (Lucide, inline — ver js/icons.js) ---
   // Se insertan una sola vez al arrancar: no cambian entre idiomas ni
-  // temas (heredan el color vía currentColor). El texto de cada botón
-  // vive en un <span class="action-label"> aparte para poder
-  // actualizarlo sin pisar el ícono — ver setLabel().
+  // temas (heredan el color vía currentColor). Los botones son
+  // solo-ícono: el texto de cada uno vive en title/aria-label, no
+  // visible en pantalla — ver setTitle().
   const BUTTON_ICONS = {
     docsBtn: "files",
     helpBtn: "command",
@@ -115,9 +114,12 @@ function initApp() {
     prependIcon(els[key], icon);
   }
 
-  function setLabel(btn, text) {
-    const label = btn.querySelector(".action-label");
-    if (label) label.textContent = text;
+  function setTitle(btn, text) {
+    btn.title = text;
+    btn.setAttribute("aria-label", text);
+  }
+  function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   // --- Idioma activo: familia (léxico/interfaz) + variante regional
@@ -279,7 +281,8 @@ function initApp() {
   const reader = new Reader({
     onState: (state) => {
       const readingNow = state === "reading";
-      setLabel(els.readBtn, readingNow ? t.stop : t.read);
+      setTitle(els.readBtn, readingNow ? t.stop : t.read);
+      els.readBtn.setAttribute("aria-pressed", String(readingNow));
       els.micBtn.disabled = readingNow; // evita que el mic capte la lectura
       if (!readingNow) editor.clearSelection();
     },
@@ -303,26 +306,20 @@ function initApp() {
   // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
   function applyUiStrings() {
     document.title = t.title;
-    setLabel(els.langTag, familyKey);
-    els.langTag.dataset.label = t.langLabel;
+    els.langTag.title = `${capitalize(t.langLabel)}: ${family().label}`;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
-    els.langTag.title = family().label;
 
     const v = variant();
-    const region = v.code.split("-")[1] || v.code;
-    setLabel(els.variantTag, region);
-    els.variantTag.dataset.label = t.variantLabel;
+    els.variantTag.title = `${capitalize(t.variantLabel)}: ${v.label}`;
     els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
-    els.variantTag.title = v.label;
     els.variantTag.hidden = family().variants.length <= 1;
 
-    setLabel(els.themeBtn, themeLabel(currentTheme()));
-    els.themeBtn.setAttribute("aria-label", t.themeSwitchAria);
-    setLabel(els.docsBtn, t.docs);
-    setLabel(els.helpBtn, t.help);
-    setLabel(els.copyBtn, t.copy);
-    setLabel(els.readBtn, reader.speaking ? t.stop : t.read);
-    setLabel(els.exportBtn, t.export);
+    setTitle(els.themeBtn, themeLabel(currentTheme()));
+    setTitle(els.docsBtn, t.docs);
+    setTitle(els.helpBtn, t.help);
+    setTitle(els.copyBtn, t.copy);
+    setTitle(els.readBtn, reader.speaking ? t.stop : t.read);
+    setTitle(els.exportBtn, t.export);
     updateFullscreenBtn();
     els.editor.placeholder = t.editorPlaceholder;
     els.editor.setAttribute("aria-label", t.editorAriaLabel);
@@ -381,7 +378,7 @@ function initApp() {
 
     const listening = state === "listening";
     els.micBtn.setAttribute("aria-pressed", String(listening));
-    els.micLabel.textContent = listening ? t.stop : t.dictate;
+    setTitle(els.micBtn, listening ? t.stop : t.dictate);
     els.readBtn.disabled = listening; // evita que la lectura se mezcle con el dictado
 
     if (listening) meter.start();
@@ -418,16 +415,6 @@ function initApp() {
   }
   els.toastClose.addEventListener("click", hideToast);
 
-  function flashLabel(btn, temp) {
-    const label = btn.querySelector(".action-label");
-    if (!label) return;
-    const original = label.textContent;
-    label.textContent = temp;
-    setTimeout(() => {
-      label.textContent = original;
-    }, 1400);
-  }
-
   // --- Tema ---
   function applyThemeColorMeta() {
     els.themeColorMeta.content = themes[currentTheme()].colors.paper;
@@ -435,7 +422,7 @@ function initApp() {
   applyThemeColorMeta();
   els.themeBtn.addEventListener("click", () => {
     nextTheme();
-    setLabel(els.themeBtn, themeLabel(currentTheme()));
+    setTitle(els.themeBtn, themeLabel(currentTheme()));
     applyThemeColorMeta();
   });
 
@@ -451,8 +438,7 @@ function initApp() {
   }
   function updateFullscreenBtn() {
     const full = isFullscreen();
-    setLabel(els.fullscreenBtn, full ? t.exitFullscreen : t.fullscreen);
-    els.fullscreenBtn.setAttribute("aria-label", full ? t.exitFullscreen : t.fullscreen);
+    setTitle(els.fullscreenBtn, full ? t.exitFullscreen : t.fullscreen);
     els.fullscreenBtn.querySelector(".icon")?.replaceWith(
       document.createRange().createContextualFragment(iconMarkup(full ? "minimize" : "maximize"))
     );
@@ -474,7 +460,7 @@ function initApp() {
   // --- Copiar / Exportar (con limpieza de espaciado) ---
   els.copyBtn.addEventListener("click", async () => {
     const ok = await copyText(tidy(editor.getText()));
-    flashLabel(els.copyBtn, ok ? t.copied : t.copyFailed);
+    showToast(ok ? t.copied : t.copyFailed);
   });
 
   // --- Atajos de teclado ---

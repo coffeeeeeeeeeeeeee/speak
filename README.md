@@ -97,9 +97,15 @@ su librería por CDN: `js/icons.js` tiene el SVG de cada uno inline (bajado
 de `unpkg.com/lucide-static`), sin dependencia de red en tiempo de
 ejecución. Cada ícono usa `stroke="currentColor"`, así que hereda el color
 de texto automáticamente en los 6 temas sin código extra por tema. Se
-insertan una sola vez al arrancar (no cambian entre idiomas); el texto de
-cada botón vive en un `<span class="action-label">` aparte para poder
-actualizarlo sin pisar el ícono.
+insertan una sola vez al arrancar (no cambian entre idiomas).
+
+Los botones son solo-ícono, sin texto visible: lo que hace cada uno vive en
+`title`/`aria-label` (aparece como tooltip nativo al pasar el mouse, y lo
+leen los lectores de pantalla). El botón **Dictar** se resalta con un color
+propio (`--mic`) distinto del acento general de la interfaz en los temas
+Claro, Oscuro, Sepia y Bosque; Neón y Alto contraste no definen uno propio
+y usan el acento general como color de "Dictar" (mismo mecanismo de
+fallback que `--accent-2`/`--accent-3`: `var(--mic, var(--accent))`).
 
 En pantallas angostas (menos de 720px), las acciones del encabezado se
 pliegan en un acordeón: el botón **▾** las muestra apiladas.
