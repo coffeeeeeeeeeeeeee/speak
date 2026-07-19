@@ -9,6 +9,7 @@
 import { exportTxt } from "./txt.js";
 import { exportHtml } from "./html.js";
 import { exportRtf } from "./rtf.js";
+import { exportMarkdown } from "./markdown.js";
 import { printPdf } from "./print.js";
 
 // `getLang`/`getTitle` son callbacks: se leen recién al exportar, así
@@ -23,6 +24,7 @@ export function createFormats({ getLang, getTitle }) {
       run: (text) => exportHtml(text, null, { lang: getLang(), title: getTitle() }),
     },
     { id: "rtf", label: "RTF", run: (text) => exportRtf(text) },
+    { id: "md", label: "MD", run: (text) => exportMarkdown(text) },
     {
       id: "pdf",
       label: "PDF",

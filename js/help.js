@@ -16,7 +16,7 @@ function groupByValue(map) {
   return out;
 }
 
-export function createHelp({ lexicon, t, els }) {
+export function createHelp({ lexicon, t, families, els }) {
   let lastFocus = null;
   build();
   wire();
@@ -38,6 +38,11 @@ export function createHelp({ lexicon, t, els }) {
       { title: t.helpSections.editing, map: lexicon.editing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.casing, map: lexicon.casing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.history, map: lexicon.history, desc: (v) => t.actionLabels[v] },
+      {
+        title: t.helpSections.languages,
+        map: lexicon.languages || {},
+        desc: (v) => `${t.switchLangDesc} ${families[v]?.label ?? v}`,
+      },
     ];
 
     els.body.textContent = "";

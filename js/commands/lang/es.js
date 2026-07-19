@@ -8,8 +8,6 @@
 // ============================================================
 
 export const es = {
-  code: "es-ES",
-
   // Puntuación -> texto que se inserta.
   punctuation: {
     "punto": ".",
@@ -60,6 +58,19 @@ export const es = {
   history: {
     "deshacer": "undo",
     "rehacer": "redo",
+  },
+
+  // Cambiar el idioma de dictado dictando (frase distintiva a propósito,
+  // para no dispararse si el nombre del idioma aparece en una oración
+  // normal). El valor es la clave de familia en config.js.
+  languages: {
+    "cambiar a inglés": "en",
+    "cambiar a francés": "fr",
+    "cambiar a portugués": "pt",
+    "cambiar a alemán": "de",
+    "cambiar a italiano": "it",
+    "cambiar a chino": "zh",
+    "cambiar a japonés": "ja",
   },
 
   // Vía de escape: "literal <palabra>" inserta la palabra tal cual.

@@ -62,3 +62,9 @@ test("parser (pt): sequência com texto, comando de formatação, pontuação e 
     ]
   );
 });
+
+test("parser (pt): «mudar para <idioma>» produz um token de idioma com a chave da família", () => {
+  assertEqual(parser.parse("mudar para inglês"), [
+    { type: "language", value: "en" },
+  ]);
+});

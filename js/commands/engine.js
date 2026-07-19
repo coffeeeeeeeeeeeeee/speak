@@ -13,10 +13,11 @@
 import * as ops from "../text-ops.js";
 
 export class CommandEngine {
-  constructor({ editor, history, parser }) {
+  constructor({ editor, history, parser, onSwitchLanguage }) {
     this.editor = editor;
     this.history = history;
     this.parser = parser;
+    this.onSwitchLanguage = onSwitchLanguage || (() => {});
 
     this.forceUpper = false; // modo "todo mayúsculas"
     this.capNext = false; // "mayúscula" puntual
@@ -35,6 +36,8 @@ export class CommandEngine {
         this.editor.insertAtCaret(t.value);
       } else if (t.type === "command") {
         this._runCommand(t.action);
+      } else if (t.type === "language") {
+        this.onSwitchLanguage(t.value);
       }
     }
   }

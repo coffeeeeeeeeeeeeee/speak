@@ -60,3 +60,9 @@ test("parser (it): sequenza mista di testo, comando di formato, punteggiatura e 
     ]
   );
 });
+
+test("parser (it): «passa a <lingua>» produce un token di lingua con la chiave di famiglia", () => {
+  assertEqual(parser.parse("passa a inglese"), [
+    { type: "language", value: "en" },
+  ]);
+});

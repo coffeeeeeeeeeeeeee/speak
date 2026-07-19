@@ -59,3 +59,9 @@ test("parser (fr): texte, commande de casse, ponctuation et commande d'édition 
     ]
   );
 });
+
+test("parser (fr): «passer en <langue>» produit un token de langue avec la clé de famille", () => {
+  assertEqual(parser.parse("passer en anglais"), [
+    { type: "language", value: "en" },
+  ]);
+});

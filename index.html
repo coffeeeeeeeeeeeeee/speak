@@ -36,6 +36,7 @@
         <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
         <button class="action" id="helpBtn" type="button" aria-haspopup="dialog">Comandos</button>
         <button class="action" id="copyBtn" type="button">Copiar</button>
+        <button class="action" id="readBtn" type="button">Leer</button>
         <div class="export-wrap">
           <button
             class="action"
@@ -53,6 +54,13 @@
           data-label="idioma"
           aria-label="Cambiar idioma de dictado"
         >es</button>
+        <button
+          class="action lang-tag"
+          id="variantTag"
+          type="button"
+          data-label="región"
+          aria-label="Cambiar variante regional"
+        >ES</button>
       </div>
     </header>
 
@@ -78,6 +86,10 @@
 
       <div class="hud-meta">
         <span class="count" id="count" data-label="palabras">0</span>
+      </div>
+
+      <div class="mic-level" id="micLevel" aria-hidden="true">
+        <span class="mic-level-bar" id="micLevelBar"></span>
       </div>
 
       <button class="mic" id="micBtn" type="button" aria-pressed="false">

@@ -9,8 +9,6 @@
 // ============================================================
 
 export const fr = {
-  code: "fr-FR",
-
   // Ponctuation -> texte inséré.
   punctuation: {
     "point": ".",
@@ -57,6 +55,19 @@ export const fr = {
   history: {
     "annuler": "undo",
     "rétablir": "redo",
+  },
+
+  // Changer de langue de dictée à la voix (phrase distincte à dessein,
+  // pour ne pas se déclencher si le nom d'une langue apparaît dans une
+  // phrase normale). La valeur est la clé de famille dans config.js.
+  languages: {
+    "passer en espagnol": "es",
+    "passer en anglais": "en",
+    "passer en portugais": "pt",
+    "passer en allemand": "de",
+    "passer en italien": "it",
+    "passer en chinois": "zh",
+    "passer en japonais": "ja",
   },
 
   // Échappement : "littéral <mot>" insère le mot tel quel.

@@ -9,8 +9,6 @@
 // ============================================================
 
 export const it = {
-  code: "it-IT",
-
   // Punteggiatura -> testo inserito.
   punctuation: {
     "punto": ".",
@@ -52,6 +50,19 @@ export const it = {
   history: {
     "annulla": "undo",
     "ripristina": "redo",
+  },
+
+  // Cambia lingua di dettatura a voce (frase distintiva apposta, per
+  // non attivarsi solo perché il nome di una lingua compare in una
+  // frase normale). Il valore è la chiave di famiglia in config.js.
+  languages: {
+    "passa a spagnolo": "es",
+    "passa a inglese": "en",
+    "passa a francese": "fr",
+    "passa a portoghese": "pt",
+    "passa a tedesco": "de",
+    "passa a cinese": "zh",
+    "passa a giapponese": "ja",
   },
 
   // Escape: "letterale <parola>" scrive la parola così com'è.

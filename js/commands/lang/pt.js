@@ -9,8 +9,6 @@
 // ============================================================
 
 export const pt = {
-  code: "pt-BR",
-
   // Pontuação -> texto inserido.
   punctuation: {
     "ponto": ".",
@@ -56,6 +54,19 @@ export const pt = {
   history: {
     "desfazer": "undo",
     "refazer": "redo",
+  },
+
+  // Trocar o idioma de ditado por voz (frase distinta de propósito,
+  // para não disparar se o nome do idioma aparecer numa frase normal).
+  // O valor é a chave da família em config.js.
+  languages: {
+    "mudar para espanhol": "es",
+    "mudar para inglês": "en",
+    "mudar para francês": "fr",
+    "mudar para alemão": "de",
+    "mudar para italiano": "it",
+    "mudar para chinês": "zh",
+    "mudar para japonês": "ja",
   },
 
   // Escape: "literal <palavra>" insere a palavra tal como falada.

@@ -1,24 +1,82 @@
 // ============================================================
 // config.js
-// Configuración central. Pensada para i18n: agregar un idioma
-// nuevo es sumar una entrada acá y su léxico en js/commands/lang/.
+// Configuración central. Cada idioma es una "familia" con un léxico
+// de comandos fijo (no cambia entre variantes) y una o más variantes
+// regionales (`code` distinto para SpeechRecognition, mismo léxico e
+// interfaz). Sumar una variante nueva es agregarla al array; sumar un
+// idioma nuevo es sumar una familia con su léxico en commands/lang/.
 // ============================================================
 
 export const config = {
-  // Idioma activo al iniciar (si no hay uno guardado de una sesión anterior).
-  defaultLang: "es-ES",
+  // Familia + variante activas al iniciar (si no hay nada guardado).
+  defaultFamily: "es",
+  defaultVariant: "es-ES",
 
-  // Idiomas disponibles. `code` es el valor para SpeechRecognition.lang.
-  // `lexicon` es el nombre del módulo en commands/lang/ y también la clave
-  // de sus textos de interfaz en i18n.js (misma clave para ambos).
-  languages: {
-    "es-ES": { code: "es-ES", short: "es", label: "Español", lexicon: "es" },
-    "en-US": { code: "en-US", short: "en", label: "English", lexicon: "en" },
-    "fr-FR": { code: "fr-FR", short: "fr", label: "Français", lexicon: "fr" },
-    "pt-BR": { code: "pt-BR", short: "pt", label: "Português", lexicon: "pt" },
-    "de-DE": { code: "de-DE", short: "de", label: "Deutsch", lexicon: "de" },
-    "it-IT": { code: "it-IT", short: "it", label: "Italiano", lexicon: "it" },
-    "zh-CN": { code: "zh-CN", short: "zh", label: "中文", lexicon: "zh" },
-    "ja-JP": { code: "ja-JP", short: "ja", label: "日本語", lexicon: "ja" },
+  families: {
+    es: {
+      label: "Español",
+      lexicon: "es",
+      variants: [
+        { code: "es-ES", label: "España" },
+        { code: "es-AR", label: "Argentina" },
+        { code: "es-MX", label: "México" },
+        { code: "es-US", label: "Latinoamérica (EE. UU.)" },
+      ],
+    },
+    en: {
+      label: "English",
+      lexicon: "en",
+      variants: [
+        { code: "en-US", label: "US" },
+        { code: "en-GB", label: "UK" },
+        { code: "en-AU", label: "Australia" },
+        { code: "en-IN", label: "India" },
+      ],
+    },
+    fr: {
+      label: "Français",
+      lexicon: "fr",
+      variants: [
+        { code: "fr-FR", label: "France" },
+        { code: "fr-CA", label: "Canada" },
+      ],
+    },
+    pt: {
+      label: "Português",
+      lexicon: "pt",
+      variants: [
+        { code: "pt-BR", label: "Brasil" },
+        { code: "pt-PT", label: "Portugal" },
+      ],
+    },
+    de: {
+      label: "Deutsch",
+      lexicon: "de",
+      variants: [
+        { code: "de-DE", label: "Deutschland" },
+        { code: "de-AT", label: "Österreich" },
+        { code: "de-CH", label: "Schweiz" },
+      ],
+    },
+    it: {
+      label: "Italiano",
+      lexicon: "it",
+      variants: [
+        { code: "it-IT", label: "Italia" },
+        { code: "it-CH", label: "Svizzera" },
+      ],
+    },
+    zh: {
+      label: "中文",
+      lexicon: "zh",
+      // Solo simplificado/continental por ahora: zh-TW usa caracteres
+      // tradicionales, que necesitarían un léxico de comandos aparte.
+      variants: [{ code: "zh-CN", label: "中国大陆" }],
+    },
+    ja: {
+      label: "日本語",
+      lexicon: "ja",
+      variants: [{ code: "ja-JP", label: "日本" }],
+    },
   },
 };

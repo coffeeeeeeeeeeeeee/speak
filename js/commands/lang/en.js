@@ -9,8 +9,6 @@
 // ============================================================
 
 export const en = {
-  code: "en-US",
-
   // Punctuation -> text that gets inserted.
   punctuation: {
     "period": ".",
@@ -61,6 +59,19 @@ export const en = {
   history: {
     "undo": "undo",
     "redo": "redo",
+  },
+
+  // Switch dictation language by voice (deliberately a distinctive
+  // phrase, so it doesn't fire just because a language name shows up
+  // in normal speech). Value is the family key in config.js.
+  languages: {
+    "switch to spanish": "es",
+    "switch to french": "fr",
+    "switch to portuguese": "pt",
+    "switch to german": "de",
+    "switch to italian": "it",
+    "switch to chinese": "zh",
+    "switch to japanese": "ja",
   },
 
   // Escape hatch: "literal <word>" inserts the word as-is.

@@ -46,6 +46,7 @@ export function createParser(lexicon) {
   add(lexicon.editing, "command");
   add(lexicon.casing, "command");
   add(lexicon.history, "command");
+  add(lexicon.languages || {}, "language");
 
   const index = new Map(entries.map((e) => [normalize(e.phrase), e]));
   const maxWords = entries.reduce((m, e) => Math.max(m, tokenCount(e.phrase, byChar)), 1);
@@ -101,6 +102,8 @@ export function createParser(lexicon) {
         const { entry } = matched;
         if (entry.kind === "insert") {
           tokens.push({ type: "insert", value: entry.value });
+        } else if (entry.kind === "language") {
+          tokens.push({ type: "language", value: entry.value });
         } else {
           tokens.push({ type: "command", action: entry.value });
         }

@@ -59,3 +59,9 @@ test("parser (en): mixed text, formatting command, punctuation and editing comma
     ]
   );
 });
+
+test("parser (en): «switch to <language>» produces a language token with the family key", () => {
+  assertEqual(parser.parse("switch to spanish"), [
+    { type: "language", value: "es" },
+  ]);
+});

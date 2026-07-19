@@ -60,3 +60,9 @@ test("parser (de): gemischte Folge aus Text, Formatbefehl, Satzzeichen und Bearb
     ]
   );
 });
+
+test("parser (de): «wechseln zu <sprache>» erzeugt ein Sprach-Token mit dem Familienschlüssel", () => {
+  assertEqual(parser.parse("wechseln zu englisch"), [
+    { type: "language", value: "en" },
+  ]);
+});

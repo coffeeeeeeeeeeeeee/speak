@@ -26,6 +26,8 @@ import { createFormats } from "./export/formats.js";
 import { createExportMenu } from "./export/menu.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
+import { AudioMeter } from "./audioMeter.js";
+import { Reader } from "./tts.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -46,8 +48,11 @@ function initApp() {
     micBtn: document.getElementById("micBtn"),
     micLabel: document.getElementById("micLabel"),
     langTag: document.getElementById("langTag"),
+    variantTag: document.getElementById("variantTag"),
     saveState: document.getElementById("saveState"),
     copyBtn: document.getElementById("copyBtn"),
+    readBtn: document.getElementById("readBtn"),
+    micLevelBar: document.getElementById("micLevelBar"),
     exportBtn: document.getElementById("exportBtn"),
     exportMenu: document.getElementById("exportMenu"),
     helpBtn: document.getElementById("helpBtn"),
@@ -61,11 +66,40 @@ function initApp() {
     toastClose: document.getElementById("toastClose"),
   };
 
-  // --- Idioma activo (persistido; si no hay uno guardado, el default) ---
+  // --- Idioma activo: familia (léxico/interfaz) + variante regional
+  // (solo cambia el código que recibe SpeechRecognition). Persistidos
+  // por separado: la variante exacta ("speakly:lang") y, por familia,
+  // la última variante elegida ("speakly:variants"), para que volver a
+  // un idioma no resetee la región que ya habías elegido ahí. ---
+  const familyKeys = Object.keys(config.families);
   const langStorage = new Storage({ key: "speakly:lang" });
+  const variantStorage = new Storage({ key: "speakly:variants" });
+
+  function loadVariantPrefs() {
+    try {
+      return JSON.parse(variantStorage.load() || "{}");
+    } catch (_) {
+      return {};
+    }
+  }
+  const variantPrefs = loadVariantPrefs();
+
+  function findByCode(code) {
+    for (const key of familyKeys) {
+      const idx = config.families[key].variants.findIndex((v) => v.code === code);
+      if (idx !== -1) return { familyKey: key, variantIndex: idx };
+    }
+    return null;
+  }
+
   const savedCode = langStorage.load();
-  let lang = config.languages[savedCode] || config.languages[config.defaultLang];
-  let t = strings[lang.lexicon];
+  const resolved = findByCode(savedCode) || findByCode(config.defaultVariant);
+  let familyKey = resolved.familyKey;
+  let variantIndex = resolved.variantIndex;
+
+  const family = () => config.families[familyKey];
+  const variant = () => family().variants[variantIndex];
+  let t = strings[family().lexicon];
 
   // --- Persistencia del documento ---
   const storage = new Storage();
@@ -88,13 +122,19 @@ function initApp() {
 
   // --- Motor de comandos ---
   const history = new History(editor);
-  let parser = createParser(LEXICONS[lang.lexicon]);
-  const engine = new CommandEngine({ editor, history, parser });
+  let parser = createParser(LEXICONS[family().lexicon]);
+  const engine = new CommandEngine({
+    editor,
+    history,
+    parser,
+    onSwitchLanguage: (familyCode) => switchFamily(familyCode),
+  });
 
   // --- Panel de comandos ---
   const help = createHelp({
-    lexicon: LEXICONS[lang.lexicon],
+    lexicon: LEXICONS[family().lexicon],
     t,
+    families: config.families,
     els: {
       overlay: els.help,
       body: els.helpBody,
@@ -107,7 +147,7 @@ function initApp() {
 
   // --- Menú de exportar ---
   const formats = createFormats({
-    getLang: () => lang.code,
+    getLang: () => variant().code,
     getTitle: () => t.title,
   });
   const exportMenu = createExportMenu({
@@ -119,21 +159,56 @@ function initApp() {
 
   // --- Reconocimiento ---
   const speech = new SpeechController({
-    lang: lang.code,
+    lang: variant().code,
     onInterim: (text) => editor.setInterim(text),
     onFinal: (text) => engine.process(text),
     onState: (state) => setStatus(state),
     onError: (err) => handleError(err),
   });
 
+  // --- Medidor de nivel de audio (no afecta el reconocimiento, es
+  // solo feedback visual — ver audioMeter.js) ---
+  const meter = new AudioMeter({
+    onLevel: (v) => {
+      els.micLevelBar.style.transform = `scaleX(${v})`;
+    },
+  });
+
+  // --- Leer en voz alta (SpeechSynthesis) ---
+  const reader = new Reader({
+    onState: (state) => {
+      const readingNow = state === "reading";
+      els.readBtn.textContent = readingNow ? t.stop : t.read;
+      els.micBtn.disabled = readingNow; // evita que el mic capte la lectura
+    },
+  });
+  els.readBtn.addEventListener("click", () => {
+    if (reader.speaking) {
+      reader.stop();
+    } else {
+      reader.speak(tidy(editor.getText()), variant().code);
+    }
+  });
+
   // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
   function applyUiStrings() {
     document.title = t.title;
-    els.langTag.textContent = lang.short;
+    els.langTag.textContent = familyKey;
     els.langTag.dataset.label = t.langLabel;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
+    els.langTag.title = family().label;
+
+    const v = variant();
+    const region = v.code.split("-")[1] || v.code;
+    els.variantTag.textContent = region;
+    els.variantTag.dataset.label = t.variantLabel;
+    els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
+    els.variantTag.title = v.label;
+    els.variantTag.hidden = family().variants.length <= 1;
+
     els.helpBtn.textContent = t.help;
     els.copyBtn.textContent = t.copy;
+    els.readBtn.textContent = reader.speaking ? t.stop : t.read;
     els.exportBtn.textContent = t.export;
     els.editor.placeholder = t.editorPlaceholder;
     els.editor.setAttribute("aria-label", t.editorAriaLabel);
@@ -142,25 +217,42 @@ function initApp() {
   }
   applyUiStrings();
 
-  // --- Selector de idioma ---
+  function persistLanguage() {
+    langStorage.save(variant().code);
+    variantPrefs[familyKey] = variantIndex;
+    variantStorage.save(JSON.stringify(variantPrefs));
+  }
+
+  // --- Selector de familia de idioma (cicla es→en→fr→...→es) ---
   els.langTag.addEventListener("click", () => {
-    const codes = Object.keys(config.languages);
-    const next = codes[(codes.indexOf(lang.code) + 1) % codes.length];
-    switchLanguage(next);
+    const next = familyKeys[(familyKeys.indexOf(familyKey) + 1) % familyKeys.length];
+    switchFamily(next);
   });
 
-  function switchLanguage(code) {
-    lang = config.languages[code] || config.languages[config.defaultLang];
-    t = strings[lang.lexicon];
+  // --- Selector de variante regional (cicla dentro de la familia activa) ---
+  els.variantTag.addEventListener("click", () => {
+    const n = family().variants.length;
+    variantIndex = (variantIndex + 1) % n;
+    applyUiStrings();
+    speech.setLang(variant().code);
+    persistLanguage();
+  });
+
+  function switchFamily(newFamilyKey) {
+    if (!config.families[newFamilyKey]) return;
+    familyKey = newFamilyKey;
+    variantIndex = variantPrefs[familyKey] ?? 0;
+    if (variantIndex >= family().variants.length) variantIndex = 0;
+    t = strings[family().lexicon];
 
     applyUiStrings();
-    parser = createParser(LEXICONS[lang.lexicon]);
+    parser = createParser(LEXICONS[family().lexicon]);
     engine.parser = parser;
-    help.setLexicon(LEXICONS[lang.lexicon], t);
+    help.setLexicon(LEXICONS[family().lexicon], t);
     exportMenu.build(t);
-    speech.setLang(lang.code);
+    speech.setLang(variant().code);
     setStatus(speech.listening ? "listening" : "idle");
-    langStorage.save(lang.code);
+    persistLanguage();
   }
 
   // --- Estados ---
@@ -176,6 +268,10 @@ function initApp() {
     const listening = state === "listening";
     els.micBtn.setAttribute("aria-pressed", String(listening));
     els.micLabel.textContent = listening ? t.stop : t.dictate;
+    els.readBtn.disabled = listening; // evita que la lectura se mezcle con el dictado
+
+    if (listening) meter.start();
+    else meter.stop();
   }
 
   function handleError(err) {
