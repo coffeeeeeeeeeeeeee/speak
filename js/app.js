@@ -30,6 +30,7 @@ import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
 import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
+import { currentTheme, toggleTheme } from "./theme.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -58,6 +59,8 @@ function initApp() {
     micLabel: document.getElementById("micLabel"),
     langTag: document.getElementById("langTag"),
     variantTag: document.getElementById("variantTag"),
+    themeBtn: document.getElementById("themeBtn"),
+    themeColorMeta: document.getElementById("themeColorMeta"),
     saveState: document.getElementById("saveState"),
     copyBtn: document.getElementById("copyBtn"),
     readBtn: document.getElementById("readBtn"),
@@ -264,6 +267,7 @@ function initApp() {
     els.variantTag.title = v.label;
     els.variantTag.hidden = family().variants.length <= 1;
 
+    els.themeBtn.textContent = currentTheme() === "dark" ? t.themeToLight : t.themeToDark;
     els.docsBtn.textContent = t.docs;
     els.helpBtn.textContent = t.help;
     els.copyBtn.textContent = t.copy;
@@ -370,6 +374,18 @@ function initApp() {
       btn.textContent = original;
     }, 1400);
   }
+
+  // --- Tema claro/oscuro ---
+  // Colores calcados de --paper en styles/main.css (claro/oscuro).
+  function applyThemeColorMeta() {
+    els.themeColorMeta.content = currentTheme() === "dark" ? "#242524" : "#F2F3F0";
+  }
+  applyThemeColorMeta();
+  els.themeBtn.addEventListener("click", () => {
+    toggleTheme();
+    els.themeBtn.textContent = currentTheme() === "dark" ? t.themeToLight : t.themeToDark;
+    applyThemeColorMeta();
+  });
 
   // --- Micrófono ---
   els.micBtn.addEventListener("click", () => {

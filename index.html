@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>speakly — voz a texto para escritores</title>
 
+  <!-- Aplica el tema guardado ANTES del primer pintado, para que no
+       parpadee del tema del sistema al elegido (theme.js hace lo mismo
+       para cambios en caliente; esto es solo el arranque). -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("speakly:theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -19,7 +31,7 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <meta name="theme-color" content="#F2F3F0" />
+  <meta name="theme-color" id="themeColorMeta" content="#F2F3F0" />
 </head>
 <body>
   <!-- Aviso cuando el navegador no soporta el reconocimiento de voz.
@@ -69,6 +81,7 @@
           data-label="región"
           aria-label="Cambiar variante regional"
         >ES</button>
+        <button class="action" id="themeBtn" type="button">Oscuro</button>
       </div>
     </header>
 

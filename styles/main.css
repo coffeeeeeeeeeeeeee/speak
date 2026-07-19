@@ -26,6 +26,34 @@
   --top-h: 2.75rem;
 }
 
+/* Oscuro por preferencia del sistema, salvo que el usuario haya
+   elegido explícitamente lo contrario con el botón de tema
+   (:root[data-theme] manda por encima de la media query). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #242524;
+    --canvas:     #141514;
+    --ink:        #ECEDE9;
+    --ink-soft:   #A6A8A2;
+    --ghost:      #6B6D67;
+    --line:       #35362F;
+    --accent:     #6C8CFF;
+    --accent-dim: rgba(108, 140, 255, 0.18);
+    --danger:     #E2726F;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:      #242524;
+  --canvas:     #141514;
+  --ink:        #ECEDE9;
+  --ink-soft:   #A6A8A2;
+  --ghost:      #6B6D67;
+  --line:       #35362F;
+  --accent:     #6C8CFF;
+  --accent-dim: rgba(108, 140, 255, 0.18);
+  --danger:     #E2726F;
+}
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -51,12 +79,14 @@ body {
 
 /* ---------- Barra superior ---------- */
 .topbar {
-  height: var(--top-h);
+  min-height: var(--top-h);
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
+  flex-wrap: wrap;
+  row-gap: 0.4rem;
+  padding: 0.5rem 1.5rem;
   border-bottom: 1px solid var(--line);
 }
 
@@ -83,7 +113,9 @@ body {
 .actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.7rem 1rem;
 }
 
 .save-state {

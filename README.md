@@ -10,12 +10,18 @@ edición.
 - ✅ **Fase 2 — Dictado continuo:** transcripción en vivo, auto-reinicio, conteo.
 - ✅ **Fase 3 — Comandos:** puntuación, mayúscula automática, edición, mayúsculas,
   deshacer/rehacer y `literal`, con detección automática (sin palabra clave).
-- ✅ **Fase 6 — Persistencia:** autoguardado local, exportar (`.txt`/`.html`/`.rtf`/PDF), copiar.
-- ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de espaciado, accesibilidad.
+- ✅ **Fase 6 — Persistencia:** múltiples documentos, autoguardado local,
+  exportar (`.txt`/`.html`/`.rtf`/`.md`/PDF), copiar.
+- ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de
+  espaciado, accesibilidad, tema claro/oscuro.
 - ✅ **Multi-idioma:** español, inglés, francés, portugués, alemán, italiano,
-  chino y japonés (léxico de comandos y toda la interfaz), selector en el
-  encabezado, preferencia persistida. Chino/japonés usan tokenización por
-  carácter (ver [Notas](#notas)) en vez de por palabra.
+  chino y japonés (léxico de comandos y toda la interfaz), con variantes
+  regionales dentro de cada uno (ver [Idiomas y variantes](#idiomas-y-variantes)),
+  preferencia persistida. Chino/japonés usan tokenización por carácter (ver
+  [Notas](#notas)) en vez de por palabra.
+- ✅ **Instalable:** manifest + service worker — se puede instalar como app y
+  abrir sin conexión (el dictado en sí siempre necesita internet).
+- ✅ **Medidor de nivel de audio** y **lectura en voz alta** (SpeechSynthesis).
 
 ## Cómo ejecutarlo
 
@@ -32,17 +38,47 @@ El dictado inserta **en la posición del cursor**: hacé clic donde quieras dent
 
 **Atajos:** dictar/detener `Ctrl/Cmd + J` · exportar `.txt` `Ctrl/Cmd + S` · deshacer/rehacer `Ctrl+Z` / `Ctrl+Shift+Z` · panel de comandos `Ctrl/Cmd + /`. El texto se **autoguarda** en el navegador y se recupera al recargar; *Copiar* y *Exportar* están en el encabezado.
 
-El botón de idioma del encabezado (ES · EN · FR · PT · DE · IT · ZH · JA, en
-ese orden) cambia el idioma de dictado (léxico de comandos, reconocimiento de
-voz y toda la interfaz). La elección queda guardada y se recupera al volver a
-abrir la hoja.
+### Idiomas y variantes
+
+El botón **IDIOMA** (ES · EN · FR · PT · DE · IT · ZH · JA, en ese orden)
+cambia la familia de idioma: léxico de comandos, reconocimiento de voz e
+interfaz. El botón **REGIÓN**, al lado, cicla las variantes regionales de la
+familia activa (afecta solo el código que recibe SpeechRecognition, útil para
+mejorar la precisión según el acento — es-ES/AR/MX/US, en-US/GB/AU/IN,
+fr-FR/CA, pt-BR/PT, de-DE/AT/CH, it-IT/CH; se oculta si el idioma tiene una
+sola variante, como chino/japonés). Ambos quedan guardados por separado, así
+cambiar de idioma no resetea la región que ya habías elegido en cada uno.
+
+También podés cambiar de idioma **dictando**: cada léxico tiene una frase
+distintiva para eso (ver la sección "Idiomas" del panel de comandos), por
+ejemplo «cambiar a inglés» en español o «switch to spanish» en inglés.
+
+### Exportar
 
 **Exportar** abre un menú con los formatos disponibles: **TXT**, **HTML**,
-**RTF** (se abren directo en Word/LibreOffice/Google Docs) y **PDF** — este
-último no descarga nada: abre el diálogo nativo de impresión del navegador
-para que elijas "Guardar como PDF" ahí (funciona con cualquier idioma sin
-necesidad de embeber fuentes). `Ctrl/Cmd + S` sigue exportando `.txt` directo,
-sin pasar por el menú.
+**RTF** y **MD** (se abren directo en Word/LibreOffice/Google Docs/cualquier
+editor de texto) y **PDF** — este último no descarga nada: abre el diálogo
+nativo de impresión del navegador para que elijas "Guardar como PDF" ahí
+(funciona con cualquier idioma sin necesidad de embeber fuentes). `Ctrl/Cmd + S`
+sigue exportando `.txt` directo, sin pasar por el menú.
+
+### Documentos
+
+El botón **Documentos** abre un panel con todos los documentos guardados
+(título derivado de la primera línea, sin rename manual). Desde ahí se abre
+uno existente, se crea uno nuevo o se borra uno (con confirmación). Cambiar
+de documento resetea el deshacer/rehacer del anterior.
+
+### Otras acciones
+
+**Leer** usa la síntesis de voz del navegador para releer el documento en voz
+alta — se bloquea mutuamente con el dictado (no tiene sentido que el
+micrófono capte la propia lectura). Al lado del botón "Dictar" hay un
+**medidor de nivel de audio**: es aparte del reconocimiento en sí (Web Speech
+no expone el stream ni parámetros de audio como ganancia o cancelación de
+eco), solo confirma visualmente que el micrófono está captando algo. El botón
+**Oscuro/Claro** cambia el tema; sin elegirlo, sigue la preferencia del
+sistema.
 
 ## Comandos de voz
 
@@ -65,6 +101,9 @@ fin mayúsculas.
 
 **Historial:** deshacer · rehacer (también `Ctrl+Z` / `Ctrl+Shift+Z`).
 
+**Idiomas:** cambiar a inglés · cambiar a francés · cambiar a portugués ·
+cambiar a alemán · cambiar a italiano · cambiar a chino · cambiar a japonés.
+
 La mayúscula inicial tras punto, signo de cierre y salto de párrafo es automática.
 
 ### English
@@ -80,6 +119,9 @@ mark · open/close parenthesis.
 caps off / end caps.
 
 **History:** undo · redo (also `Ctrl+Z` / `Ctrl+Shift+Z`).
+
+**Languages:** switch to spanish · switch to french · switch to portuguese ·
+switch to german · switch to italian · switch to chinese · switch to japanese.
 
 The initial capital after a period, a closing sign, and a paragraph break is automatic.
 
@@ -97,6 +139,9 @@ supprime/efface tout · sélectionne tout.
 fin des majuscules.
 
 **Historique :** annuler · rétablir (aussi `Ctrl+Z` / `Ctrl+Shift+Z`).
+
+**Langues :** passer en espagnol · passer en anglais · passer en portugais ·
+passer en allemand · passer en italien · passer en chinois · passer en japonais.
 
 La majuscule initiale après un point, un signe de fermeture et un saut de
 paragraphe est automatique.
@@ -116,6 +161,9 @@ maiúsculas · fim das maiúsculas.
 
 **Histórico:** desfazer · refazer (também `Ctrl+Z` / `Ctrl+Shift+Z`).
 
+**Idiomas:** mudar para espanhol · mudar para inglês · mudar para francês ·
+mudar para alemão · mudar para italiano · mudar para chinês · mudar para japonês.
+
 A maiúscula inicial após ponto, sinal de fechamento e quebra de parágrafo é
 automática.
 
@@ -132,6 +180,10 @@ anführungszeichen · klammer auf/zu.
 alles großschreiben · großschreibung beenden.
 
 **Verlauf:** rückgängig · wiederholen (auch `Strg+Z` / `Strg+Umschalt+Z`).
+
+**Sprachen:** wechseln zu spanisch · wechseln zu englisch · wechseln zu
+französisch · wechseln zu portugiesisch · wechseln zu italienisch · wechseln
+zu chinesisch · wechseln zu japanisch.
 
 Der Großbuchstabe nach einem Punkt und am Absatzanfang ist automatisch.
 
@@ -150,6 +202,9 @@ maiuscolo · fine maiuscolo.
 
 **Cronologia:** annulla · ripristina (anche `Ctrl+Z` / `Ctrl+Maiusc+Z`).
 
+**Lingue:** passa a spagnolo · passa a inglese · passa a francese · passa a
+portoghese · passa a tedesco · passa a cinese · passa a giapponese.
+
 La maiuscola iniziale dopo un punto, un segno di chiusura e un'interruzione
 di paragrafo è automatica.
 
@@ -165,6 +220,9 @@ di paragrafo è automatica.
 
 **历史记录：** 撤销 · 重做（也可用 `Ctrl+Z` / `Ctrl+Shift+Z`）。
 
+**语言：** 切换到西班牙语 · 切换到英语 · 切换到法语 · 切换到葡萄牙语 ·
+切换到德语 · 切换到意大利语 · 切换到日语。
+
 句号后及段落开头的自动大写，只对混入的拉丁字母生效。
 
 ### 日本語
@@ -178,6 +236,10 @@ di paragrafo è automatica.
 小文字にする · すべて大文字 · 大文字終わり。
 
 **履歴：** 元に戻す · やり直す（`Ctrl+Z` / `Ctrl+Shift+Z` も使えます）。
+
+**言語：** スペイン語に切り替え · 英語に切り替え · フランス語に切り替え ·
+ポルトガル語に切り替え · ドイツ語に切り替え · イタリア語に切り替え ·
+中国語に切り替え。
 
 句点の後や段落の先頭での自動大文字化は、混在するラテン文字に対してのみ
 働きます。
@@ -193,25 +255,42 @@ headless (sin Node ni dependencias, para no sumarle un build step al
 proyecto). Levanta un server efímero, ejecuta `tests/index.html` y vuelca el
 resultado a la terminal con código de salida 1 si algo falla.
 
+Las features que son sobre todo integración de UI (variantes regionales,
+cambio de idioma por voz de punta a punta, documentos múltiples, medidor de
+audio, lectura en voz alta, PWA, tema) no tienen suite propia — se
+verificaron a mano en un navegador real (Chrome headless con dispositivo de
+audio *fake*, más una pasada en Chrome de escritorio con LibreOffice para el
+RTF) en vez de con tests automatizados, porque dependen de APIs del
+navegador (getUserMedia, SpeechSynthesis, Service Worker) difíciles de
+simular fielmente en este runner casero.
+
 ## Estructura
 
 ```
 index.html
-styles/main.css
+manifest.webmanifest
+sw.js               service worker (red primero, caché de respaldo)
+icons/              icon.svg + icon-192.png/icon-512.png rasterizados del mismo SVG
+styles/main.css     incluye la paleta oscura (prefers-color-scheme + [data-theme])
 js/
-  app.js            orquestación, incluye el selector de idioma
-  config.js         idiomas disponibles
+  app.js            orquestación: idioma/variante, documentos, tema, todo lo demás
+  config.js         familias de idioma + sus variantes regionales
   i18n.js           textos de interfaz por idioma (no el léxico de comandos)
+  theme.js          tema claro/oscuro (persistido, sigue el sistema por defecto)
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
-  storage.js        autoguardado (localStorage)
+  storage.js        autoguardado genérico (localStorage) — clave/valor simple
+  docs.js           múltiples documentos (índice + contenido en localStorage)
+  docsPanel.js       panel de documentos (crear/abrir/borrar)
   exporter.js       copiar al portapapeles (no es un formato de archivo)
+  audioMeter.js     medidor de nivel de audio (getUserMedia + AnalyserNode aparte)
+  tts.js            leer el documento en voz alta (SpeechSynthesis)
   help.js           panel de comandos
   commands/
-    engine.js       aplica los comandos al editor
-    parser.js       segmenta dictado vs comandos
+    engine.js       aplica los comandos al editor, incluye el cambio de idioma
+    parser.js       segmenta dictado vs comandos (soporta tokenize: "char")
     lang/es.js      léxico español
     lang/en.js      léxico inglés
     lang/fr.js      léxico francés
@@ -225,6 +304,7 @@ js/
     txt.js          .txt (texto tal cual)
     html.js         .html (documento autocontenido, un <p> por párrafo)
     rtf.js          .rtf (control words a mano, sin librerías)
+    markdown.js     .md (escapa sintaxis accidental, no es Markdown de origen)
     print.js        "PDF" vía diálogo de impresión del navegador (#printSheet)
     formats.js       registro de formatos que arma el menú
     menu.js          menú desplegable del botón Exportar (abrir/cerrar accesible)
@@ -259,3 +339,15 @@ codicioso prueba de más a menos caracteres, y el buffer de texto libre se
 reconstruye sin espacio entre caracteres. `text-ops.joiner()` también sabe
 que el chino/japonés (y su puntuación de ancho completo) nunca lleva un
 espacio occidental por default, sin importar qué idioma esté activo.
+
+**La Web Speech API no expone el micrófono ni parámetros de audio**
+(ganancia, cancelación de eco, `deviceId`, sample rate) como sí lo hace
+`getUserMedia` — el navegador captura del dispositivo default del sistema y
+manda el audio al servicio de reconocimiento sin darle a la página ningún
+control sobre eso. Lo único accionable desde acá para mejorar la precisión es
+elegir la variante regional correcta (ver arriba) y, en teoría,
+`SpeechGrammarList` para sesgar el reconocimiento hacia el léxico de
+comandos — pero el soporte de Chrome para eso es casi un no-op hoy, así que
+no se usa. El medidor de nivel de audio (`audioMeter.js`) es una
+verificación aparte con `getUserMedia` propio, no una mejora del
+reconocimiento en sí.
