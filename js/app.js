@@ -30,7 +30,8 @@ import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
 import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
-import { currentTheme, toggleTheme } from "./theme.js";
+import { currentTheme, nextTheme, themeLabel } from "./theme.js";
+import { themes } from "./themes.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -61,6 +62,8 @@ function initApp() {
     variantTag: document.getElementById("variantTag"),
     themeBtn: document.getElementById("themeBtn"),
     themeColorMeta: document.getElementById("themeColorMeta"),
+    topbarToggle: document.getElementById("topbarToggle"),
+    actions: document.getElementById("actions"),
     saveState: document.getElementById("saveState"),
     copyBtn: document.getElementById("copyBtn"),
     readBtn: document.getElementById("readBtn"),
@@ -267,7 +270,8 @@ function initApp() {
     els.variantTag.title = v.label;
     els.variantTag.hidden = family().variants.length <= 1;
 
-    els.themeBtn.textContent = currentTheme() === "dark" ? t.themeToLight : t.themeToDark;
+    els.themeBtn.textContent = themeLabel(currentTheme());
+    els.themeBtn.setAttribute("aria-label", t.themeSwitchAria);
     els.docsBtn.textContent = t.docs;
     els.helpBtn.textContent = t.help;
     els.copyBtn.textContent = t.copy;
@@ -375,16 +379,21 @@ function initApp() {
     }, 1400);
   }
 
-  // --- Tema claro/oscuro ---
-  // Colores calcados de --paper en styles/main.css (claro/oscuro).
+  // --- Tema ---
   function applyThemeColorMeta() {
-    els.themeColorMeta.content = currentTheme() === "dark" ? "#242524" : "#F2F3F0";
+    els.themeColorMeta.content = themes[currentTheme()].colors.paper;
   }
   applyThemeColorMeta();
   els.themeBtn.addEventListener("click", () => {
-    toggleTheme();
-    els.themeBtn.textContent = currentTheme() === "dark" ? t.themeToLight : t.themeToDark;
+    nextTheme();
+    els.themeBtn.textContent = themeLabel(currentTheme());
     applyThemeColorMeta();
+  });
+
+  // --- Acordeón de acciones (pantallas chicas) ---
+  els.topbarToggle.addEventListener("click", () => {
+    const open = els.actions.classList.toggle("is-open");
+    els.topbarToggle.setAttribute("aria-expanded", String(open));
   });
 
   // --- Micrófono ---

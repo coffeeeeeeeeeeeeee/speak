@@ -13,7 +13,9 @@ edición.
 - ✅ **Fase 6 — Persistencia:** múltiples documentos, autoguardado local,
   exportar (`.txt`/`.html`/`.rtf`/`.md`/PDF), copiar.
 - ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de
-  espaciado, accesibilidad, tema claro/oscuro.
+  espaciado, accesibilidad, diseño plano (sin bordes/contornos), 6 temas
+  intercambiables (ver [Temas](#temas)), acordeón de acciones en pantallas
+  chicas.
 - ✅ **Multi-idioma:** español, inglés, francés, portugués, alemán, italiano,
   chino y japonés (léxico de comandos y toda la interfaz), con variantes
   regionales dentro de cada uno (ver [Idiomas y variantes](#idiomas-y-variantes)),
@@ -71,14 +73,32 @@ de documento resetea el deshacer/rehacer del anterior.
 
 ### Otras acciones
 
-**Leer** usa la síntesis de voz del navegador para releer el documento en voz
-alta — se bloquea mutuamente con el dictado (no tiene sentido que el
-micrófono capte la propia lectura). Al lado del botón "Dictar" hay un
-**medidor de nivel de audio**: es aparte del reconocimiento en sí (Web Speech
-no expone el stream ni parámetros de audio como ganancia o cancelación de
-eco), solo confirma visualmente que el micrófono está captando algo. El botón
-**Oscuro/Claro** cambia el tema; sin elegirlo, sigue la preferencia del
-sistema.
+**Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
+usa la síntesis de voz del navegador para releer el documento en voz alta —
+se bloquea mutuamente con el dictado (no tiene sentido que el micrófono capte
+la propia lectura). Al lado de "Dictar" también hay un **medidor de nivel de
+audio**: es aparte del reconocimiento en sí (Web Speech no expone el stream
+ni parámetros de audio como ganancia o cancelación de eco), solo confirma
+visualmente que el micrófono está captando algo.
+
+En pantallas angostas (menos de 720px), las acciones del encabezado se
+pliegan en un acordeón: el botón **▾** las muestra apiladas.
+
+## Temas
+
+El botón de tema (en el encabezado) cicla entre 6 temas: **Claro**,
+**Oscuro**, **Neón** (fucsia/celeste/amarillo sobre violeta oscuro, tipografía
+mono para todo), **Sepia** (lectura cálida, serif clásica), **Alto contraste**
+(blanco y negro puros, sans del sistema) y **Bosque** (verde salvia, calma).
+Sin elegir ninguno, sigue la preferencia de color del sistema (claro/oscuro).
+La elección queda guardada.
+
+Cada tema define su paleta y, opcionalmente, su propia tipografía —
+`js/themes.js` es el único lugar que hay que tocar para sumar uno nuevo, sin
+tocar CSS: `theme.js` aplica `colors`/`fonts` como custom properties sobre
+`<html>` en tiempo de ejecución. El diseño general no usa bordes/contornos:
+la separación entre zonas es contraste de color + sombra de elevación en los
+paneles, y los estados de hover/foco son un relleno de color, no un trazo.
 
 ## Comandos de voz
 
@@ -276,7 +296,8 @@ js/
   app.js            orquestación: idioma/variante, documentos, tema, todo lo demás
   config.js         familias de idioma + sus variantes regionales
   i18n.js           textos de interfaz por idioma (no el léxico de comandos)
-  theme.js          tema claro/oscuro (persistido, sigue el sistema por defecto)
+  themes.js         registro de temas — sumar uno nuevo es solo agregarlo acá
+  theme.js          aplica/cicla temas (custom properties en runtime, persistido)
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   text-ops.js       operaciones puras de texto (testeable)

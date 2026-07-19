@@ -6,13 +6,31 @@
   <title>speakly — voz a texto para escritores</title>
 
   <!-- Aplica el tema guardado ANTES del primer pintado, para que no
-       parpadee del tema del sistema al elegido (theme.js hace lo mismo
-       para cambios en caliente; esto es solo el arranque). -->
+       parpadee del tema del sistema al elegido. Es un adelanto chico
+       a propósito (solo paper/ink, no la paleta completa): el registro
+       real vive en theme.js/themes.js, esto es nomás para no arrancar
+       en blanco/negro un instante antes de que cargue el módulo. Si
+       se suma un tema nuevo en themes.js y se lo quiere sin parpadeo
+       desde el arranque, hay que sumarle su par paper/ink acá también
+       (opcional: sin eso igual funciona, solo parpadea una vez). -->
   <script>
     (function () {
+      var PAPER_INK = {
+        light: ["#F2F3F0", "#1B1C1E"],
+        dark: ["#242524", "#ECEDE9"],
+        neon: ["#150A24", "#F7F3FF"],
+        sepia: ["#F4ECD8", "#3B2F22"],
+        highContrast: ["#FFFFFF", "#000000"],
+        forest: ["#EDF1E7", "#23301F"],
+      };
       try {
         var t = localStorage.getItem("speakly:theme");
-        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+        var pair = PAPER_INK[t];
+        if (pair) {
+          document.documentElement.dataset.theme = t;
+          document.documentElement.style.setProperty("--paper", pair[0]);
+          document.documentElement.style.setProperty("--ink", pair[1]);
+        }
       } catch (e) {}
     })();
   </script>
@@ -51,12 +69,19 @@
   <div class="app" id="app">
     <header class="topbar">
       <span class="brand">speakly</span>
-      <div class="actions">
+      <button
+        class="action topbar-toggle"
+        id="topbarToggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="actions"
+        aria-label="Mostrar acciones"
+      >▾</button>
+      <div class="actions" id="actions">
         <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
         <button class="action" id="docsBtn" type="button" aria-haspopup="dialog">Documentos</button>
         <button class="action" id="helpBtn" type="button" aria-haspopup="dialog">Comandos</button>
         <button class="action" id="copyBtn" type="button">Copiar</button>
-        <button class="action" id="readBtn" type="button">Leer</button>
         <div class="export-wrap">
           <button
             class="action"
@@ -81,7 +106,7 @@
           data-label="región"
           aria-label="Cambiar variante regional"
         >ES</button>
-        <button class="action" id="themeBtn" type="button">Oscuro</button>
+        <button class="action" id="themeBtn" type="button">Claro</button>
       </div>
     </header>
 
@@ -113,9 +138,12 @@
         <span class="mic-level-bar" id="micLevelBar"></span>
       </div>
 
-      <button class="mic" id="micBtn" type="button" aria-pressed="false">
-        <span class="mic-label" id="micLabel">Dictar</span>
-      </button>
+      <div class="hud-buttons">
+        <button class="action" id="readBtn" type="button">Leer</button>
+        <button class="mic" id="micBtn" type="button" aria-pressed="false">
+          <span class="mic-label" id="micLabel">Dictar</span>
+        </button>
+      </div>
     </footer>
   </div>
 

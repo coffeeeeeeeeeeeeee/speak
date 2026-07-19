@@ -1,21 +1,32 @@
 /* ============================================================
    speakly — estilos base
    Concepto: un manuscrito que escucha.
+
+   Diseño plano: sin bordes/contornos. La separación entre zonas usa
+   contraste de color (paper vs. canvas) y sombra de elevación para
+   los paneles flotantes, no líneas. Los estados interactivos (hover/
+   foco) usan relleno de color, no un trazo alrededor.
    ============================================================ */
 
 :root {
-  /* Paleta */
+  /* Paleta — estos son los valores del tema "light" (ver
+     js/themes.js), que sirve de fallback antes de que corra JS.
+     theme.js pisa estas custom properties en tiempo de ejecución
+     para el resto de los temas; agregar un tema nuevo no toca este
+     archivo, solo js/themes.js. */
   --paper:      #F2F3F0;  /* papel: la hoja y el cromo */
-  --canvas:     #DBDCD7;  /* lienzo gris detrás de la hoja (barras laterales) */
+  --canvas:     #DBDCD7;  /* lienzo detrás de la hoja (barras laterales) */
   --ink:        #1B1C1E;  /* tinta */
   --ink-soft:   #5A5C5E;  /* texto secundario */
   --ghost:      #A8AAA4;  /* texto interino / fantasma */
-  --line:       #E2E3DF;  /* hairlines */
-  --accent:     #3A5BDB;  /* índigo: estado activo */
+  --line:       #E2E3DF;  /* separadores sutiles (relleno, no trazo) */
+  --accent:     #3A5BDB;  /* estado activo */
   --accent-dim: rgba(58, 91, 219, 0.12);
   --danger:     #B23A3A;  /* errores (permiso, etc.) */
+  /* --accent-2 / --accent-3: opcionales, con fallback a --accent —
+     algunos temas (ej. "neon") tienen más de un color de acento. */
 
-  /* Tipografía */
+  /* Tipografía (también la puede pisar un tema, ver js/themes.js) */
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
@@ -24,34 +35,6 @@
   --page-width: 46rem;  /* ancho de la hoja (texto + márgenes internos) */
   --hud-h: 3.25rem;
   --top-h: 2.75rem;
-}
-
-/* Oscuro por preferencia del sistema, salvo que el usuario haya
-   elegido explícitamente lo contrario con el botón de tema
-   (:root[data-theme] manda por encima de la media query). */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper:      #242524;
-    --canvas:     #141514;
-    --ink:        #ECEDE9;
-    --ink-soft:   #A6A8A2;
-    --ghost:      #6B6D67;
-    --line:       #35362F;
-    --accent:     #6C8CFF;
-    --accent-dim: rgba(108, 140, 255, 0.18);
-    --danger:     #E2726F;
-  }
-}
-:root[data-theme="dark"] {
-  --paper:      #242524;
-  --canvas:     #141514;
-  --ink:        #ECEDE9;
-  --ink-soft:   #A6A8A2;
-  --ghost:      #6B6D67;
-  --line:       #35362F;
-  --accent:     #6C8CFF;
-  --accent-dim: rgba(108, 140, 255, 0.18);
-  --danger:     #E2726F;
 }
 
 * { box-sizing: border-box; }
@@ -79,15 +62,15 @@ body {
 
 /* ---------- Barra superior ---------- */
 .topbar {
+  position: relative;
   min-height: var(--top-h);
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  row-gap: 0.4rem;
   padding: 0.5rem 1.5rem;
-  border-bottom: 1px solid var(--line);
+  /* Sin línea divisoria: la separación con la hoja la da el
+     contraste paper/canvas. */
 }
 
 .brand {
@@ -108,6 +91,15 @@ body {
   content: attr(data-label) " · ";
   color: var(--ghost);
 }
+
+/* Botón "▾" que abre el acordeón de acciones en pantallas chicas.
+   Oculto salvo bajo el breakpoint (ver Responsive). */
+.topbar-toggle {
+  display: none;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+}
+.topbar-toggle[aria-expanded="true"] { transform: scaleY(-1); }
 
 /* Acciones de documento (derecha del encabezado) */
 .actions {
@@ -134,18 +126,20 @@ body {
   color: var(--ink-soft);
   background: transparent;
   border: none;
-  padding: 0.25rem 0;
+  border-radius: 4px;
+  padding: 0.32rem 0.55rem;
   cursor: pointer;
-  border-bottom: 1px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
-.action:hover {
+.action:hover,
+.action:focus-visible {
   color: var(--ink);
-  border-bottom-color: var(--ink);
+  background: var(--accent-dim);
 }
 .action:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  background: transparent;
 }
 
 /* ---------- Hoja de escritura ---------- */
@@ -153,11 +147,12 @@ body {
   flex: 1 1 auto;
   overflow-y: auto;
   overflow-anchor: none;          /* evita reajustes de scroll del navegador */
-  background: var(--canvas);      /* lienzo gris: deja barras a los costados */
+  background: var(--canvas);      /* lienzo: deja barras a los costados */
   padding: 2.5rem 1.5rem;
 }
 
-/* La hoja propiamente dicha: papel flotando sobre el lienzo. */
+/* La hoja propiamente dicha: papel flotando sobre el lienzo (la
+   separación es el contraste de color + la sombra, no un borde). */
 .sheet-column {
   max-width: var(--page-width);
   margin: 0 auto;
@@ -200,7 +195,6 @@ body {
   align-items: center;
   gap: 1.25rem;
   padding: 0 1.5rem;
-  border-top: 1px solid var(--line);
   background: var(--paper);
 }
 
@@ -227,7 +221,8 @@ body {
   flex: 0 0 auto;
 }
 .dot[data-state="listening"] {
-  background: var(--accent);
+  /* Segundo color de acento si el tema lo define (ej. "neon"). */
+  background: var(--accent-2, var(--accent));
   animation: breathe 2s ease-in-out infinite;
 }
 .dot[data-state="error"] {
@@ -268,10 +263,19 @@ body {
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--accent);
+  /* Tercer color de acento si el tema lo define (ej. "neon"). */
+  background: var(--accent-3, var(--accent));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.08s linear;
+}
+
+/* Agrupa "Leer" y "Dictar": Leer queda al lado del botón principal. */
+.hud-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 /* ---------- Botón de micrófono ---------- */
@@ -281,28 +285,29 @@ body {
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--ink);
+  background: var(--line);
+  border: none;
   border-radius: 999px;
   padding: 0.5rem 1.25rem;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 .mic:hover { background: var(--ink); color: var(--paper); }
 .mic[aria-pressed="true"] {
   background: var(--accent);
-  border-color: var(--accent);
   color: #fff;
 }
 .mic[aria-pressed="true"]:hover { background: var(--accent); opacity: 0.9; }
 .mic:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* ---------- Foco accesible ---------- */
+/* Una barra sólida (relleno), no un anillo alrededor del elemento. */
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: inset 0 -2px 0 0 var(--accent);
 }
-.editor:focus-visible { outline: none; }
+.action:focus-visible { box-shadow: none; } /* .action ya cambia de fondo al enfocar */
+.editor:focus-visible { box-shadow: none; }
 
 /* ---------- Aviso de no-soporte ---------- */
 /* El atributo `hidden` debe ganar: solo se muestra cuando NO está hidden. */
@@ -343,8 +348,7 @@ body {
   max-height: 82vh;
   overflow-y: auto;
   background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 1.75rem;
   box-shadow: 0 1.5rem 3rem rgba(27, 28, 30, 0.18);
 }
@@ -380,10 +384,10 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid var(--line);
+  padding: 0.45rem 0.5rem;
+  border-radius: 4px;
 }
-.cmd:last-child { border-bottom: none; }
+.cmd:nth-child(2n) { background: var(--accent-dim); }
 .cmd-trigger {
   font-family: var(--serif);
   font-size: 0.95rem;
@@ -422,8 +426,7 @@ body {
   max-height: 82vh;
   overflow-y: auto;
   background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 1.75rem;
   box-shadow: 0 1.5rem 3rem rgba(27, 28, 30, 0.18);
 }
@@ -446,9 +449,9 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-bottom: 1px solid var(--line);
+  border-radius: 4px;
 }
-.docs-item:last-child { border-bottom: none; }
+.docs-item:nth-child(2n) { background: var(--accent-dim); }
 .docs-item.is-current .docs-item-title { color: var(--accent); }
 .docs-open {
   flex: 1 1 auto;
@@ -456,7 +459,7 @@ body {
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
-  padding: 0.6rem 0.2rem;
+  padding: 0.6rem 0.5rem;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -488,7 +491,7 @@ body {
   cursor: pointer;
   border-radius: 3px;
 }
-.docs-remove:hover { color: var(--danger); background: var(--gray-mid, rgba(0, 0, 0, 0.06)); }
+.docs-remove:hover { color: var(--danger); background: var(--accent-dim); }
 
 /* ---------- Menú de exportar ---------- */
 .export-wrap { position: relative; }
@@ -503,8 +506,7 @@ body {
   padding: 0.35rem;
   list-style: none;
   background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 6px;
   box-shadow: 0 0.75rem 2rem rgba(27, 28, 30, 0.18);
 }
 .export-item {
@@ -567,11 +569,36 @@ body {
 .unsupported strong { color: var(--ink); }
 
 /* ---------- Responsive ---------- */
+/* Bajo este ancho, las acciones del encabezado se pliegan en un
+   acordeón: el botón "▾" las muestra/oculta apiladas. */
+@media (max-width: 720px) {
+  .topbar-toggle { display: inline-flex; }
+  .actions {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.2rem;
+  }
+  .actions.is-open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    padding: 0.75rem 1.5rem 1rem;
+    background: var(--paper);
+    box-shadow: 0 0.75rem 1.5rem rgba(27, 28, 30, 0.15);
+  }
+  .actions .action { text-align: left; width: 100%; }
+  .actions .save-state { text-align: left; }
+  .actions .export-wrap { width: 100%; }
+  .actions .export-menu:not([hidden]) { position: static; margin-top: 0.3rem; box-shadow: none; }
+}
+
 @media (max-width: 540px) {
-  .topbar { padding: 0 1rem; }
-  .actions { gap: 0.7rem; }
-  .save-state { display: none; }
-  .lang-tag { display: none; }
+  .topbar { padding: 0.5rem 1rem; }
   .sheet { padding: 1rem 0.6rem; }
   .sheet-column {
     padding: 2rem 1.4rem 4rem;
@@ -579,10 +606,11 @@ body {
     box-shadow: 0 2px 10px rgba(27, 28, 30, 0.08);
   }
   .editor { font-size: 1.18rem; }
-  .hud { gap: 0.75rem; padding: 0 1rem; }
+  .hud { gap: 0.6rem; padding: 0 1rem; }
   .hud-status { min-width: auto; }
+  .mic-level { display: none; } /* prioridad al botón de dictar */
   .count::after { content: ""; } /* solo el número en pantallas chicas */
-  .help-panel { padding: 1.25rem; }
+  .help-panel, .docs-panel { padding: 1.25rem; }
   .cmd { flex-direction: column; gap: 0.15rem; }
   .cmd-desc { text-align: left; }
 }
