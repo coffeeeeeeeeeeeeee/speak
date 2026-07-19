@@ -12,8 +12,8 @@ edición.
   deshacer/rehacer y `literal`, con detección automática (sin palabra clave).
 - ✅ **Fase 6 — Persistencia:** autoguardado local, exportar `.txt`, copiar.
 - ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de espaciado, accesibilidad.
-- ✅ **Multi-idioma:** español + inglés (léxico de comandos y toda la interfaz),
-  selector en el encabezado, preferencia persistida.
+- ✅ **Multi-idioma:** español, inglés, francés y portugués (léxico de comandos
+  y toda la interfaz), selector en el encabezado, preferencia persistida.
 
 ## Cómo ejecutarlo
 
@@ -30,9 +30,9 @@ El dictado inserta **en la posición del cursor**: hacé clic donde quieras dent
 
 **Atajos:** dictar/detener `Ctrl/Cmd + J` · exportar `.txt` `Ctrl/Cmd + S` · deshacer/rehacer `Ctrl+Z` / `Ctrl+Shift+Z` · panel de comandos `Ctrl/Cmd + /`. El texto se **autoguarda** en el navegador y se recupera al recargar; *Copiar* y *Exportar* están en el encabezado.
 
-El botón **ES · EN** del encabezado cambia el idioma de dictado (léxico de
-comandos, reconocimiento de voz y toda la interfaz). La elección queda
-guardada y se recupera al volver a abrir la hoja.
+El botón de idioma del encabezado (ES · EN · FR · PT, en ese orden) cambia el
+idioma de dictado (léxico de comandos, reconocimiento de voz y toda la
+interfaz). La elección queda guardada y se recupera al volver a abrir la hoja.
 
 ## Comandos de voz
 
@@ -73,16 +73,52 @@ caps off / end caps.
 
 The initial capital after a period, a closing sign, and a paragraph break is automatic.
 
+### Français
+
+**Ponctuation :** point · point final · virgule · deux points · point-virgule
+/ point virgule · points de suspension · point d'interrogation · point
+d'exclamation · nouvelle ligne / à la ligne · nouveau paragraphe · tiret ·
+tiret cadratin · guillemet · ouvre/ferme parenthèse.
+
+**Édition :** supprime/efface le mot · supprime/efface la phrase ·
+supprime/efface tout · sélectionne tout.
+
+**Majuscules :** majuscule (le mot suivant) · minuscule · tout en majuscules ·
+fin des majuscules.
+
+**Historique :** annuler · rétablir (aussi `Ctrl+Z` / `Ctrl+Shift+Z`).
+
+La majuscule initiale après un point, un signe de fermeture et un saut de
+paragraphe est automatique.
+
+### Português
+
+**Pontuação:** ponto / ponto final · vírgula · dois pontos · ponto e vírgula ·
+reticências · ponto de interrogação · ponto de exclamação · nova linha /
+quebra de linha · novo parágrafo · hífen · travessão · aspas · abre/fecha
+parênteses.
+
+**Edição:** apaga/apagar palavra · apaga/apagar frase · apaga/apagar tudo ·
+selecionar tudo.
+
+**Maiúsculas:** maiúscula (a próxima palavra) · minúscula · tudo em
+maiúsculas · fim das maiúsculas.
+
+**Histórico:** desfazer · refazer (também `Ctrl+Z` / `Ctrl+Shift+Z`).
+
+A maiúscula inicial após ponto, sinal de fechamento e quebra de parágrafo é
+automática.
+
 ## Tests
 
 ```bash
 tests/run.sh
 ```
 
-Corre `text-ops.js` y el parser (español e inglés) en Chrome/Chromium headless
-(sin Node ni dependencias, para no sumarle un build step al proyecto). Levanta
-un server efímero, ejecuta `tests/index.html` y vuelca el resultado a la
-terminal con código de salida 1 si algo falla.
+Corre `text-ops.js` y el parser (español, inglés, francés y portugués) en
+Chrome/Chromium headless (sin Node ni dependencias, para no sumarle un build
+step al proyecto). Levanta un server efímero, ejecuta `tests/index.html` y
+vuelca el resultado a la terminal con código de salida 1 si algo falla.
 
 ## Estructura
 
@@ -105,11 +141,15 @@ js/
     parser.js       segmenta dictado vs comandos
     lang/es.js      léxico español
     lang/en.js      léxico inglés
+    lang/fr.js      léxico francés
+    lang/pt.js      léxico portugués (Brasil)
 tests/
   tiny-test.js      test-runner casero (test/assertEqual/run)
   text-ops.test.js  suite de text-ops.js
   parser.test.js    suite del parser (léxico español)
   parser-en.test.js suite del parser (léxico inglés)
+  parser-fr.test.js suite del parser (léxico francés)
+  parser-pt.test.js suite del parser (léxico portugués)
   index.html        arma y corre las suites en el navegador
   run.sh            arranca un server, corre index.html en headless y reporta
 ```

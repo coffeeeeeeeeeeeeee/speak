@@ -14,5 +14,7 @@ export const config = {
   languages: {
     "es-ES": { code: "es-ES", short: "es", label: "Español", lexicon: "es" },
     "en-US": { code: "en-US", short: "en", label: "English", lexicon: "en" },
+    "fr-FR": { code: "fr-FR", short: "fr", label: "Français", lexicon: "fr" },
+    "pt-BR": { code: "pt-BR", short: "pt", label: "Português", lexicon: "pt" },
   },
 };

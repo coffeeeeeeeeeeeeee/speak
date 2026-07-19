@@ -126,4 +126,127 @@ export const strings = {
     newParagraphLabel: "paragraph break",
     newLineLabel: "line break",
   },
+
+  fr: {
+    title: "speakly — dictée vocale pour écrivains",
+    unsupported:
+      "Votre navigateur ne prend pas en charge la reconnaissance vocale. " +
+      "Utilisez Chrome ou Edge sur ordinateur pour dicter.",
+    langLabel: "langue",
+    langSwitchAria: "Changer la langue de dictée",
+    help: "Commandes",
+    copy: "Copier",
+    copied: "Copié",
+    copyFailed: "Échec",
+    export: "Exporter",
+    editorPlaceholder: "Appuyez sur « Dicter » et commencez à parler. Le texte apparaît ici.",
+    editorAriaLabel: "Feuille d'écriture vocale",
+    wordsLabel: "mots",
+    dictate: "Dicter",
+    stop: "Arrêter",
+    statusListening: "à l'écoute",
+    statusIdle: "en pause",
+    statusError: "erreur",
+    micError: "microphone",
+    permissionDenied:
+      "Autorisation du microphone refusée. Activez-la depuis l'icône de la " +
+      "barre d'adresse et appuyez de nouveau sur « Dicter ».",
+    networkError: "Pas de connexion : la reconnaissance vocale a besoin d'internet.",
+    genericError: "Erreur de reconnaissance vocale.",
+    savingState: "enregistrement…",
+    savedState: "enregistré",
+    noSaveState: "non enregistré",
+    helpTitle: "Commandes vocales",
+    helpIntroHtml:
+      "Détectées automatiquement pendant la dictée. Pour écrire un mot-" +
+      "commande tel quel, dites d'abord <strong>« littéral »</strong> " +
+      "(ex. : « littéral point » écrit le mot <em>point</em>). Si une " +
+      "commande se déclenche par erreur, dites <strong>« annuler »</strong> " +
+      "ou utilisez Ctrl+Z. La majuscule après un point et en début de " +
+      "paragraphe est automatique.",
+    helpClose: "Fermer",
+    helpCloseAria: "Fermer le panneau",
+    toastCloseAria: "Fermer l'avis",
+    helpSections: {
+      punctuation: "Ponctuation",
+      editing: "Édition",
+      casing: "Majuscules",
+      history: "Historique",
+    },
+    actionLabels: {
+      deleteWord: "supprime le dernier mot",
+      deleteSentence: "supprime la dernière phrase",
+      deleteAll: "efface toute la feuille",
+      selectAll: "sélectionne tout le texte",
+      capitalizeNext: "majuscule au mot suivant",
+      lowercaseNext: "minuscule au mot suivant",
+      upperOn: "commence à écrire TOUT EN MAJUSCULES",
+      upperOff: "termine le mode majuscules",
+      undo: "annule la dernière action",
+      redo: "rétablit ce qui a été annulé",
+    },
+    newParagraphLabel: "saut de paragraphe",
+    newLineLabel: "saut de ligne",
+  },
+
+  pt: {
+    title: "speakly — voz em texto para escritores",
+    unsupported:
+      "Seu navegador não é compatível com o reconhecimento de voz. Use o " +
+      "Chrome ou o Edge no computador para ditar.",
+    langLabel: "idioma",
+    langSwitchAria: "Trocar idioma de ditado",
+    help: "Comandos",
+    copy: "Copiar",
+    copied: "Copiado",
+    copyFailed: "Não foi possível",
+    export: "Exportar",
+    editorPlaceholder: "Aperte «Ditar» e comece a falar. O texto aparece aqui.",
+    editorAriaLabel: "Folha de escrita por voz",
+    wordsLabel: "palavras",
+    dictate: "Ditar",
+    stop: "Parar",
+    statusListening: "ouvindo",
+    statusIdle: "em pausa",
+    statusError: "erro",
+    micError: "microfone",
+    permissionDenied:
+      "Permissão de microfone negada. Ative-a no ícone da barra de " +
+      "endereço e aperte «Ditar» de novo.",
+    networkError: "Sem conexão: o reconhecimento de voz precisa de internet.",
+    genericError: "Erro de reconhecimento de voz.",
+    savingState: "salvando…",
+    savedState: "salvo",
+    noSaveState: "não salvo",
+    helpTitle: "Comandos de voz",
+    helpIntroHtml:
+      "Detectados automaticamente enquanto você dita. Para escrever uma " +
+      "palavra-comando ao pé da letra, diga antes <strong>«literal»</strong> " +
+      "(ex.: «literal ponto» escreve a palavra <em>ponto</em>). Se algo " +
+      "disparar sem querer, diga <strong>«desfazer»</strong> ou use Ctrl+Z. " +
+      "A maiúscula após ponto e no início de parágrafo é automática.",
+    helpClose: "Fechar",
+    helpCloseAria: "Fechar painel",
+    toastCloseAria: "Fechar aviso",
+    helpSections: {
+      punctuation: "Pontuação",
+      editing: "Edição",
+      casing: "Maiúsculas",
+      history: "Histórico",
+    },
+    actionLabels: {
+      deleteWord: "apaga a última palavra",
+      deleteSentence: "apaga a última frase",
+      deleteAll: "apaga a folha inteira",
+      selectAll: "seleciona todo o texto",
+      capitalizeNext: "maiúscula na próxima palavra",
+      lowercaseNext: "minúscula na próxima palavra",
+      upperOn: "começa a escrever TUDO EM MAIÚSCULAS",
+      upperOff: "termina o modo maiúsculas",
+      undo: "desfaz a última ação",
+      redo: "refaz o que foi desfeito",
+    },
+    newParagraphLabel: "quebra de parágrafo",
+    newLineLabel: "quebra de linha",
+  },
 };

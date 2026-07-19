@@ -13,12 +13,14 @@ import { createParser } from "./commands/parser.js";
 import { CommandEngine } from "./commands/engine.js";
 import { es } from "./commands/lang/es.js";
 import { en } from "./commands/lang/en.js";
+import { fr } from "./commands/lang/fr.js";
+import { pt } from "./commands/lang/pt.js";
 import { Storage } from "./storage.js";
 import { exportTxt, copyText } from "./exporter.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 
-const LEXICONS = { es, en };
+const LEXICONS = { es, en, fr, pt };
 
 if (!isSupported()) {
   document.getElementById("unsupported").hidden = false;
