@@ -160,6 +160,27 @@ test("tidy: texto nulo no rompe", () => {
 
 // --- insertAt (caret) ---
 
+// --- splitParagraphs ---
+
+test("splitParagraphs: separa por línea en blanco, conserva saltos sueltos adentro", () => {
+  assertEqual(ops.splitParagraphs("Uno\nSigue.\n\nDos.\n\n\nTres."), [
+    "Uno\nSigue.",
+    "Dos.",
+    "Tres.",
+  ]);
+});
+
+test("splitParagraphs: texto vacío da lista vacía", () => {
+  assertEqual(ops.splitParagraphs(""), []);
+  assertEqual(ops.splitParagraphs("   \n\n  "), []);
+});
+
+test("splitParagraphs: sin párrafos extra, un solo elemento", () => {
+  assertEqual(ops.splitParagraphs("Todo junto sin blancos."), [
+    "Todo junto sin blancos.",
+  ]);
+});
+
 test("insertAt: inserta en medio del texto con espacios correctos", () => {
   const r = ops.insertAt("Hola mundo", 4, "bello");
   assertEqual(r, { text: "Hola bello mundo", caret: 10 });

@@ -10,7 +10,7 @@ edición.
 - ✅ **Fase 2 — Dictado continuo:** transcripción en vivo, auto-reinicio, conteo.
 - ✅ **Fase 3 — Comandos:** puntuación, mayúscula automática, edición, mayúsculas,
   deshacer/rehacer y `literal`, con detección automática (sin palabra clave).
-- ✅ **Fase 6 — Persistencia:** autoguardado local, exportar `.txt`, copiar.
+- ✅ **Fase 6 — Persistencia:** autoguardado local, exportar (`.txt`/`.html`/`.rtf`/PDF), copiar.
 - ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de espaciado, accesibilidad.
 - ✅ **Multi-idioma:** español, inglés, francés, portugués, alemán, italiano,
   chino y japonés (léxico de comandos y toda la interfaz), selector en el
@@ -36,6 +36,13 @@ El botón de idioma del encabezado (ES · EN · FR · PT · DE · IT · ZH · JA
 ese orden) cambia el idioma de dictado (léxico de comandos, reconocimiento de
 voz y toda la interfaz). La elección queda guardada y se recupera al volver a
 abrir la hoja.
+
+**Exportar** abre un menú con los formatos disponibles: **TXT**, **HTML**,
+**RTF** (se abren directo en Word/LibreOffice/Google Docs) y **PDF** — este
+último no descarga nada: abre el diálogo nativo de impresión del navegador
+para que elijas "Guardar como PDF" ahí (funciona con cualquier idioma sin
+necesidad de embeber fuentes). `Ctrl/Cmd + S` sigue exportando `.txt` directo,
+sin pasar por el menú.
 
 ## Comandos de voz
 
@@ -181,10 +188,10 @@ di paragrafo è automatica.
 tests/run.sh
 ```
 
-Corre `text-ops.js` y el parser (los 8 idiomas) en Chrome/Chromium headless
-(sin Node ni dependencias, para no sumarle un build step al proyecto). Levanta
-un server efímero, ejecuta `tests/index.html` y vuelca el resultado a la
-terminal con código de salida 1 si algo falla.
+Corre `text-ops.js`, `export/` y el parser (los 8 idiomas) en Chrome/Chromium
+headless (sin Node ni dependencias, para no sumarle un build step al
+proyecto). Levanta un server efímero, ejecuta `tests/index.html` y vuelca el
+resultado a la terminal con código de salida 1 si algo falla.
 
 ## Estructura
 
@@ -200,7 +207,7 @@ js/
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
   storage.js        autoguardado (localStorage)
-  exporter.js       exportar .txt + copiar
+  exporter.js       copiar al portapapeles (no es un formato de archivo)
   help.js           panel de comandos
   commands/
     engine.js       aplica los comandos al editor
@@ -213,9 +220,18 @@ js/
     lang/it.js      léxico italiano
     lang/zh.js      léxico chino (tokenize: "char")
     lang/ja.js      léxico japonés (tokenize: "char")
+  export/           módulos de guardado — un formato por archivo
+    download.js     Blob + <a download> compartido, nombre de archivo por defecto
+    txt.js          .txt (texto tal cual)
+    html.js         .html (documento autocontenido, un <p> por párrafo)
+    rtf.js          .rtf (control words a mano, sin librerías)
+    print.js        "PDF" vía diálogo de impresión del navegador (#printSheet)
+    formats.js       registro de formatos que arma el menú
+    menu.js          menú desplegable del botón Exportar (abrir/cerrar accesible)
 tests/
   tiny-test.js      test-runner casero (test/assertEqual/run)
   text-ops.test.js  suite de text-ops.js
+  export.test.js    suite de export/ (toTxt/toHtml/toRtf)
   parser.test.js    suite del parser (léxico español)
   parser-en.test.js suite del parser (léxico inglés)
   parser-fr.test.js suite del parser (léxico francés)

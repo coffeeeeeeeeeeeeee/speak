@@ -90,6 +90,17 @@ export function tidy(text) {
     .trim();
 }
 
+// Divide en párrafos (separados por línea en blanco, tal como los deja
+// tidy()). Cada párrafo puede tener saltos de línea sueltos adentro
+// ("nueva línea", a diferencia de "nuevo párrafo") — lo usan los
+// exportadores de export/ para representar la misma estructura en
+// distintos formatos (html/rtf/pdf).
+export function splitParagraphs(text) {
+  const t = (text || "").trim();
+  if (!t) return [];
+  return t.split(/\n{2,}/);
+}
+
 // --- Operaciones en una posición de cursor (caret) ---
 // Devuelven { text, caret }.
 

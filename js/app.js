@@ -20,7 +20,10 @@ import { it } from "./commands/lang/it.js";
 import { zh } from "./commands/lang/zh.js";
 import { ja } from "./commands/lang/ja.js";
 import { Storage } from "./storage.js";
-import { exportTxt, copyText } from "./exporter.js";
+import { copyText } from "./exporter.js";
+import { exportTxt } from "./export/txt.js";
+import { createFormats } from "./export/formats.js";
+import { createExportMenu } from "./export/menu.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 
@@ -46,6 +49,7 @@ function initApp() {
     saveState: document.getElementById("saveState"),
     copyBtn: document.getElementById("copyBtn"),
     exportBtn: document.getElementById("exportBtn"),
+    exportMenu: document.getElementById("exportMenu"),
     helpBtn: document.getElementById("helpBtn"),
     help: document.getElementById("help"),
     helpBody: document.getElementById("helpBody"),
@@ -101,6 +105,18 @@ function initApp() {
     },
   });
 
+  // --- Menú de exportar ---
+  const formats = createFormats({
+    getLang: () => lang.code,
+    getTitle: () => t.title,
+  });
+  const exportMenu = createExportMenu({
+    formats,
+    getText: () => tidy(editor.getText()),
+    els: { toggle: els.exportBtn, menu: els.exportMenu, list: els.exportMenu },
+  });
+  exportMenu.build(t);
+
   // --- Reconocimiento ---
   const speech = new SpeechController({
     lang: lang.code,
@@ -141,6 +157,7 @@ function initApp() {
     parser = createParser(LEXICONS[lang.lexicon]);
     engine.parser = parser;
     help.setLexicon(LEXICONS[lang.lexicon], t);
+    exportMenu.build(t);
     speech.setLang(lang.code);
     setStatus(speech.listening ? "listening" : "idle");
     langStorage.save(lang.code);
@@ -210,10 +227,6 @@ function initApp() {
   els.copyBtn.addEventListener("click", async () => {
     const ok = await copyText(tidy(editor.getText()));
     flashLabel(els.copyBtn, ok ? t.copied : t.copyFailed);
-  });
-
-  els.exportBtn.addEventListener("click", () => {
-    exportTxt(tidy(editor.getText()));
   });
 
   // --- Atajos de teclado ---

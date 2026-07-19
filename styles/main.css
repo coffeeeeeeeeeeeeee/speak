@@ -345,6 +345,40 @@ body {
   align-self: center;
 }
 
+/* ---------- Menú de exportar ---------- */
+.export-wrap { position: relative; }
+.export-menu[hidden] { display: none; }
+.export-menu:not([hidden]) {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 8rem;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 0.75rem 2rem rgba(27, 28, 30, 0.18);
+}
+.export-item {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-align: left;
+  cursor: pointer;
+}
+.export-item:hover,
+.export-item:focus-visible { background: var(--accent-dim); }
+
 /* ---------- Toast de avisos ---------- */
 .toast[hidden] { display: none; }
 .toast:not([hidden]) {
@@ -413,4 +447,23 @@ body {
   .dot[data-state="listening"] { animation: none; }
   .sheet { scroll-behavior: auto; }
   * { transition: none !important; }
+}
+
+/* ---------- Hoja imprimible ("PDF") ---------- */
+/* Oculta en pantalla; export/print.js la llena y dispara window.print()
+   justo antes de que estos estilos importen. */
+.print-sheet { display: none; }
+
+@media print {
+  .app, .help, .toast, .unsupported { display: none !important; }
+  .print-sheet {
+    display: block;
+    max-width: var(--measure);
+    margin: 0 auto;
+    font-family: var(--serif);
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #000;
+  }
+  .print-sheet p { margin: 0 0 1em; white-space: pre-wrap; }
 }
