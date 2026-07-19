@@ -12,8 +12,9 @@ edición.
   deshacer/rehacer y `literal`, con detección automática (sin palabra clave).
 - ✅ **Fase 6 — Persistencia:** autoguardado local, exportar `.txt`, copiar.
 - ✅ **Fase 7 — Pulido:** panel de comandos, avisos de error, limpieza de espaciado, accesibilidad.
-- ✅ **Multi-idioma:** español, inglés, francés y portugués (léxico de comandos
-  y toda la interfaz), selector en el encabezado, preferencia persistida.
+- ✅ **Multi-idioma:** español, inglés, francés, portugués, alemán e italiano
+  (léxico de comandos y toda la interfaz), selector en el encabezado,
+  preferencia persistida.
 
 ## Cómo ejecutarlo
 
@@ -30,9 +31,9 @@ El dictado inserta **en la posición del cursor**: hacé clic donde quieras dent
 
 **Atajos:** dictar/detener `Ctrl/Cmd + J` · exportar `.txt` `Ctrl/Cmd + S` · deshacer/rehacer `Ctrl+Z` / `Ctrl+Shift+Z` · panel de comandos `Ctrl/Cmd + /`. El texto se **autoguarda** en el navegador y se recupera al recargar; *Copiar* y *Exportar* están en el encabezado.
 
-El botón de idioma del encabezado (ES · EN · FR · PT, en ese orden) cambia el
-idioma de dictado (léxico de comandos, reconocimiento de voz y toda la
-interfaz). La elección queda guardada y se recupera al volver a abrir la hoja.
+El botón de idioma del encabezado (ES · EN · FR · PT · DE · IT, en ese orden)
+cambia el idioma de dictado (léxico de comandos, reconocimiento de voz y toda
+la interfaz). La elección queda guardada y se recupera al volver a abrir la hoja.
 
 ## Comandos de voz
 
@@ -109,16 +110,51 @@ maiúsculas · fim das maiúsculas.
 A maiúscula inicial após ponto, sinal de fechamento e quebra de parágrafo é
 automática.
 
+### Deutsch
+
+**Zeichensetzung:** punkt · komma · doppelpunkt · semikolon ·
+auslassungspunkte · fragezeichen · ausrufezeichen · neue zeile /
+zeilenumbruch · neuer absatz · bindestrich · gedankenstrich ·
+anführungszeichen · klammer auf/zu.
+
+**Bearbeiten:** wort löschen · satz löschen · alles löschen · alles auswählen.
+
+**Groß-/Kleinschreibung:** großschreiben (nächstes Wort) · kleinschreiben ·
+alles großschreiben · großschreibung beenden.
+
+**Verlauf:** rückgängig · wiederholen (auch `Strg+Z` / `Strg+Umschalt+Z`).
+
+Der Großbuchstabe nach einem Punkt und am Absatzanfang ist automatisch.
+
+### Italiano
+
+**Punteggiatura:** punto · virgola · due punti · punto e virgola · puntini
+di sospensione · punto interrogativo · punto esclamativo · nuova riga / a
+capo · nuovo paragrafo · trattino · lineetta · virgolette · apri/chiudi
+parentesi.
+
+**Modifica:** cancella parola · cancella frase · cancella tutto · seleziona
+tutto.
+
+**Maiuscole:** maiuscola (la parola successiva) · minuscola · tutto
+maiuscolo · fine maiuscolo.
+
+**Cronologia:** annulla · ripristina (anche `Ctrl+Z` / `Ctrl+Maiusc+Z`).
+
+La maiuscola iniziale dopo un punto, un segno di chiusura e un'interruzione
+di paragrafo è automatica.
+
 ## Tests
 
 ```bash
 tests/run.sh
 ```
 
-Corre `text-ops.js` y el parser (español, inglés, francés y portugués) en
-Chrome/Chromium headless (sin Node ni dependencias, para no sumarle un build
-step al proyecto). Levanta un server efímero, ejecuta `tests/index.html` y
-vuelca el resultado a la terminal con código de salida 1 si algo falla.
+Corre `text-ops.js` y el parser (español, inglés, francés, portugués, alemán
+e italiano) en Chrome/Chromium headless (sin Node ni dependencias, para no
+sumarle un build step al proyecto). Levanta un server efímero, ejecuta
+`tests/index.html` y vuelca el resultado a la terminal con código de salida 1
+si algo falla.
 
 ## Estructura
 
@@ -143,6 +179,8 @@ js/
     lang/en.js      léxico inglés
     lang/fr.js      léxico francés
     lang/pt.js      léxico portugués (Brasil)
+    lang/de.js      léxico alemán
+    lang/it.js      léxico italiano
 tests/
   tiny-test.js      test-runner casero (test/assertEqual/run)
   text-ops.test.js  suite de text-ops.js
@@ -150,6 +188,8 @@ tests/
   parser-en.test.js suite del parser (léxico inglés)
   parser-fr.test.js suite del parser (léxico francés)
   parser-pt.test.js suite del parser (léxico portugués)
+  parser-de.test.js suite del parser (léxico alemán)
+  parser-it.test.js suite del parser (léxico italiano)
   index.html        arma y corre las suites en el navegador
   run.sh            arranca un server, corre index.html en headless y reporta
 ```

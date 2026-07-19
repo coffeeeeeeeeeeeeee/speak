@@ -249,4 +249,128 @@ export const strings = {
     newParagraphLabel: "quebra de parágrafo",
     newLineLabel: "quebra de linha",
   },
+
+  de: {
+    title: "speakly — Diktieren für Schreibende",
+    unsupported:
+      "Ihr Browser unterstützt keine Spracherkennung. Verwenden Sie Chrome " +
+      "oder Edge am Computer zum Diktieren.",
+    langLabel: "Sprache",
+    langSwitchAria: "Diktiersprache wechseln",
+    help: "Befehle",
+    copy: "Kopieren",
+    copied: "Kopiert",
+    copyFailed: "Fehlgeschlagen",
+    export: "Exportieren",
+    editorPlaceholder: "Drücken Sie „Diktieren“ und beginnen Sie zu sprechen. Der Text erscheint hier.",
+    editorAriaLabel: "Blatt zum Diktieren",
+    wordsLabel: "Wörter",
+    dictate: "Diktieren",
+    stop: "Stopp",
+    statusListening: "hört zu",
+    statusIdle: "pausiert",
+    statusError: "Fehler",
+    micError: "Mikrofon",
+    permissionDenied:
+      "Mikrofonzugriff verweigert. Aktivieren Sie ihn über das Symbol in " +
+      "der Adressleiste und drücken Sie erneut „Diktieren“.",
+    networkError: "Keine Verbindung: Die Spracherkennung benötigt Internet.",
+    genericError: "Fehler bei der Spracherkennung.",
+    savingState: "speichert…",
+    savedState: "gespeichert",
+    noSaveState: "nicht gespeichert",
+    helpTitle: "Sprachbefehle",
+    helpIntroHtml:
+      "Werden automatisch beim Diktieren erkannt. Um ein Befehlswort " +
+      "wörtlich zu schreiben, sagen Sie zuerst <strong>„wörtlich“</strong> " +
+      "(z. B. schreibt „wörtlich Punkt“ das Wort <em>Punkt</em>). Wenn " +
+      "versehentlich ein Befehl ausgelöst wird, sagen Sie " +
+      "<strong>„rückgängig“</strong> oder drücken Sie Strg+Z. Der " +
+      "Großbuchstabe nach einem Punkt und am Absatzanfang ist automatisch.",
+    helpClose: "Schließen",
+    helpCloseAria: "Panel schließen",
+    toastCloseAria: "Hinweis schließen",
+    helpSections: {
+      punctuation: "Zeichensetzung",
+      editing: "Bearbeiten",
+      casing: "Groß-/Kleinschreibung",
+      history: "Verlauf",
+    },
+    actionLabels: {
+      deleteWord: "löscht das letzte Wort",
+      deleteSentence: "löscht den letzten Satz",
+      deleteAll: "löscht das ganze Blatt",
+      selectAll: "wählt den gesamten Text aus",
+      capitalizeNext: "Großbuchstabe beim nächsten Wort",
+      lowercaseNext: "Kleinbuchstabe beim nächsten Wort",
+      upperOn: "beginnt ALLES IN GROSSBUCHSTABEN zu schreiben",
+      upperOff: "beendet den Großschreibungsmodus",
+      undo: "macht die letzte Änderung rückgängig",
+      redo: "stellt das Rückgängiggemachte wieder her",
+    },
+    newParagraphLabel: "Absatzumbruch",
+    newLineLabel: "Zeilenumbruch",
+  },
+
+  it: {
+    title: "speakly — voce in testo per chi scrive",
+    unsupported:
+      "Il tuo browser non supporta il riconoscimento vocale. Usa Chrome o " +
+      "Edge da computer per dettare.",
+    langLabel: "lingua",
+    langSwitchAria: "Cambia lingua di dettatura",
+    help: "Comandi",
+    copy: "Copia",
+    copied: "Copiato",
+    copyFailed: "Non riuscito",
+    export: "Esporta",
+    editorPlaceholder: "Premi «Detta» e inizia a parlare. Il testo appare qui.",
+    editorAriaLabel: "Foglio di scrittura vocale",
+    wordsLabel: "parole",
+    dictate: "Detta",
+    stop: "Ferma",
+    statusListening: "in ascolto",
+    statusIdle: "in pausa",
+    statusError: "errore",
+    micError: "microfono",
+    permissionDenied:
+      "Permesso del microfono negato. Attivalo dall'icona nella barra " +
+      "degli indirizzi e premi di nuovo «Detta».",
+    networkError: "Nessuna connessione: il riconoscimento vocale richiede internet.",
+    genericError: "Errore di riconoscimento vocale.",
+    savingState: "salvataggio…",
+    savedState: "salvato",
+    noSaveState: "non salvato",
+    helpTitle: "Comandi vocali",
+    helpIntroHtml:
+      "Rilevati automaticamente mentre detti. Per scrivere una parola-" +
+      "comando così com'è, di' prima <strong>«letterale»</strong> (es.: " +
+      "«letterale punto» scrive la parola <em>punto</em>). Se un comando " +
+      "si attiva per errore, di' <strong>«annulla»</strong> oppure usa " +
+      "Ctrl+Z. La maiuscola dopo un punto e all'inizio di un paragrafo è " +
+      "automatica.",
+    helpClose: "Chiudi",
+    helpCloseAria: "Chiudi pannello",
+    toastCloseAria: "Chiudi avviso",
+    helpSections: {
+      punctuation: "Punteggiatura",
+      editing: "Modifica",
+      casing: "Maiuscole",
+      history: "Cronologia",
+    },
+    actionLabels: {
+      deleteWord: "cancella l'ultima parola",
+      deleteSentence: "cancella l'ultima frase",
+      deleteAll: "cancella tutto il foglio",
+      selectAll: "seleziona tutto il testo",
+      capitalizeNext: "maiuscola alla prossima parola",
+      lowercaseNext: "minuscola alla prossima parola",
+      upperOn: "inizia a scrivere TUTTO MAIUSCOLO",
+      upperOff: "termina la modalità maiuscolo",
+      undo: "annulla l'ultima modifica",
+      redo: "ripristina ciò che è stato annullato",
+    },
+    newParagraphLabel: "interruzione di paragrafo",
+    newLineLabel: "interruzione di riga",
+  },
 };

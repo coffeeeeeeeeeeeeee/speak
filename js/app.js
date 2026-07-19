@@ -15,12 +15,14 @@ import { es } from "./commands/lang/es.js";
 import { en } from "./commands/lang/en.js";
 import { fr } from "./commands/lang/fr.js";
 import { pt } from "./commands/lang/pt.js";
+import { de } from "./commands/lang/de.js";
+import { it } from "./commands/lang/it.js";
 import { Storage } from "./storage.js";
 import { exportTxt, copyText } from "./exporter.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 
-const LEXICONS = { es, en, fr, pt };
+const LEXICONS = { es, en, fr, pt, de, it };
 
 if (!isSupported()) {
   document.getElementById("unsupported").hidden = false;
