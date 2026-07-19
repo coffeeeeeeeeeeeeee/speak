@@ -28,6 +28,21 @@ test("joiner: después de un signo de apertura no va espacio", () => {
   assertEqual(ops.joiner("(", "mundo"), "");
 });
 
+test("joiner: entre caracteres CJK nunca hay espacio (a diferencia de los idiomas latinos)", () => {
+  assertEqual(ops.joiner("你好", "世界"), "");
+  assertEqual(ops.joiner("こんにちは", "世界"), "");
+});
+
+test("joiner: puntuación CJK de ancho completo se pega sin espacio", () => {
+  assertEqual(ops.joiner("你好", "。"), "");
+  assertEqual(ops.joiner("你好", "，"), "");
+});
+
+test("joiner: en el borde entre texto latino y CJK tampoco agrega espacio", () => {
+  assertEqual(ops.joiner("hello", "世界"), "");
+  assertEqual(ops.joiner("你好", "world"), "");
+});
+
 // --- appendText ---
 
 test("appendText: arranca un documento vacío sin espacio previo", () => {

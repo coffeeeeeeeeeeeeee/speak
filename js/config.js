@@ -18,5 +18,7 @@ export const config = {
     "pt-BR": { code: "pt-BR", short: "pt", label: "Português", lexicon: "pt" },
     "de-DE": { code: "de-DE", short: "de", label: "Deutsch", lexicon: "de" },
     "it-IT": { code: "it-IT", short: "it", label: "Italiano", lexicon: "it" },
+    "zh-CN": { code: "zh-CN", short: "zh", label: "中文", lexicon: "zh" },
+    "ja-JP": { code: "ja-JP", short: "ja", label: "日本語", lexicon: "ja" },
   },
 };

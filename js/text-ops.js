@@ -4,6 +4,23 @@
 // Sin DOM: el editor y los tests las reutilizan.
 // ============================================================
 
+// Chino/japonés (y su puntuación de ancho completo) no llevan espacio entre
+// caracteres/palabras: a diferencia de los idiomas latinos, ahí el espacio
+// NO es el default, así que se corta antes de llegar a la regla general.
+const CJK_RANGES = [
+  [0x3000, 0x303f], // puntuación y símbolos CJK (incluye 。、「」…)
+  [0x3040, 0x30ff], // hiragana + katakana
+  [0x3400, 0x4dbf], // ideogramas CJK, extensión A
+  [0x4e00, 0x9fff], // ideogramas CJK unificados
+  [0xff00, 0xffef], // formas de ancho completo
+];
+
+function isCJK(ch) {
+  if (!ch) return false;
+  const cp = ch.codePointAt(0);
+  return CJK_RANGES.some(([lo, hi]) => cp >= lo && cp <= hi);
+}
+
 // ¿Hace falta un espacio entre `left` y `right`?
 export function joiner(left, right) {
   if (!left || !right) return "";
@@ -13,6 +30,7 @@ export function joiner(left, right) {
   if (/\s/.test(r)) return "";              // ya empieza con espacio/salto
   if (/[.,;:!?)\]}»…]/.test(r)) return "";  // puntuación de cierre se pega
   if (/[¿¡(\[{«"]/.test(l)) return "";      // apertura no lleva espacio después
+  if (isCJK(l) || isCJK(r)) return "";      // CJK: nunca space por default
   return " ";
 }
 

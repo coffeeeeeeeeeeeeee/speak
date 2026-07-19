@@ -17,12 +17,14 @@ import { fr } from "./commands/lang/fr.js";
 import { pt } from "./commands/lang/pt.js";
 import { de } from "./commands/lang/de.js";
 import { it } from "./commands/lang/it.js";
+import { zh } from "./commands/lang/zh.js";
+import { ja } from "./commands/lang/ja.js";
 import { Storage } from "./storage.js";
 import { exportTxt, copyText } from "./exporter.js";
 import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 
-const LEXICONS = { es, en, fr, pt, de, it };
+const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
 if (!isSupported()) {
   document.getElementById("unsupported").hidden = false;

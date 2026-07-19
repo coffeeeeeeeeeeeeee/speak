@@ -13,6 +13,11 @@
 //     tildes), pero el texto dictado se conserva TAL CUAL (con tildes
 //     y mayúsculas),
 //   - prefijo "literal" fuerza la palabra como texto literal.
+//
+// Chino/japonés no separan palabras con espacios: para esos idiomas el
+// léxico marca `tokenize: "char"` y la unidad mínima pasa a ser el
+// CARÁCTER en vez de la palabra (tanto para partir el transcript como
+// para reconstruir frases/buffer, que ahí se unen sin espacio).
 // ============================================================
 
 function normalize(s) {
@@ -23,11 +28,14 @@ function normalize(s) {
     .trim();
 }
 
-function wordCount(s) {
-  return s.trim().split(/\s+/).length;
+function tokenCount(s, byChar) {
+  return byChar ? Array.from(s.trim()).length : s.trim().split(/\s+/).length;
 }
 
 export function createParser(lexicon) {
+  const byChar = lexicon.tokenize === "char";
+  const sep = byChar ? "" : " ";
+
   const entries = [];
   const add = (map, kind) => {
     for (const [phrase, value] of Object.entries(map)) {
@@ -40,40 +48,48 @@ export function createParser(lexicon) {
   add(lexicon.history, "command");
 
   const index = new Map(entries.map((e) => [normalize(e.phrase), e]));
-  const maxWords = entries.reduce((m, e) => Math.max(m, wordCount(e.phrase)), 1);
+  const maxWords = entries.reduce((m, e) => Math.max(m, tokenCount(e.phrase, byChar)), 1);
   const literal = normalize(lexicon.literalPrefix);
+  // En modo palabra el prefijo siempre ocupa 1 token ("literal"); en modo
+  // carácter puede ocupar varios (p. ej. "字面" son 2 caracteres) — sin esto
+  // la comparación de abajo nunca sería cierta para esos léxicos.
+  const literalLen = tokenCount(lexicon.literalPrefix, byChar);
 
   function parse(transcript) {
-    const original = (transcript || "").trim().split(/\s+/).filter(Boolean);
+    const original = byChar
+      ? Array.from((transcript || "").trim())
+      : (transcript || "").trim().split(/\s+/).filter(Boolean);
     const norm = original.map(normalize);
     const tokens = [];
     let buffer = [];
 
     const flush = () => {
       if (buffer.length) {
-        tokens.push({ type: "text", value: buffer.join(" ") });
+        tokens.push({ type: "text", value: buffer.join(sep) });
         buffer = [];
       }
     };
 
     for (let i = 0; i < original.length; ) {
       // Vía de escape: "literal <palabra>" -> palabra literal (original).
-      if (norm[i] === literal) {
-        if (i + 1 < original.length) {
-          buffer.push(original[i + 1]);
-          i += 2;
+      if (norm.slice(i, i + literalLen).join(sep) === literal) {
+        const after = i + literalLen;
+        if (after < original.length) {
+          buffer.push(original[after]);
+          i = after + 1;
         } else {
-          buffer.push(original[i]);
-          i += 1;
+          buffer.push(...original.slice(i, after)); // el prefijo solo, sin nada después
+          i = after;
         }
         continue;
       }
 
-      // Match codicioso: probamos frases de maxWords..1 palabras.
+      // Match codicioso: probamos frases de maxWords..1 palabras (o
+      // caracteres, en léxicos `tokenize: "char"`).
       let matched = null;
       const maxN = Math.min(maxWords, original.length - i);
       for (let n = maxN; n >= 1; n--) {
-        const candidate = norm.slice(i, i + n).join(" ");
+        const candidate = norm.slice(i, i + n).join(sep);
         if (index.has(candidate)) {
           matched = { entry: index.get(candidate), n };
           break;
