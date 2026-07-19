@@ -28,6 +28,8 @@ import { createHelp } from "./help.js";
 import { tidy } from "./text-ops.js";
 import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
+import { DocStore } from "./docs.js";
+import { createDocsPanel } from "./docsPanel.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -55,6 +57,12 @@ function initApp() {
     micLevelBar: document.getElementById("micLevelBar"),
     exportBtn: document.getElementById("exportBtn"),
     exportMenu: document.getElementById("exportMenu"),
+    docsBtn: document.getElementById("docsBtn"),
+    docs: document.getElementById("docs"),
+    docsList: document.getElementById("docsList"),
+    docsTitle: document.getElementById("docsTitle"),
+    docsNew: document.getElementById("docsNew"),
+    docsClose: document.getElementById("docsClose"),
     helpBtn: document.getElementById("helpBtn"),
     help: document.getElementById("help"),
     helpBody: document.getElementById("helpBody"),
@@ -101,24 +109,25 @@ function initApp() {
   const variant = () => family().variants[variantIndex];
   let t = strings[family().lexicon];
 
-  // --- Persistencia del documento ---
-  const storage = new Storage();
+  // --- Documentos: varios en localStorage, uno abierto a la vez ---
+  const docs = new DocStore();
+  let currentDocId = docs.available ? docs.currentId() || docs.create("") : null;
 
   // --- Editor ---
   const editor = new Editor(els.editor, {
     scrollEl: els.sheet,
     onChange: () => {
       els.count.textContent = String(editor.getWordCount());
-      if (storage.available) {
+      if (docs.available && currentDocId) {
         setSaveState(t.savingState);
-        storage.saveDebounced(editor.getText(), () => setSaveState(t.savedState));
+        docs.saveDebounced(currentDocId, editor.getText(), () => setSaveState(t.savedState));
       }
     },
   });
 
-  const saved = storage.load();
-  if (saved) editor.setText(saved);
-  setSaveState(storage.available ? (saved ? t.savedState : "") : t.noSaveState);
+  const savedText = docs.available ? docs.load(currentDocId) : "";
+  if (savedText) editor.setText(savedText);
+  setSaveState(docs.available ? (savedText ? t.savedState : "") : t.noSaveState);
 
   // --- Motor de comandos ---
   const history = new History(editor);
@@ -128,6 +137,48 @@ function initApp() {
     history,
     parser,
     onSwitchLanguage: (familyCode) => switchFamily(familyCode),
+  });
+
+  // --- Panel de documentos ---
+  function loadDocument(id) {
+    currentDocId = id;
+    docs.setCurrentId(id);
+    editor.setText(docs.load(id));
+    history.clear();
+    engine.resetFormatState();
+    setSaveState(t.savedState);
+  }
+
+  function createDocument() {
+    const id = docs.create("");
+    loadDocument(id);
+    editor.focus();
+  }
+
+  function removeDocument(id) {
+    const wasCurrent = id === currentDocId;
+    docs.remove(id);
+    if (wasCurrent) {
+      const next = docs.currentId() || docs.create("");
+      loadDocument(next);
+    }
+  }
+
+  createDocsPanel({
+    store: docs,
+    t,
+    getCurrentId: () => currentDocId,
+    onOpen: loadDocument,
+    onCreate: createDocument,
+    onRemove: removeDocument,
+    els: {
+      overlay: els.docs,
+      list: els.docsList,
+      title: els.docsTitle,
+      newBtn: els.docsNew,
+      openBtn: els.docsBtn,
+      closeBtn: els.docsClose,
+    },
   });
 
   // --- Panel de comandos ---
@@ -206,6 +257,7 @@ function initApp() {
     els.variantTag.title = v.label;
     els.variantTag.hidden = family().variants.length <= 1;
 
+    els.docsBtn.textContent = t.docs;
     els.helpBtn.textContent = t.help;
     els.copyBtn.textContent = t.copy;
     els.readBtn.textContent = reader.speaking ? t.stop : t.read;

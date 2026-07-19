@@ -366,6 +366,98 @@ body {
   align-self: center;
 }
 
+/* ---------- Panel de documentos ---------- */
+.docs[hidden] { display: none; }
+.docs:not([hidden]) {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.docs-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 28, 30, 0.45);
+}
+.docs-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 30rem;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.75rem;
+  box-shadow: 0 1.5rem 3rem rgba(27, 28, 30, 0.18);
+}
+.docs-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+.docs-head h2 {
+  margin: 0;
+  flex: 1 1 auto;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.4rem;
+}
+.docs-list { list-style: none; margin: 0; padding: 0; }
+.docs-empty { color: var(--ink-soft); font-size: 0.9rem; }
+.docs-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.docs-item:last-child { border-bottom: none; }
+.docs-item.is-current .docs-item-title { color: var(--accent); }
+.docs-open {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0.2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.docs-item-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.docs-item-date {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+.docs-remove {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.docs-remove:hover { color: var(--danger); background: var(--gray-mid, rgba(0, 0, 0, 0.06)); }
+
 /* ---------- Menú de exportar ---------- */
 .export-wrap { position: relative; }
 .export-menu[hidden] { display: none; }

@@ -105,6 +105,14 @@ export class CommandEngine {
     }
   }
 
+  /** Al cambiar de documento: los modos de mayúsculas no deberían
+   * arrastrarse de un documento a otro. */
+  resetFormatState() {
+    this.forceUpper = false;
+    this.capNext = false;
+    this.lowerNext = false;
+  }
+
   // Atajos de teclado.
   undo() {
     return this.history.undo();

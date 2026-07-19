@@ -34,6 +34,7 @@
       <span class="brand">speakly</span>
       <div class="actions">
         <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
+        <button class="action" id="docsBtn" type="button" aria-haspopup="dialog">Documentos</button>
         <button class="action" id="helpBtn" type="button" aria-haspopup="dialog">Comandos</button>
         <button class="action" id="copyBtn" type="button">Copiar</button>
         <button class="action" id="readBtn" type="button">Leer</button>
@@ -120,6 +121,19 @@
         La mayúscula tras punto y al inicio de párrafo es automática.
       </p>
       <div class="help-body" id="helpBody"></div>
+    </div>
+  </div>
+
+  <!-- Panel de documentos -->
+  <div class="docs" id="docs" hidden role="dialog" aria-modal="true" aria-labelledby="docsTitle">
+    <div class="docs-backdrop" data-close></div>
+    <div class="docs-panel">
+      <div class="docs-head">
+        <h2 id="docsTitle">Documentos</h2>
+        <button class="action" id="docsNew" type="button">Nuevo</button>
+        <button class="action docs-close" id="docsClose" type="button" aria-label="Cerrar">Cerrar</button>
+      </div>
+      <ul class="docs-list" id="docsList"></ul>
     </div>
   </div>
 

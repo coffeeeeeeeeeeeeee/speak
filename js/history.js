@@ -44,4 +44,11 @@ export class History {
   canRedo() {
     return this.redoStack.length > 0;
   }
+
+  /** El historial de deshacer es por documento: al cambiar de uno a
+   * otro no tiene sentido arrastrar los cambios del anterior. */
+  clear() {
+    this.undoStack.length = 0;
+    this.redoStack.length = 0;
+  }
 }
