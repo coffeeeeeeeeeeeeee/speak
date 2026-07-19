@@ -87,6 +87,20 @@ reconocimiento en sí (Web Speech no expone el stream ni parámetros de audio
 como ganancia o cancelación de eco), solo confirma visualmente que el
 micrófono está captando algo.
 
+**Completa** pone la app en pantalla completa (Fullscreen API); el botón
+cambia solo a "Salir" si se sale con Esc en vez de tocarlo de nuevo.
+
+### Íconos
+
+Los botones usan íconos de [Lucide](https://lucide.dev) — pero no cargando
+su librería por CDN: `js/icons.js` tiene el SVG de cada uno inline (bajado
+de `unpkg.com/lucide-static`), sin dependencia de red en tiempo de
+ejecución. Cada ícono usa `stroke="currentColor"`, así que hereda el color
+de texto automáticamente en los 6 temas sin código extra por tema. Se
+insertan una sola vez al arrancar (no cambian entre idiomas); el texto de
+cada botón vive en un `<span class="action-label">` aparte para poder
+actualizarlo sin pisar el ícono.
+
 En pantallas angostas (menos de 720px), las acciones del encabezado se
 pliegan en un acordeón: el botón **▾** las muestra apiladas.
 
@@ -304,6 +318,7 @@ js/
   i18n.js           textos de interfaz por idioma (no el léxico de comandos)
   themes.js         registro de temas — sumar uno nuevo es solo agregarlo acá
   theme.js          aplica/cicla temas (custom properties en runtime, persistido)
+  icons.js          íconos de Lucide inline (SVG a mano, sin cargar su librería)
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   text-ops.js       operaciones puras de texto (testeable)

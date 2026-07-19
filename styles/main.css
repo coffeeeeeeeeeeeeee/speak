@@ -91,6 +91,9 @@ body {
   content: attr(data-label) " · ";
   color: var(--ghost);
 }
+/* El ícono va primero: ::before ya se ordena como 1er ítem del flex,
+   hay que forzarlo antes con order. */
+.lang-tag .icon { order: -1; }
 
 /* Botón "▾" que abre el acordeón de acciones en pantallas chicas.
    Oculto salvo bajo el breakpoint (ver Responsive). */
@@ -99,7 +102,8 @@ body {
   font-size: 0.9rem;
   padding: 0.3rem 0.6rem;
 }
-.topbar-toggle[aria-expanded="true"] { transform: scaleY(-1); }
+.topbar-toggle .icon { transition: transform 0.15s ease; }
+.topbar-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
 
 /* Acciones de documento (derecha del encabezado) */
 .actions {
@@ -120,6 +124,9 @@ body {
 }
 
 .action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.03em;
@@ -141,6 +148,25 @@ body {
   cursor: not-allowed;
   background: transparent;
 }
+
+/* Ícono de Lucide inline (ver js/icons.js): tamaño fijo, no se achica
+   en un flex row, y toma el color de texto vía currentColor — así
+   sigue el color de cada tema sin código extra por tema. */
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+}
+.action { font-size: 0.72rem; }
+.action .icon { width: 0.95rem; height: 0.95rem; }
+
+/* Botón solo-ícono (cerrar paneles, acordeón, etc.): cuadrado,
+   centrado, sin el gap/padding pensado para ícono+texto. */
+.icon-btn {
+  padding: 0.35rem;
+  gap: 0;
+}
+.icon-btn .icon { width: 1.05rem; height: 1.05rem; }
 
 /* ---------- Hoja de escritura ---------- */
 .sheet {
@@ -281,6 +307,9 @@ body {
 /* ---------- Botón de micrófono ---------- */
 .mic {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
@@ -292,6 +321,7 @@ body {
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
+.mic .icon { width: 1rem; height: 1rem; }
 .mic:hover { background: var(--ink); color: var(--paper); }
 .mic[aria-pressed="true"] {
   background: var(--accent);
@@ -481,16 +511,18 @@ body {
 }
 .docs-remove {
   flex: 0 0 auto;
-  width: 1.6rem;
-  height: 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
   background: transparent;
   border: none;
   color: var(--ink-soft);
-  font-size: 1rem;
-  line-height: 1;
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: 4px;
 }
+.docs-remove .icon { width: 0.95rem; height: 0.95rem; }
 .docs-remove:hover { color: var(--danger); background: var(--accent-dim); }
 
 /* ---------- Menú de exportar ---------- */
@@ -551,14 +583,14 @@ body {
 }
 .toast-close {
   flex: 0 0 auto;
+  display: inline-flex;
   background: transparent;
   border: none;
   color: var(--paper);
-  font-size: 1.1rem;
-  line-height: 1;
   cursor: pointer;
   opacity: 0.7;
 }
+.toast-close .icon { width: 1rem; height: 1rem; }
 .toast-close:hover { opacity: 1; }
 .unsupported p {
   max-width: 30rem;

@@ -6,6 +6,8 @@
 // rename manual — mantiene esto simple.
 // ============================================================
 
+import { iconMarkup } from "./icons.js";
+
 export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate, onRemove }) {
   let lastFocus = null;
 
@@ -20,8 +22,8 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
 
   function build(currentId) {
     els.title.textContent = t.docsTitle;
-    els.newBtn.textContent = t.docsNew;
-    els.closeBtn.textContent = t.docsClose;
+    const newLabel = els.newBtn.querySelector(".action-label");
+    if (newLabel) newLabel.textContent = t.docsNew;
     els.closeBtn.setAttribute("aria-label", t.docsCloseAria);
 
     els.list.textContent = "";
@@ -57,7 +59,7 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
       removeBtn.className = "docs-remove";
-      removeBtn.textContent = "×";
+      removeBtn.innerHTML = iconMarkup("trash-2");
       removeBtn.setAttribute("aria-label", `${t.docsDelete}: ${doc.title || t.docsUntitled}`);
       removeBtn.addEventListener("click", (e) => {
         e.stopPropagation();

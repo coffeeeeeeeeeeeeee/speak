@@ -30,7 +30,6 @@ export function createHelp({ lexicon, t, families, els }) {
   function build() {
     els.title.textContent = t.helpTitle;
     els.intro.innerHTML = t.helpIntroHtml;
-    els.closeBtn.textContent = t.helpClose;
     els.closeBtn.setAttribute("aria-label", t.helpCloseAria);
 
     const sections = [

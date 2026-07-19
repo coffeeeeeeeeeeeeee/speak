@@ -25,13 +25,14 @@ export const strings = {
     docs: "Documentos",
     docsTitle: "Documentos",
     docsNew: "Nuevo",
-    docsClose: "Cerrar",
     docsCloseAria: "Cerrar panel",
     docsEmpty: "Todavía no hay documentos guardados.",
     docsUntitled: "Sin título",
     docsDelete: "Eliminar",
     docsConfirmDelete: "¿Eliminar este documento? No se puede deshacer.",
     themeSwitchAria: "Cambiar tema",
+    fullscreen: "Completa",
+    exitFullscreen: "Salir",
     export: "Exportar",
     editorPlaceholder: "Pulsá «Dictar» y empezá a hablar. El texto aparece acá.",
     editorAriaLabel: "Hoja de escritura por voz",
@@ -56,7 +57,6 @@ export const strings = {
       "(ej.: «literal punto» escribe la palabra <em>punto</em>). Si algo se " +
       "dispara sin querer, decí <strong>«deshacer»</strong> o usá Ctrl+Z. " +
       "La mayúscula tras punto y al inicio de párrafo es automática.",
-    helpClose: "Cerrar",
     helpCloseAria: "Cerrar panel",
     toastCloseAria: "Cerrar aviso",
     helpSections: {
@@ -101,13 +101,14 @@ export const strings = {
     docs: "Docs",
     docsTitle: "Documents",
     docsNew: "New",
-    docsClose: "Close",
     docsCloseAria: "Close panel",
     docsEmpty: "No documents saved yet.",
     docsUntitled: "Untitled",
     docsDelete: "Delete",
     docsConfirmDelete: "Delete this document? This can't be undone.",
     themeSwitchAria: "Switch theme",
+    fullscreen: "Full screen",
+    exitFullscreen: "Exit",
     export: "Export",
     editorPlaceholder: "Press “Dictate” and start talking. Your text shows up here.",
     editorAriaLabel: "Voice writing sheet",
@@ -132,7 +133,6 @@ export const strings = {
       "types the word <em>period</em>). If something triggers by accident, " +
       "say <strong>«undo»</strong> or press Ctrl+Z. The capital letter " +
       "after a period and at the start of a paragraph is automatic.",
-    helpClose: "Close",
     helpCloseAria: "Close panel",
     toastCloseAria: "Close notice",
     helpSections: {
@@ -178,13 +178,14 @@ export const strings = {
     docs: "Docs",
     docsTitle: "Documents",
     docsNew: "Nouveau",
-    docsClose: "Fermer",
     docsCloseAria: "Fermer le panneau",
     docsEmpty: "Aucun document enregistré pour l'instant.",
     docsUntitled: "Sans titre",
     docsDelete: "Supprimer",
     docsConfirmDelete: "Supprimer ce document ? Cette action est irréversible.",
     themeSwitchAria: "Changer de thème",
+    fullscreen: "Plein écran",
+    exitFullscreen: "Quitter",
     export: "Exporter",
     editorPlaceholder: "Appuyez sur « Dicter » et commencez à parler. Le texte apparaît ici.",
     editorAriaLabel: "Feuille d'écriture vocale",
@@ -211,7 +212,6 @@ export const strings = {
       "commande se déclenche par erreur, dites <strong>« annuler »</strong> " +
       "ou utilisez Ctrl+Z. La majuscule après un point et en début de " +
       "paragraphe est automatique.",
-    helpClose: "Fermer",
     helpCloseAria: "Fermer le panneau",
     toastCloseAria: "Fermer l'avis",
     helpSections: {
@@ -257,13 +257,14 @@ export const strings = {
     docs: "Documentos",
     docsTitle: "Documentos",
     docsNew: "Novo",
-    docsClose: "Fechar",
     docsCloseAria: "Fechar painel",
     docsEmpty: "Ainda não há documentos salvos.",
     docsUntitled: "Sem título",
     docsDelete: "Excluir",
     docsConfirmDelete: "Excluir este documento? Isso não pode ser desfeito.",
     themeSwitchAria: "Trocar tema",
+    fullscreen: "Tela cheia",
+    exitFullscreen: "Sair",
     export: "Exportar",
     editorPlaceholder: "Aperte «Ditar» e comece a falar. O texto aparece aqui.",
     editorAriaLabel: "Folha de escrita por voz",
@@ -289,7 +290,6 @@ export const strings = {
       "(ex.: «literal ponto» escreve a palavra <em>ponto</em>). Se algo " +
       "disparar sem querer, diga <strong>«desfazer»</strong> ou use Ctrl+Z. " +
       "A maiúscula após ponto e no início de parágrafo é automática.",
-    helpClose: "Fechar",
     helpCloseAria: "Fechar painel",
     toastCloseAria: "Fechar aviso",
     helpSections: {
@@ -335,13 +335,14 @@ export const strings = {
     docs: "Dokumente",
     docsTitle: "Dokumente",
     docsNew: "Neu",
-    docsClose: "Schließen",
     docsCloseAria: "Panel schließen",
     docsEmpty: "Noch keine Dokumente gespeichert.",
     docsUntitled: "Ohne Titel",
     docsDelete: "Löschen",
     docsConfirmDelete: "Dieses Dokument löschen? Das kann nicht rückgängig gemacht werden.",
     themeSwitchAria: "Thema wechseln",
+    fullscreen: "Vollbild",
+    exitFullscreen: "Beenden",
     export: "Exportieren",
     editorPlaceholder: "Drücken Sie „Diktieren“ und beginnen Sie zu sprechen. Der Text erscheint hier.",
     editorAriaLabel: "Blatt zum Diktieren",
@@ -368,7 +369,6 @@ export const strings = {
       "versehentlich ein Befehl ausgelöst wird, sagen Sie " +
       "<strong>„rückgängig“</strong> oder drücken Sie Strg+Z. Der " +
       "Großbuchstabe nach einem Punkt und am Absatzanfang ist automatisch.",
-    helpClose: "Schließen",
     helpCloseAria: "Panel schließen",
     toastCloseAria: "Hinweis schließen",
     helpSections: {
@@ -414,13 +414,14 @@ export const strings = {
     docs: "Documenti",
     docsTitle: "Documenti",
     docsNew: "Nuovo",
-    docsClose: "Chiudi",
     docsCloseAria: "Chiudi pannello",
     docsEmpty: "Nessun documento salvato ancora.",
     docsUntitled: "Senza titolo",
     docsDelete: "Elimina",
     docsConfirmDelete: "Eliminare questo documento? Non si può annullare.",
     themeSwitchAria: "Cambia tema",
+    fullscreen: "Schermo intero",
+    exitFullscreen: "Esci",
     export: "Esporta",
     editorPlaceholder: "Premi «Detta» e inizia a parlare. Il testo appare qui.",
     editorAriaLabel: "Foglio di scrittura vocale",
@@ -447,7 +448,6 @@ export const strings = {
       "si attiva per errore, di' <strong>«annulla»</strong> oppure usa " +
       "Ctrl+Z. La maiuscola dopo un punto e all'inizio di un paragrafo è " +
       "automatica.",
-    helpClose: "Chiudi",
     helpCloseAria: "Chiudi pannello",
     toastCloseAria: "Chiudi avviso",
     helpSections: {
@@ -491,13 +491,14 @@ export const strings = {
     docs: "文档",
     docsTitle: "文档",
     docsNew: "新建",
-    docsClose: "关闭",
     docsCloseAria: "关闭面板",
     docsEmpty: "还没有保存的文档。",
     docsUntitled: "无标题",
     docsDelete: "删除",
     docsConfirmDelete: "删除这个文档吗？此操作无法撤销。",
     themeSwitchAria: "切换主题",
+    fullscreen: "全屏",
+    exitFullscreen: "退出全屏",
     export: "导出",
     editorPlaceholder: "点击「开始口述」并开始说话，文字会显示在这里。",
     editorAriaLabel: "语音书写页面",
@@ -521,7 +522,6 @@ export const strings = {
       "这两个字，而不是句号符号）。如果不小心触发了某个命令，说 " +
       "<strong>「撤销」</strong>或按 Ctrl+Z。句号后及段落开头自动大写" +
       "（对混入的拉丁字母生效）。",
-    helpClose: "关闭",
     helpCloseAria: "关闭面板",
     toastCloseAria: "关闭提示",
     helpSections: {
@@ -565,13 +565,14 @@ export const strings = {
     docs: "書類",
     docsTitle: "書類",
     docsNew: "新規",
-    docsClose: "閉じる",
     docsCloseAria: "パネルを閉じる",
     docsEmpty: "まだ保存された書類はありません。",
     docsUntitled: "無題",
     docsDelete: "削除",
     docsConfirmDelete: "この書類を削除しますか？元に戻せません。",
     themeSwitchAria: "テーマを切り替え",
+    fullscreen: "全画面表示",
+    exitFullscreen: "終了",
     export: "エクスポート",
     editorPlaceholder: "「ディクテーション」を押して話し始めてください。テキストがここに表示されます。",
     editorAriaLabel: "音声入力用のシート",
@@ -597,7 +598,6 @@ export const strings = {
       "<strong>「元に戻す」</strong>と言うか、Ctrl+Z を押してください。" +
       "句点の後や段落の先頭での大文字化は自動です（混在するラテン文字" +
       "に対して）。",
-    helpClose: "閉じる",
     helpCloseAria: "パネルを閉じる",
     toastCloseAria: "通知を閉じる",
     helpSections: {

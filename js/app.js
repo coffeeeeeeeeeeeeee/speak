@@ -32,6 +32,7 @@ import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
 import { currentTheme, nextTheme, themeLabel } from "./theme.js";
 import { themes } from "./themes.js";
+import { prependIcon, iconMarkup } from "./icons.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
@@ -62,6 +63,7 @@ function initApp() {
     variantTag: document.getElementById("variantTag"),
     themeBtn: document.getElementById("themeBtn"),
     themeColorMeta: document.getElementById("themeColorMeta"),
+    fullscreenBtn: document.getElementById("fullscreenBtn"),
     topbarToggle: document.getElementById("topbarToggle"),
     actions: document.getElementById("actions"),
     saveState: document.getElementById("saveState"),
@@ -86,6 +88,37 @@ function initApp() {
     toastMsg: document.getElementById("toastMsg"),
     toastClose: document.getElementById("toastClose"),
   };
+
+  // --- Íconos (Lucide, inline — ver js/icons.js) ---
+  // Se insertan una sola vez al arrancar: no cambian entre idiomas ni
+  // temas (heredan el color vía currentColor). El texto de cada botón
+  // vive en un <span class="action-label"> aparte para poder
+  // actualizarlo sin pisar el ícono — ver setLabel().
+  const BUTTON_ICONS = {
+    docsBtn: "files",
+    helpBtn: "command",
+    copyBtn: "copy",
+    readBtn: "volume-2",
+    exportBtn: "download",
+    langTag: "languages",
+    variantTag: "map-pin",
+    themeBtn: "palette",
+    fullscreenBtn: "maximize",
+    micBtn: "mic",
+    docsNew: "plus",
+    helpClose: "x",
+    docsClose: "x",
+    toastClose: "x",
+    topbarToggle: "chevron-down",
+  };
+  for (const [key, icon] of Object.entries(BUTTON_ICONS)) {
+    prependIcon(els[key], icon);
+  }
+
+  function setLabel(btn, text) {
+    const label = btn.querySelector(".action-label");
+    if (label) label.textContent = text;
+  }
 
   // --- Idioma activo: familia (léxico/interfaz) + variante regional
   // (solo cambia el código que recibe SpeechRecognition). Persistidos
@@ -246,7 +279,7 @@ function initApp() {
   const reader = new Reader({
     onState: (state) => {
       const readingNow = state === "reading";
-      els.readBtn.textContent = readingNow ? t.stop : t.read;
+      setLabel(els.readBtn, readingNow ? t.stop : t.read);
       els.micBtn.disabled = readingNow; // evita que el mic capte la lectura
       if (!readingNow) editor.clearSelection();
     },
@@ -270,26 +303,27 @@ function initApp() {
   // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
   function applyUiStrings() {
     document.title = t.title;
-    els.langTag.textContent = familyKey;
+    setLabel(els.langTag, familyKey);
     els.langTag.dataset.label = t.langLabel;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
     els.langTag.title = family().label;
 
     const v = variant();
     const region = v.code.split("-")[1] || v.code;
-    els.variantTag.textContent = region;
+    setLabel(els.variantTag, region);
     els.variantTag.dataset.label = t.variantLabel;
     els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
     els.variantTag.title = v.label;
     els.variantTag.hidden = family().variants.length <= 1;
 
-    els.themeBtn.textContent = themeLabel(currentTheme());
+    setLabel(els.themeBtn, themeLabel(currentTheme()));
     els.themeBtn.setAttribute("aria-label", t.themeSwitchAria);
-    els.docsBtn.textContent = t.docs;
-    els.helpBtn.textContent = t.help;
-    els.copyBtn.textContent = t.copy;
-    els.readBtn.textContent = reader.speaking ? t.stop : t.read;
-    els.exportBtn.textContent = t.export;
+    setLabel(els.docsBtn, t.docs);
+    setLabel(els.helpBtn, t.help);
+    setLabel(els.copyBtn, t.copy);
+    setLabel(els.readBtn, reader.speaking ? t.stop : t.read);
+    setLabel(els.exportBtn, t.export);
+    updateFullscreenBtn();
     els.editor.placeholder = t.editorPlaceholder;
     els.editor.setAttribute("aria-label", t.editorAriaLabel);
     els.count.dataset.label = t.wordsLabel;
@@ -385,10 +419,12 @@ function initApp() {
   els.toastClose.addEventListener("click", hideToast);
 
   function flashLabel(btn, temp) {
-    const original = btn.textContent;
-    btn.textContent = temp;
+    const label = btn.querySelector(".action-label");
+    if (!label) return;
+    const original = label.textContent;
+    label.textContent = temp;
     setTimeout(() => {
-      btn.textContent = original;
+      label.textContent = original;
     }, 1400);
   }
 
@@ -399,7 +435,7 @@ function initApp() {
   applyThemeColorMeta();
   els.themeBtn.addEventListener("click", () => {
     nextTheme();
-    els.themeBtn.textContent = themeLabel(currentTheme());
+    setLabel(els.themeBtn, themeLabel(currentTheme()));
     applyThemeColorMeta();
   });
 
@@ -408,6 +444,25 @@ function initApp() {
     const open = els.actions.classList.toggle("is-open");
     els.topbarToggle.setAttribute("aria-expanded", String(open));
   });
+
+  // --- Pantalla completa ---
+  function isFullscreen() {
+    return Boolean(document.fullscreenElement);
+  }
+  function updateFullscreenBtn() {
+    const full = isFullscreen();
+    setLabel(els.fullscreenBtn, full ? t.exitFullscreen : t.fullscreen);
+    els.fullscreenBtn.setAttribute("aria-label", full ? t.exitFullscreen : t.fullscreen);
+    els.fullscreenBtn.querySelector(".icon")?.replaceWith(
+      document.createRange().createContextualFragment(iconMarkup(full ? "minimize" : "maximize"))
+    );
+  }
+  els.fullscreenBtn.addEventListener("click", () => {
+    if (isFullscreen()) document.exitFullscreen?.();
+    else document.documentElement.requestFullscreen?.().catch(() => {});
+  });
+  // Sincroniza el botón si el usuario sale con Esc/F11 en vez de acá.
+  document.addEventListener("fullscreenchange", updateFullscreenBtn);
 
   // --- Micrófono ---
   els.micBtn.addEventListener("click", () => {
