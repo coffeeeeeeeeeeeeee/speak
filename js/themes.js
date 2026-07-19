@@ -55,15 +55,15 @@ export const themes = {
   neon: {
     label: "Neón",
     colors: {
-      paper: "#150A24",
-      canvas: "#08040F",
-      ink: "#F7F3FF",
-      "ink-soft": "#B9A8E0",
+      paper: "#150A24", // hoja: violeta casi negro, para que el celeste resalte
+      canvas: "#22E6E6", // fondo detrás de la hoja: celeste llamativo
+      ink: "#22E6E6", // letra: mismo celeste
+      "ink-soft": "#8FDDE0",
       ghost: "#6E5B9E",
       line: "#3A2A5C",
-      accent: "#FF2FD4", // fucsia
-      "accent-2": "#22E6E6", // celeste
-      "accent-3": "#FFE600", // amarillo
+      accent: "#FF2FD4", // magenta/fucsia
+      "accent-2": "#FFE600", // amarillo: color de resaltado (dot, etc.)
+      "accent-3": "#FFE600", // amarillo también acá (medidor de audio)
       "accent-dim": "rgba(255, 47, 212, 0.18)",
       danger: "#FF4D6D",
     },
@@ -98,12 +98,14 @@ export const themes = {
   highContrast: {
     label: "Alto contraste",
     colors: {
+      // Solo blanco y negro puros (más el acento) — nada de grises
+      // intermedios, ni siquiera en los neutros secundarios.
       paper: "#FFFFFF",
-      canvas: "#E5E5E5",
+      canvas: "#000000",
       ink: "#000000",
-      "ink-soft": "#1A1A1A",
-      ghost: "#555555",
-      line: "#CCCCCC",
+      "ink-soft": "rgba(0, 0, 0, 0.7)", // negro atenuado, no un gris aparte
+      ghost: "rgba(0, 0, 0, 0.45)",
+      line: "#000000",
       accent: "#0000EE",
       "accent-dim": "rgba(0, 0, 238, 0.15)",
       danger: "#D40000",
@@ -116,17 +118,17 @@ export const themes = {
     },
   },
 
-  forest: {
-    label: "Bosque",
+  natural: {
+    label: "Natural",
     colors: {
-      paper: "#EDF1E7",
-      canvas: "#DCE3D3",
-      ink: "#23301F",
-      "ink-soft": "#52604A",
-      ghost: "#94A187",
-      line: "#CBD6BE",
-      accent: "#3E7A4B",
-      "accent-dim": "rgba(62, 122, 75, 0.14)",
+      paper: "#E7F0DC",
+      canvas: "#C3D9A8",
+      ink: "#16240F",
+      "ink-soft": "#3E5730",
+      ghost: "#7C9663",
+      line: "#B3CB98",
+      accent: "#2E8B3D",
+      "accent-dim": "rgba(46, 139, 61, 0.18)",
       danger: "#B5482E",
       mic: "#C98A2B",
     },
