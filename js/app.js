@@ -33,6 +33,13 @@ import { createDocsPanel } from "./docsPanel.js";
 
 const LEXICONS = { es, en, fr, pt, de, it, zh, ja };
 
+// Instalable como app + funciona sin conexión (salvo el dictado en sí,
+// que siempre necesita internet). Independiente de si el navegador
+// soporta reconocimiento de voz o no.
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
+
 if (!isSupported()) {
   document.getElementById("unsupported").hidden = false;
   document.getElementById("app").style.display = "none";

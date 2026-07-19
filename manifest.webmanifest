@@ -1,0 +1,16 @@
+{
+  "name": "speakly — voz a texto para escritores",
+  "short_name": "speakly",
+  "description": "Dictado por voz con comandos hablados, en 8 idiomas, con exportación a varios formatos.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F2F3F0",
+  "theme_color": "#F2F3F0",
+  "lang": "es",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

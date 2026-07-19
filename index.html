@@ -13,6 +13,13 @@
   />
 
   <link rel="stylesheet" href="styles/main.css" />
+
+  <!-- Instalable como app (ver sw.js: funciona sin conexión salvo el
+       dictado en sí, que siempre necesita internet). -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <meta name="theme-color" content="#F2F3F0" />
 </head>
 <body>
   <!-- Aviso cuando el navegador no soporta el reconocimiento de voz.
