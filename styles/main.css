@@ -263,6 +263,16 @@ body {
   color: var(--bar-btn-ink, var(--bar-ink, var(--ink)));
   background: var(--bar-btn-hover, var(--accent-dim));
 }
+/* El <select> hereda su `color` (--bar-btn-ink, etc.) pero las <option>
+   del desplegable nativo las pinta el sistema operativo con SU propio
+   fondo (normalmente blanco), no con --bar-btn. En temas oscuros eso
+   deja texto claro sobre fondo claro. Se fuerzan fondo/texto legibles
+   con --paper/--ink (que sí están definidos en los 7 temas, a
+   diferencia de --bar-*, pensados solo para la barra). */
+.edit-toolbar-style option {
+  background: var(--paper);
+  color: var(--ink);
+}
 
 /* Envoltorio de la hoja: .editor-overlay pinta negrita/cursiva/
    tachado/subrayado en vivo detrás del textarea real (ver
