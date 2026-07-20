@@ -30,8 +30,9 @@ import { AudioMeter } from "./audioMeter.js";
 import { Reader } from "./tts.js";
 import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
-import { currentTheme, setTheme, themeLabel } from "./theme.js";
+import { currentTheme, setTheme, themeLabel, applyCustomTheme } from "./theme.js";
 import { themes } from "./themes.js";
+import { createThemeEditor } from "./themeEditor.js";
 import { prependIcon, iconMarkup } from "./icons.js";
 import { createDropdown, renderMenuItems } from "./dropdown.js";
 
@@ -68,6 +69,11 @@ function initApp() {
     themeBtn: document.getElementById("themeBtn"),
     themeMenu: document.getElementById("themeMenu"),
     themeColorMeta: document.getElementById("themeColorMeta"),
+    themeEditor: document.getElementById("themeEditor"),
+    themeEditorForm: document.getElementById("themeEditorForm"),
+    themeEditorTitle: document.getElementById("themeEditorTitle"),
+    themeEditorClose: document.getElementById("themeEditorClose"),
+    themeEditorSave: document.getElementById("themeEditorSave"),
     fullscreenBtn: document.getElementById("fullscreenBtn"),
     topbarToggle: document.getElementById("topbarToggle"),
     actions: document.getElementById("actions"),
@@ -113,6 +119,7 @@ function initApp() {
     docsNew: "plus",
     helpClose: "x",
     docsClose: "x",
+    themeEditorClose: "x",
     toastClose: "x",
     topbarToggle: "chevron-down",
   };
@@ -169,6 +176,11 @@ function initApp() {
   const family = () => config.families[familyKey];
   const variant = () => family().variants[variantIndex];
   let t = strings[family().lexicon];
+
+  // Declarado temprano porque applyUiStrings() (más abajo) llama a
+  // buildThemeMenu() antes de que se ejecute el resto de la sección
+  // "Tema" que definiría esta constante donde se usa.
+  const CUSTOMIZE_KEY = "__customize__";
 
   // --- Documentos: varios en localStorage, uno abierto a la vez ---
   const docs = new DocStore();
@@ -337,6 +349,7 @@ function initApp() {
     buildVariantMenu();
 
     setTitle(els.themeBtn, themeLabel(currentTheme()));
+    buildThemeMenu();
     setTitle(els.docsBtn, t.docs);
     setTitle(els.helpBtn, t.help);
     setTitle(els.copyBtn, t.copy);
@@ -461,28 +474,64 @@ function initApp() {
   els.toastClose.addEventListener("click", hideToast);
 
   // --- Tema: desplegable con todos los temas, igual que "Exportar"
-  // (antes ciclaba con cada click). ---
+  // (antes ciclaba con cada click). Al final del menú siempre hay una
+  // opción "Personalizar…" que abre el editor de colores (themeEditor.js)
+  // en vez de aplicar un tema directamente. ---
   function applyThemeColorMeta() {
     els.themeColorMeta.content = themes[currentTheme()].colors.paper;
   }
   applyThemeColorMeta();
   const themeDropdown = createDropdown({ toggle: els.themeBtn, menu: els.themeMenu });
   function buildThemeMenu() {
-    renderMenuItems(
-      els.themeMenu,
-      Object.keys(themes).map((id) => ({ key: id, label: themes[id].label })),
-      {
-        isCurrent: (key) => key === currentTheme(),
-        onSelect: (key) => {
-          themeDropdown.close();
-          setTheme(key);
-          setTitle(els.themeBtn, themeLabel(currentTheme()));
-          applyThemeColorMeta();
-          buildThemeMenu();
-        },
-      }
-    );
+    const items = Object.keys(themes).map((id) => ({ key: id, label: themes[id].label }));
+    items.push({ key: CUSTOMIZE_KEY, label: t.themeCustomize });
+    renderMenuItems(els.themeMenu, items, {
+      isCurrent: (key) => key === currentTheme(),
+      onSelect: (key) => {
+        themeDropdown.close();
+        if (key === CUSTOMIZE_KEY) {
+          themeEditor.open();
+          return;
+        }
+        setTheme(key);
+        setTitle(els.themeBtn, themeLabel(currentTheme()));
+        applyThemeColorMeta();
+        buildThemeMenu();
+      },
+    });
   }
+
+  // --- Editor de tema personalizado: precarga los colores editables
+  // del tema activo (o los ya guardados como "Personalizado", si el
+  // tema activo ES el personalizado) y, al guardar, lo aplica y lo deja
+  // guardado para la próxima sesión. ---
+  const themeEditor = createThemeEditor({
+    getT: () => t,
+    els: {
+      overlay: els.themeEditor,
+      form: els.themeEditorForm,
+      title: els.themeEditorTitle,
+      closeBtn: els.themeEditorClose,
+      saveBtn: els.themeEditorSave,
+    },
+    getPrefillColors: () => {
+      const c = themes[currentTheme()].colors;
+      return {
+        paper: c.paper,
+        canvas: c.canvas,
+        ink: c.ink,
+        accent: c.accent,
+        mic: c.mic || c.accent,
+        danger: c.danger,
+      };
+    },
+    onSave: (picks) => {
+      applyCustomTheme(picks);
+      setTitle(els.themeBtn, themeLabel(currentTheme()));
+      applyThemeColorMeta();
+      buildThemeMenu();
+    },
+  });
   buildThemeMenu();
 
   // --- Acordeón de acciones (pantallas chicas) ---

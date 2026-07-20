@@ -91,6 +91,21 @@ mismas funciones que HTML) la traducen a `<strong>/<em>/<s>/<u>` reales, y
 **RTF** a los control words `\b/\i/\strike/\ul`. **MD** no necesita traducir
 nada — ya es la sintaxis de origen.
 
+El **alineado** (`[center]`, `[right]`, `[left]`, `[justify]`, ver
+`js/textAlign.js`) es distinto: a diferencia de negrita/cursiva/tachado/
+subrayado, que envuelven un tramo cualquiera, el alineado es una propiedad
+de PÁRRAFO — el marcador va al principio y afecta a todo ese párrafo. En el
+overlay cada párrafo se pinta en su propio `<div>` con su `text-align`
+(`.md-para`), con el separador en blanco pegado adentro para que la altura
+total siga calzando con la del `<textarea>` de abajo (que es un solo bloque
+de texto plano); `text-align` no mueve el punto donde se corta la línea,
+solo la posición horizontal de cada renglón ya partido, así que separar en
+`<div>`s no desalinea nada. Al exportar a HTML/PDF/RTF, a diferencia del
+overlay, el marcador SÍ se saca del texto — ahí no hace falta mostrarlo, el
+párrafo directamente sale alineado. En **MD** el marcador queda como texto
+plano (`[center]`, etc.): no hay forma de representar alineado en Markdown
+de origen.
+
 ### Otras acciones
 
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
@@ -153,6 +168,17 @@ tocar CSS: `theme.js` aplica `colors`/`fonts` como custom properties sobre
 la separación entre zonas es contraste de color + sombra de elevación en los
 paneles, y los estados de hover/foco son un relleno de color, no un trazo.
 
+Al final del desplegable de temas hay una opción **Personalizar…** que abre
+un panel con seis selectores de color (hoja/fondo/texto/acento/dictar/alerta)
+precargados con los del tema activo. Al guardar, esos seis colores se aplican
+de una y quedan guardados como un séptimo tema, **Personalizado** (a partir de
+ahí aparece como una opción más del desplegable, y se puede reabrir el editor
+para retocarlo). El resto de las variables de la paleta (ink-soft/ghost/
+line/accent-dim) no se eligen a mano: se derivan mezclando texto/acento con
+transparencia (`js/customTheme.js`), el mismo criterio que usa **Alto
+contraste** a mano en `js/themes.js` — así el usuario no tiene que picker-ear
+9+ colores para terminar con un tema coherente.
+
 ## Comandos de voz
 
 Se detectan automáticamente mientras dictás. Para escribir una palabra-comando
@@ -174,6 +200,9 @@ fin mayúsculas.
 
 **Formato:** negrita · cursiva · tachado · subrayado (se dicen dos veces,
 para abrir y cerrar — igual que «comillas»).
+
+**Alineado:** centrar · justificar · alinear a la derecha · alinear a la
+izquierda (se dice UNA vez, al empezar el párrafo — afecta solo a ese párrafo).
 
 **Historial:** deshacer · rehacer (también `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -197,6 +226,9 @@ caps off / end caps.
 **Formatting:** bold · italic · strikethrough / strike through · underline
 (said twice, to open and close — same as «quote»).
 
+**Alignment:** center · justify · align right · align left (said ONCE, at
+the start of the paragraph — affects only that paragraph).
+
 **History:** undo · redo (also `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Languages:** switch to spanish · switch to french · switch to portuguese ·
@@ -219,6 +251,9 @@ fin des majuscules.
 
 **Mise en forme :** gras · italique · barré · souligné (se disent deux fois,
 pour ouvrir et fermer — comme « guillemet »).
+
+**Alignement :** centrer · justifier · aligner à droite · aligner à gauche
+(se dit UNE fois, au début du paragraphe — n'affecte que ce paragraphe).
 
 **Historique :** annuler · rétablir (aussi `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -244,6 +279,9 @@ maiúsculas · fim das maiúsculas.
 **Formatação:** negrito · itálico · tachado · sublinhado (ditos duas vezes,
 para abrir e fechar — igual "aspas").
 
+**Alinhamento:** centralizar · justificar · alinhar à direita · alinhar à
+esquerda (dito UMA vez, no início do parágrafo — afeta só esse parágrafo).
+
 **Histórico:** desfazer · refazer (também `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Idiomas:** mudar para espanhol · mudar para inglês · mudar para francês ·
@@ -266,6 +304,9 @@ alles großschreiben · großschreibung beenden.
 
 **Formatierung:** fett · kursiv · durchgestrichen · unterstrichen (zweimal
 gesagt, zum Öffnen und Schließen — wie „anführungszeichen").
+
+**Ausrichtung:** zentrieren · blocksatz · rechtsbündig · linksbündig (EINMAL
+gesagt, am Anfang des Absatzes — betrifft nur diesen Absatz).
 
 **Verlauf:** rückgängig · wiederholen (auch `Strg+Z` / `Strg+Umschalt+Z`).
 
@@ -291,6 +332,9 @@ maiuscolo · fine maiuscolo.
 **Formattazione:** grassetto · corsivo · barrato · sottolineato (dette due
 volte, per aprire e chiudere — come «virgolette»).
 
+**Allineamento:** centra · giustifica · allinea a destra · allinea a
+sinistra (detto UNA volta, all'inizio del paragrafo — vale solo per quello).
+
 **Cronologia:** annulla · ripristina (anche `Ctrl+Z` / `Ctrl+Maiusc+Z`).
 
 **Lingue:** passa a spagnolo · passa a inglese · passa a francese · passa a
@@ -312,6 +356,9 @@ di paragrafo è automatica.
 **格式：** 粗体 · 斜体 · 删除线 · 下划线（说两次，一次开始一次结束——跟
 "左引号/右引号"不同，这几个用同一个词）。
 
+**对齐：** 居中 · 两端对齐 · 右对齐 · 左对齐（只说一次，在段落开头——
+只影响那一段）。
+
 **历史记录：** 撤销 · 重做（也可用 `Ctrl+Z` / `Ctrl+Shift+Z`）。
 
 **语言：** 切换到西班牙语 · 切换到英语 · 切换到法语 · 切换到葡萄牙语 ·
@@ -331,6 +378,9 @@ di paragrafo è automatica.
 
 **書式：** 太字 · 斜体 · 取り消し線 · 下線（開始と終了で2回言います。
 「かぎ括弧開く/閉じる」とは違い、同じ語を2回使います）。
+
+**配置：** 中央揃え · 両端揃え · 右揃え · 左揃え（段落の先頭で1回だけ
+言います。その段落だけに効きます）。
 
 **履歴：** 元に戻す · やり直す（`Ctrl+Z` / `Ctrl+Shift+Z` も使えます）。
 
@@ -375,13 +425,16 @@ js/
   i18n.js           textos de interfaz por idioma (no el léxico de comandos)
   themes.js         registro de temas — sumar uno nuevo es solo agregarlo acá
   theme.js          aplica un tema (custom properties en runtime, persistido)
+  customTheme.js    persistencia + derivación de colores del tema "Personalizado"
+  themeEditor.js    panel de selectores de color para armar el tema "Personalizado"
   icons.js          íconos de Lucide inline (SVG a mano, sin cargar su librería)
   dropdown.js       abrir/cerrar accesible + armado de opciones, compartido por
                      los desplegables de Exportar/Idioma/Región/Tema
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
   markdownInline.js  reconoce **/*/~~/++ — lo comparten el overlay y export/
-  markdownOverlay.js negrita/cursiva/tachado/subrayado en vivo sobre la hoja
+  textAlign.js       reconoce [center]/[right]/[left]/[justify] por párrafo
+  markdownOverlay.js negrita/cursiva/tachado/subrayado/alineado en vivo
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
   storage.js        autoguardado genérico (localStorage) — clave/valor simple

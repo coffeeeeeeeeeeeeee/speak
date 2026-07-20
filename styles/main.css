@@ -622,6 +622,78 @@ body {
 .docs-remove .icon { width: 0.95rem; height: 0.95rem; }
 .docs-remove:hover { color: var(--danger); background: var(--accent-dim); }
 
+/* ---------- Editor de tema personalizado ---------- */
+.theme-editor[hidden] { display: none; }
+.theme-editor:not([hidden]) {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.theme-editor-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 28, 30, 0.45);
+}
+.theme-editor-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 20rem;
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 1.75rem;
+  box-shadow: 0 1.5rem 3rem rgba(27, 28, 30, 0.18);
+}
+.theme-editor-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.theme-editor-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.4rem;
+}
+.theme-editor-form { display: flex; flex-direction: column; gap: 0.7rem; }
+.theme-editor-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.theme-editor-row input[type="color"] {
+  width: 2.4rem;
+  height: 1.8rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+.theme-editor-save {
+  margin-top: 0.6rem;
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--accent);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+.theme-editor-save:hover { opacity: 0.88; }
+
 /* ---------- Menú de exportar ---------- */
 .export-wrap { position: relative; }
 .export-menu[hidden] { display: none; }
@@ -740,7 +812,7 @@ body {
   .hud-status { min-width: auto; }
   .mic-level { display: none; } /* prioridad al botón de dictar */
   .count::after { content: ""; } /* solo el número en pantallas chicas */
-  .help-panel, .docs-panel { padding: 1.25rem; }
+  .help-panel, .docs-panel, .theme-editor-panel { padding: 1.25rem; }
   .cmd { flex-direction: column; gap: 0.15rem; }
   .cmd-desc { text-align: left; }
 }

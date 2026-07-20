@@ -14,8 +14,21 @@
 // ============================================================
 
 import { themes } from "./themes.js";
+import { loadCustomTheme, saveCustomTheme } from "./customTheme.js";
 
 const KEY = "speakly:theme";
+const CUSTOM_ID = "custom";
+const CUSTOM_LABEL = "Personalizado";
+
+// El tema "Personalizado" no vive en themes.js (es dato del usuario, no
+// de diseño): si ya guardó uno en una sesión anterior, lo damos de alta
+// acá antes de calcular ORDER/allKeys — mientras no exista, "custom"
+// simplemente no aparece en el registro ni en el desplegable.
+const savedCustom = loadCustomTheme();
+if (savedCustom) {
+  themes[CUSTOM_ID] = { label: CUSTOM_LABEL, colors: savedCustom };
+}
+
 const ORDER = Object.keys(themes);
 const DEFAULT_ID = ORDER[0];
 
@@ -74,6 +87,19 @@ export function setTheme(id) {
 
 export function themeLabel(id) {
   return themes[id]?.label ?? id;
+}
+
+// Guarda los colores elegidos como el tema "Personalizado" (creándolo
+// o pisando el anterior) y lo aplica de una — así "cambiar los colores"
+// y "dejarlo guardado en Personalizado" son un solo paso para quien
+// dictamina, como pidió el usuario.
+export function applyCustomTheme(picks) {
+  // Los colores derivados son subconjunto de ALL_COLOR_KEYS (ya
+  // calculado a partir de los temas de diseño): no hace falta
+  // recalcularlo para que applyVars los aplique bien.
+  const colors = saveCustomTheme(picks);
+  themes[CUSTOM_ID] = { label: CUSTOM_LABEL, colors };
+  setTheme(CUSTOM_ID);
 }
 
 // Aplica ahora mismo el tema activo (guardado o el que ya haya
