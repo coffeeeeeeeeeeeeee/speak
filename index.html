@@ -153,6 +153,32 @@
 
     <main class="sheet" id="sheet">
       <div class="sheet-column">
+        <!-- Barra de formato: oculta por default (el usuario la
+             despliega con el botón "▾"), ver js/app.js. Cada botón
+             inserta la misma marca que su comando de voz equivalente
+             (**/*/~~/++ y [center]/[right]/[left]/[justify]). -->
+        <div class="edit-toolbar-handle">
+          <button
+            class="action icon-btn edit-toolbar-toggle"
+            id="editToolbarToggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="editToolbar"
+            title="Mostrar barra de formato"
+            aria-label="Mostrar barra de formato"
+          ></button>
+        </div>
+        <div class="edit-toolbar" id="editToolbar" hidden>
+          <button class="action icon-btn" id="fmtBold" type="button" title="Negrita" aria-label="Negrita"></button>
+          <button class="action icon-btn" id="fmtItalic" type="button" title="Cursiva" aria-label="Cursiva"></button>
+          <button class="action icon-btn" id="fmtStrike" type="button" title="Tachado" aria-label="Tachado"></button>
+          <button class="action icon-btn" id="fmtUnderline" type="button" title="Subrayado" aria-label="Subrayado"></button>
+          <span class="edit-toolbar-sep" aria-hidden="true"></span>
+          <button class="action icon-btn" id="alignLeftBtn" type="button" title="Alinear a la izquierda" aria-label="Alinear a la izquierda"></button>
+          <button class="action icon-btn" id="alignCenterBtn" type="button" title="Centrar" aria-label="Centrar"></button>
+          <button class="action icon-btn" id="alignRightBtn" type="button" title="Alinear a la derecha" aria-label="Alinear a la derecha"></button>
+          <button class="action icon-btn" id="alignJustifyBtn" type="button" title="Justificar" aria-label="Justificar"></button>
+        </div>
         <div class="editor-wrap">
           <!-- Pinta en vivo la negrita/cursiva/tachado/subrayado
                (**/*/~~/++) detrás del textarea real, que queda con el

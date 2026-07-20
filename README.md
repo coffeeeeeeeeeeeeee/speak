@@ -106,6 +106,14 @@ párrafo directamente sale alineado. En **MD** el marcador queda como texto
 plano (`[center]`, etc.): no hay forma de representar alineado en Markdown
 de origen.
 
+Además de por voz, esos mismos marcadores se pueden insertar con clic desde
+una **barra de formato** arriba de la hoja, oculta por default: el botón
+**▾** (arriba del `<textarea>`, fuera de `.editor-wrap` para no desalinear el
+overlay) la despliega. Cada botón llama a `editor.insertAtCaret()` con la
+misma marca que su comando de voz equivalente (`js/app.js`), así que se
+comporta exactamente igual — el alineado, por ejemplo, necesita el cursor al
+principio del párrafo tanto si se dicta como si se hace clic.
+
 ### Otras acciones
 
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),

@@ -56,6 +56,16 @@ function initApp() {
   const els = {
     editor: document.getElementById("editor"),
     editorOverlay: document.getElementById("editorOverlay"),
+    editToolbarToggle: document.getElementById("editToolbarToggle"),
+    editToolbar: document.getElementById("editToolbar"),
+    fmtBold: document.getElementById("fmtBold"),
+    fmtItalic: document.getElementById("fmtItalic"),
+    fmtStrike: document.getElementById("fmtStrike"),
+    fmtUnderline: document.getElementById("fmtUnderline"),
+    alignLeftBtn: document.getElementById("alignLeftBtn"),
+    alignCenterBtn: document.getElementById("alignCenterBtn"),
+    alignRightBtn: document.getElementById("alignRightBtn"),
+    alignJustifyBtn: document.getElementById("alignJustifyBtn"),
     sheet: document.getElementById("sheet"),
     dot: document.getElementById("dot"),
     statusText: document.getElementById("statusText"),
@@ -122,6 +132,15 @@ function initApp() {
     themeEditorClose: "x",
     toastClose: "x",
     topbarToggle: "chevron-down",
+    editToolbarToggle: "chevron-down",
+    fmtBold: "bold",
+    fmtItalic: "italic",
+    fmtStrike: "strikethrough",
+    fmtUnderline: "underline",
+    alignLeftBtn: "align-left",
+    alignCenterBtn: "align-center",
+    alignRightBtn: "align-right",
+    alignJustifyBtn: "align-justify",
   };
   for (const [key, icon] of Object.entries(BUTTON_ICONS)) {
     prependIcon(els[key], icon);
@@ -207,6 +226,40 @@ function initApp() {
   const savedText = docs.available ? docs.load(currentDocId) : "";
   if (savedText) editor.setText(savedText);
   setSaveState(docs.available ? (savedText ? t.savedState : "") : t.noSaveState);
+
+  // --- Barra de formato: oculta por default, el usuario la despliega
+  // con el botón "▾" de arriba del editor. Cada botón inserta la misma
+  // marca que su comando de voz equivalente (insertAtCaret con el
+  // texto tal cual) — ver commands/lang/*.js (formatting/align), que
+  // usan las mismas marcas universales **/*/~~/++ y
+  // [center]/[right]/[left]/[justify]. ---
+  function updateToolbarToggleTitle() {
+    const expanded = els.editToolbarToggle.getAttribute("aria-expanded") === "true";
+    setTitle(els.editToolbarToggle, expanded ? t.editToolbarHide : t.editToolbarShow);
+  }
+  els.editToolbarToggle.addEventListener("click", () => {
+    const expanded = els.editToolbarToggle.getAttribute("aria-expanded") === "true";
+    els.editToolbarToggle.setAttribute("aria-expanded", String(!expanded));
+    els.editToolbar.hidden = expanded;
+    updateToolbarToggleTitle();
+    editor.focus();
+  });
+  const FORMAT_MARKS = {
+    fmtBold: "**",
+    fmtItalic: "*",
+    fmtStrike: "~~",
+    fmtUnderline: "++",
+    alignLeftBtn: "[left]",
+    alignCenterBtn: "[center]",
+    alignRightBtn: "[right]",
+    alignJustifyBtn: "[justify]",
+  };
+  for (const [id, mark] of Object.entries(FORMAT_MARKS)) {
+    els[id].addEventListener("click", () => {
+      editor.insertAtCaret(mark);
+      editor.focus();
+    });
+  }
 
   // --- Motor de comandos ---
   const history = new History(editor);
@@ -361,6 +414,15 @@ function initApp() {
     els.count.dataset.label = t.wordsLabel;
     els.charCount.dataset.label = t.charsLabel;
     els.toastClose.setAttribute("aria-label", t.toastCloseAria);
+    updateToolbarToggleTitle();
+    setTitle(els.fmtBold, t.editBold);
+    setTitle(els.fmtItalic, t.editItalic);
+    setTitle(els.fmtStrike, t.editStrike);
+    setTitle(els.fmtUnderline, t.editUnderline);
+    setTitle(els.alignLeftBtn, t.editAlignLeft);
+    setTitle(els.alignCenterBtn, t.editAlignCenter);
+    setTitle(els.alignRightBtn, t.editAlignRight);
+    setTitle(els.alignJustifyBtn, t.editAlignJustify);
   }
   applyUiStrings();
 

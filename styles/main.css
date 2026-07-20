@@ -219,6 +219,33 @@ body {
     0 8px 28px rgba(27, 28, 30, 0.08);
 }
 
+/* ---------- Barra de formato ---------- */
+/* Oculta por default: solo el botón "▾" queda a la vista arriba del
+   editor (ver js/app.js). Vive fuera de .editor-wrap a propósito: si
+   entrara ahí, empujaría el textarea hacia abajo sin mover al overlay
+   (que es position:absolute; inset:0 relativo a .editor-wrap),
+   desalineando las dos capas. */
+.edit-toolbar-handle { display: flex; justify-content: center; margin-bottom: 0.2rem; }
+.edit-toolbar-toggle .icon { transition: transform 0.15s ease; }
+.edit-toolbar-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
+
+.edit-toolbar[hidden] { display: none; }
+.edit-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  margin-bottom: 1rem;
+}
+.edit-toolbar-sep {
+  flex: 0 0 auto;
+  width: 2px;
+  height: 1.1rem;
+  margin: 0 0.3rem;
+  border-radius: 999px;
+  background: var(--line);
+}
+
 /* Envoltorio de la hoja: .editor-overlay pinta negrita/cursiva/
    tachado/subrayado en vivo detrás del textarea real (ver
    js/markdownOverlay.js), que queda con el texto transparente —
