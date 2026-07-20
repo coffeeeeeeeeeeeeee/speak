@@ -54,6 +54,8 @@ const ICONS = {
 
   "chevron-down": '<path d="m6 9 6 6 6-6" />',
 
+  type: '<path d="M12 4v16" /><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" /><path d="M9 20h6" />',
+
   bold: '<path d="M14 12a4 4 0 0 0 0-8H6v8" /><path d="M15 20a4 4 0 0 0 0-8H6v8Z" />',
 
   italic:

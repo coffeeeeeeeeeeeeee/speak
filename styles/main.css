@@ -220,29 +220,23 @@ body {
 }
 
 /* ---------- Barra de formato ---------- */
-/* Estática debajo del encabezado: .edit-toolbar-bar vive en .app,
-   fuera de .sheet (lo único que hace scroll — ver más abajo), así no
-   se va con la página ni con el editor. Mismo fondo que .topbar/.hud
+/* Estática debajo del encabezado: .edit-toolbar vive en .app, fuera de
+   .sheet (lo único que hace scroll — ver más abajo), así no se va con
+   la página ni con el editor. Mismo fondo que .topbar/.hud
    (var(--bar, var(--paper))): visualmente extiende el encabezado en
-   vez de mezclarse con la hoja. Oculta por default: solo el botón "▾"
-   queda a la vista (ver js/app.js). */
-.edit-toolbar-bar {
-  flex: 0 0 auto;
-  background: var(--bar, var(--paper));
-  padding: 0.3rem 1.5rem;
-}
-.edit-toolbar-handle { display: flex; justify-content: center; }
-.edit-toolbar-toggle .icon { transition: transform 0.15s ease; }
-.edit-toolbar-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
-
+   vez de mezclarse con la hoja. Oculta por default: el ícono "type"
+   del encabezado (editToolbarToggle, en .actions) la despliega — ver
+   js/app.js. */
 .edit-toolbar[hidden] { display: none; }
 .edit-toolbar {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.15rem;
-  padding-top: 0.3rem;
+  padding: 0.4rem 1.5rem;
+  background: var(--bar, var(--paper));
 }
 .edit-toolbar-sep {
   flex: 0 0 auto;
@@ -903,7 +897,7 @@ body {
 
 @media (max-width: 540px) {
   .topbar { padding: 0.5rem 1rem; }
-  .edit-toolbar-bar { padding: 0.3rem 1rem; }
+  .edit-toolbar { padding: 0.4rem 1rem; }
   .sheet { padding: 1rem 0.6rem; }
   .sheet-column {
     padding: 2rem 1.4rem 4rem;

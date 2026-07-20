@@ -133,7 +133,7 @@ function initApp() {
     themeEditorClose: "x",
     toastClose: "x",
     topbarToggle: "chevron-down",
-    editToolbarToggle: "chevron-down",
+    editToolbarToggle: "type",
     fmtBold: "bold",
     fmtItalic: "italic",
     fmtStrike: "strikethrough",
@@ -229,11 +229,11 @@ function initApp() {
   setSaveState(docs.available ? (savedText ? t.savedState : "") : t.noSaveState);
 
   // --- Barra de formato: oculta por default, el usuario la despliega
-  // con el botón "▾" de arriba del editor. Cada botón inserta la misma
-  // marca que su comando de voz equivalente (insertAtCaret con el
-  // texto tal cual) — ver commands/lang/*.js (formatting/align), que
-  // usan las mismas marcas universales **/*/~~/++ y
-  // [center]/[right]/[left]/[justify]. ---
+  // con el ícono "type" del encabezado (editToolbarToggle, en
+  // .actions). Cada botón inserta la misma marca que su comando de voz
+  // equivalente (insertAtCaret con el texto tal cual) — ver
+  // commands/lang/*.js (formatting/align), que usan las mismas marcas
+  // universales **/*/~~/++ y [center]/[right]/[left]/[justify]. ---
   function updateToolbarToggleTitle() {
     const expanded = els.editToolbarToggle.getAttribute("aria-expanded") === "true";
     setTitle(els.editToolbarToggle, expanded ? t.editToolbarHide : t.editToolbarShow);
