@@ -907,6 +907,10 @@ body {
   .editor, .editor-overlay { font-size: 1.18rem; }
   .hud { gap: 0.6rem; padding: 0 1rem; }
   .hud-status { min-width: auto; }
+  /* El centrado absoluto de "Leer" (.hud-read) asume que sobra espacio
+     a los costados; en pantallas chicas .hud-meta puede crecer hasta
+     ahí y superponerse. Se vuelve a flujo normal del flex row. */
+  .hud-read { position: static; transform: none; }
   .mic-level { display: none; } /* prioridad al botón de dictar */
   .count::after { content: ""; } /* solo el número en pantallas chicas */
   .help-panel, .docs-panel, .theme-editor-panel { padding: 1.25rem; }
