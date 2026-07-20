@@ -245,6 +245,20 @@ body {
   border-radius: 999px;
   background: var(--line);
 }
+.edit-toolbar-style {
+  height: 1.9rem;
+  padding: 0 0.4rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+.edit-toolbar-style:hover,
+.edit-toolbar-style:focus-visible { color: var(--ink); background: var(--accent-dim); }
 
 /* Envoltorio de la hoja: .editor-overlay pinta negrita/cursiva/
    tachado/subrayado en vivo detrás del textarea real (ver
@@ -276,6 +290,33 @@ body {
    altura total siga siendo la suma exacta de sus contenidos, igual
    que el textarea de abajo, que es un solo bloque de texto plano. */
 .md-para { margin: 0; }
+
+/* Estilo de párrafo (título/subtítulo/cita/etc., ver textStyle.js):
+   a propósito SIN font-size (ver comentario en markdownOverlay.js) —
+   solo peso/cursiva/color, que no mueven el punto de ajuste de línea.
+   La jerarquía tipográfica real vive en la exportación. */
+.md-style-title,
+.md-style-h1 { font-weight: 700; }
+.md-style-h2 { font-weight: 600; }
+.md-style-h3 { font-weight: 600; }
+.md-style-h4 { font-weight: 500; }
+.md-style-subtitle { font-style: italic; color: var(--ink-soft); }
+.md-style-quote {
+  font-style: italic;
+  color: var(--ink-soft);
+  padding-left: 1rem;
+  position: relative;
+}
+.md-style-quote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 999px;
+  background: var(--line);
+}
 
 .editor {
   position: relative;
@@ -867,5 +908,22 @@ body {
     line-height: 1.6;
     color: #000;
   }
-  .print-sheet p { margin: 0 0 1em; white-space: pre-wrap; }
+  .print-sheet p, .print-sheet blockquote { margin: 0 0 1em; white-space: pre-wrap; }
+  .print-sheet h1, .print-sheet h2, .print-sheet h3, .print-sheet h4, .print-sheet h5 {
+    margin: 1em 0 0.4em;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .print-sheet h1 { font-size: 1.9em; }
+  .print-sheet h2 { font-size: 1.5em; }
+  .print-sheet h3 { font-size: 1.3em; }
+  .print-sheet h4 { font-size: 1.12em; }
+  .print-sheet h5 { font-size: 1.04em; }
+  .print-sheet p.subtitle { font-style: italic; font-size: 1.15em; color: #333; }
+  .print-sheet blockquote {
+    padding-left: 1em;
+    font-style: italic;
+    color: #333;
+    border-left: 3px solid #ccc;
+  }
 }

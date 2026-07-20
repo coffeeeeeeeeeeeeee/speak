@@ -58,6 +58,7 @@ function initApp() {
     editorOverlay: document.getElementById("editorOverlay"),
     editToolbarToggle: document.getElementById("editToolbarToggle"),
     editToolbar: document.getElementById("editToolbar"),
+    styleSelect: document.getElementById("styleSelect"),
     fmtBold: document.getElementById("fmtBold"),
     fmtItalic: document.getElementById("fmtItalic"),
     fmtStrike: document.getElementById("fmtStrike"),
@@ -244,22 +245,37 @@ function initApp() {
     updateToolbarToggleTitle();
     editor.focus();
   });
-  const FORMAT_MARKS = {
+  const INLINE_MARKS = {
     fmtBold: "**",
     fmtItalic: "*",
     fmtStrike: "~~",
     fmtUnderline: "++",
-    alignLeftBtn: "[left]",
-    alignCenterBtn: "[center]",
-    alignRightBtn: "[right]",
-    alignJustifyBtn: "[justify]",
   };
-  for (const [id, mark] of Object.entries(FORMAT_MARKS)) {
+  for (const [id, mark] of Object.entries(INLINE_MARKS)) {
     els[id].addEventListener("click", () => {
       editor.insertAtCaret(mark);
       editor.focus();
     });
   }
+  // Alineado: reemplaza el marcador del párrafo (no insertAtCaret, ver
+  // editor.js#setParagraphAlign) para que conviva bien con un estilo de
+  // párrafo ya aplicado.
+  const ALIGN_VALUES = {
+    alignLeftBtn: "left",
+    alignCenterBtn: "center",
+    alignRightBtn: "right",
+    alignJustifyBtn: "justify",
+  };
+  for (const [id, align] of Object.entries(ALIGN_VALUES)) {
+    els[id].addEventListener("click", () => {
+      editor.setParagraphAlign(align);
+      editor.focus();
+    });
+  }
+  els.styleSelect.addEventListener("change", () => {
+    editor.setParagraphStyle(els.styleSelect.value || null);
+    editor.focus();
+  });
 
   // --- Motor de comandos ---
   const history = new History(editor);
@@ -423,6 +439,11 @@ function initApp() {
     setTitle(els.alignCenterBtn, t.editAlignCenter);
     setTitle(els.alignRightBtn, t.editAlignRight);
     setTitle(els.alignJustifyBtn, t.editAlignJustify);
+    setTitle(els.styleSelect, t.editStyleLabel);
+    for (const [value, label] of Object.entries(t.editStyleOptions)) {
+      const opt = els.styleSelect.querySelector(`option[value="${value}"]`);
+      if (opt) opt.textContent = label;
+    }
   }
   applyUiStrings();
 

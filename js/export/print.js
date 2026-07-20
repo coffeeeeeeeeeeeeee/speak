@@ -18,8 +18,8 @@ export function printPdf(text, { title } = {}) {
   sheet.innerHTML = paragraphs.length
     ? paragraphs
         .map((p) => {
-          const { styleAttr, html } = paragraphBlock(p);
-          return `<p${styleAttr}>${html}</p>`;
+          const { tag, classAttr, styleAttr, html } = paragraphBlock(p);
+          return `<${tag}${classAttr}${styleAttr}>${html}</${tag}>`;
         })
         .join("\n")
     : "";

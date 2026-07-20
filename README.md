@@ -106,13 +106,34 @@ párrafo directamente sale alineado. En **MD** el marcador queda como texto
 plano (`[center]`, etc.): no hay forma de representar alineado en Markdown
 de origen.
 
-Además de por voz, esos mismos marcadores se pueden insertar con clic desde
-una **barra de formato** arriba de la hoja, oculta por default: el botón
-**▾** (arriba del `<textarea>`, fuera de `.editor-wrap` para no desalinear el
-overlay) la despliega. Cada botón llama a `editor.insertAtCaret()` con la
-misma marca que su comando de voz equivalente (`js/app.js`), así que se
-comporta exactamente igual — el alineado, por ejemplo, necesita el cursor al
-principio del párrafo tanto si se dicta como si se hace clic.
+El **estilo de párrafo** (`js/textStyle.js`) es un marcador más del mismo
+tipo que el alineado — **Título general** (`[title]`), **Subtítulo**
+(`[subtitle]`), **Título 1** a **Título 4** (`[h1]`..`[h4]`) y **Cita**
+(`[quote]`) — y convive con él: si un párrafo tiene los dos, el orden
+canónico es estilo primero y alineado después (`[h1][center]texto`), sin
+importar en qué orden los haya aplicado el usuario — `setParagraphStyle()`/
+`setParagraphAlign()` en `js/editor.js` siempre reconstruyen el párrafo en
+ese orden. En el overlay en vivo el estilo SOLO cambia peso/cursiva/color,
+nunca el tamaño de letra: a diferencia de `text-align`, el `font-size` sí
+mueve el punto de ajuste de línea, y como el `<textarea>` real es un tamaño
+único para todo el documento, un párrafo más grande en el overlay
+desalinearía su ajuste (y en cascada, la posición de todo lo que sigue)
+respecto del `<textarea>` de abajo. La jerarquía tipográfica real (con
+tamaños distintos) vive en la exportación: **HTML**/**PDF** usan
+`<h1>`-`<h5>`/`<blockquote>`/`<p class="subtitle">` (título general = h1,
+título 1-4 bajan un nivel a h2-h5 para no competir con él), **RTF** usa
+`\fs`/`\b`/`\i`, y **MD** usa `#`-`#####`/`>` reales (subtítulo, sin
+equivalente en Markdown, queda en cursiva).
+
+Todo lo anterior también se puede aplicar con clic desde una **barra de
+formato** arriba de la hoja, oculta por default: el botón **▾** (arriba del
+`<textarea>`, fuera de `.editor-wrap` para no desalinear el overlay) la
+despliega. Negrita/cursiva/tachado/subrayado insertan la misma marca que su
+comando de voz equivalente (`editor.insertAtCaret()`); alineado y estilo
+reemplazan el marcador de ESE párrafo (`setParagraphAlign()`/
+`setParagraphStyle()`) en vez de solo insertar — así conviven entre sí sin
+apilarse ni dejar un espacio suelto que rompa el reconocimiento del segundo
+marcador.
 
 ### Otras acciones
 
@@ -442,7 +463,8 @@ js/
   editor.js         hoja (textarea) + render
   markdownInline.js  reconoce **/*/~~/++ — lo comparten el overlay y export/
   textAlign.js       reconoce [center]/[right]/[left]/[justify] por párrafo
-  markdownOverlay.js negrita/cursiva/tachado/subrayado/alineado en vivo
+  textStyle.js       reconoce [title]/[subtitle]/[h1..h4]/[quote] por párrafo
+  markdownOverlay.js negrita/cursiva/tachado/subrayado/alineado/estilo en vivo
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
   storage.js        autoguardado genérico (localStorage) — clave/valor simple

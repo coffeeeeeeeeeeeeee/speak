@@ -11,6 +11,8 @@
 
 import * as ops from "./text-ops.js";
 import { renderOverlayHtml } from "./markdownOverlay.js";
+import { extractStyle } from "./textStyle.js";
+import { extractAlign } from "./textAlign.js";
 
 export class Editor {
   constructor(textarea, opts = {}) {
@@ -152,6 +154,47 @@ export class Editor {
     const r = ops.insertAt(this.text, this.caret, s);
     this.text = r.text;
     this.caret = r.caret;
+    this.interim = "";
+    this._render();
+  }
+
+  // Aplica (o saca, con style="") el estilo de párrafo al párrafo donde
+  // está el cursor, reemplazando cualquier marcador de estilo previo
+  // ahí — a diferencia de insertAtCaret(), que solo inserta, esto
+  // reemplaza porque un párrafo tiene UN estilo a la vez (elegir
+  // "Título 1" en el desplegable de la barra no debería apilarse con
+  // un "Cita" anterior). Preserva el alineado si el párrafo ya tenía
+  // uno (ver textStyle.js sobre el orden canónico).
+  setParagraphStyle(style) {
+    const { start, end } = ops.paragraphBoundsAt(this.text, this.caret);
+    const paragraph = this.text.slice(start, end);
+    const afterStyle = extractStyle(paragraph).body;
+    const { mark: alignMark, body } = extractAlign(afterStyle);
+    const styleMark = style ? `[${style}]` : "";
+    const newParagraph = styleMark + alignMark + body;
+    this.text = this.text.slice(0, start) + newParagraph + this.text.slice(end);
+    this.caret = start + styleMark.length + alignMark.length;
+    this.interim = "";
+    this._render();
+  }
+
+  // Igual que setParagraphStyle() pero para el alineado: reemplaza el
+  // marcador de alineado del párrafo del cursor sin apilarlo. Antes la
+  // barra de edición aplicaba el alineado con insertAtCaret() (como
+  // hace por voz), pero al combinarlo con un estilo de párrafo ya
+  // puesto, el separador automático entre inserciones metía un espacio
+  // entre "[estilo]" y "[alineado]" que rompía el reconocimiento del
+  // segundo marcador (tiene que ir pegado al primero). Preserva el
+  // estilo existente del párrafo.
+  setParagraphAlign(align) {
+    const { start, end } = ops.paragraphBoundsAt(this.text, this.caret);
+    const paragraph = this.text.slice(start, end);
+    const { mark: styleMark, body: afterStyle } = extractStyle(paragraph);
+    const { body } = extractAlign(afterStyle);
+    const alignMark = align ? `[${align}]` : "";
+    const newParagraph = styleMark + alignMark + body;
+    this.text = this.text.slice(0, start) + newParagraph + this.text.slice(end);
+    this.caret = start + styleMark.length + alignMark.length;
     this.interim = "";
     this._render();
   }

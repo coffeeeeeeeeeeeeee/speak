@@ -1,10 +1,21 @@
 // ============================================================
 // markdownOverlay.js
 // Convierte el texto plano de la hoja a HTML para pintar negrita,
-// cursiva, tachado, subrayado y alineado en vivo detrás del
-// <textarea> real (ver .editor-overlay en index.html/main.css). El
-// reconocimiento de la sintaxis es compartido con la exportación —
-// ver markdownInline.js (**/*/~~/++) y textAlign.js ([center] y cía).
+// cursiva, tachado, subrayado, alineado y estilo de párrafo (título/
+// cita/etc.) en vivo detrás del <textarea> real (ver .editor-overlay
+// en index.html/main.css). El reconocimiento de la sintaxis es
+// compartido con la exportación — ver markdownInline.js (**/*/~~/++),
+// textAlign.js ([center] y cía.) y textStyle.js ([title]/[h1]/[quote]
+// y cía.).
+//
+// El estilo de párrafo SOLO cambia peso/color/cursiva en el overlay,
+// nunca font-size: el tamaño de letra sí mueve el punto donde se
+// corta la línea (a diferencia de text-align), y como el <textarea>
+// real es un solo tamaño para todo el documento, un párrafo más
+// grande en el overlay desalinearía su ajuste de línea (y en cascada,
+// la posición vertical de todo lo que sigue) respecto del textarea de
+// abajo. La jerarquía tipográfica "de verdad" (con tamaños distintos)
+// vive en la exportación (HTML/PDF/RTF), donde no hay ese problema.
 //
 // A propósito NO se ocultan los marcadores: si el HTML generado
 // tuviera menos caracteres que el texto real, el ajuste de línea
@@ -23,6 +34,17 @@
 
 import { parseInline } from "./markdownInline.js";
 import { extractAlign } from "./textAlign.js";
+import { extractStyle } from "./textStyle.js";
+
+const STYLE_CLASS = {
+  title: "md-style-title",
+  subtitle: "md-style-subtitle",
+  h1: "md-style-h1",
+  h2: "md-style-h2",
+  h3: "md-style-h3",
+  h4: "md-style-h4",
+  quote: "md-style-quote",
+};
 
 const CLASS_BY_TYPE = {
   bold: "md-bold",
@@ -68,10 +90,14 @@ function splitParagraphChunks(text) {
 export function renderOverlayHtml(text) {
   const html = splitParagraphChunks(text)
     .map((chunk) => {
-      const { align, mark, body } = extractAlign(chunk);
-      const style = align ? ` style="text-align:${align}"` : "";
-      const markHtml = mark ? `<span class="md-mark">${escapeHtml(mark)}</span>` : "";
-      return `<div class="md-para"${style}>${markHtml}${renderInlineHtml(body)}</div>`;
+      const { style, mark: styleMark, body: afterStyle } = extractStyle(chunk);
+      const { align, mark: alignMark, body } = extractAlign(afterStyle);
+      const styleClass = style ? ` ${STYLE_CLASS[style]}` : "";
+      const alignStyle = align ? ` style="text-align:${align}"` : "";
+      const markHtml =
+        (styleMark ? `<span class="md-mark">${escapeHtml(styleMark)}</span>` : "") +
+        (alignMark ? `<span class="md-mark">${escapeHtml(alignMark)}</span>` : "");
+      return `<div class="md-para${styleClass}"${alignStyle}>${markHtml}${renderInlineHtml(body)}</div>`;
     })
     .join("");
   // Sin esto, un salto de línea final no ocupa renglón (el textarea

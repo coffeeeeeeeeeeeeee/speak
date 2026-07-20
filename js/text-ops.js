@@ -112,6 +112,27 @@ export function splitParagraphs(text) {
   return t.split(/\n{2,}/);
 }
 
+// Límites [start, end) del párrafo (separado por líneas en blanco,
+// como splitParagraphs) que contiene `caret` — lo usa
+// editor.js#setParagraphStyle para reemplazar el marcador de estilo de
+// UN párrafo sin tocar el resto del documento.
+export function paragraphBoundsAt(text, caret) {
+  const sepRe = /\n{2,}/g;
+  let start = 0;
+  let end = text.length;
+  let m;
+  while ((m = sepRe.exec(text))) {
+    const sepEnd = m.index + m[0].length;
+    if (sepEnd <= caret) {
+      start = sepEnd;
+    } else if (m.index < end) {
+      end = m.index;
+      break; // los separadores están en orden: el primero que llega acá ya es el próximo
+    }
+  }
+  return { start, end };
+}
+
 // --- Operaciones en una posición de cursor (caret) ---
 // Devuelven { text, caret }.
 

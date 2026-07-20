@@ -11,13 +11,16 @@
 // el formato no se filtre al texto que sigue. El alineado por párrafo
 // ([center] y cía., ver textAlign.js) se traduce a \qc/\qr/\ql/\qj,
 // con \pard al inicio de cada párrafo para que no se herede el
-// alineado del anterior.
+// alineado del anterior. El estilo de párrafo (título/cita/etc., ver
+// textStyle.js) se traduce a \fs/\b/\i (tamaño/peso), también en su
+// propio grupo.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
 import { parseInline } from "../markdownInline.js";
 import { extractAlign } from "../textAlign.js";
+import { extractStyle } from "../textStyle.js";
 
 function escapeRtfChars(s) {
   let out = "";
@@ -51,10 +54,26 @@ function lineRtf(line) {
 
 const RTF_ALIGN = { center: "\\qc", right: "\\qr", left: "\\ql", justify: "\\qj" };
 
+// Estilo de párrafo -> tamaño/peso en RTF (\fs son medios-puntos: \fs56
+// = 28pt). Todo agrupado en {…} para que no se filtre al párrafo
+// siguiente, igual que la negrita/cursiva/etc. inline de arriba.
+const RTF_STYLE = {
+  title: "\\fs56\\b",
+  subtitle: "\\fs28\\i",
+  h1: "\\fs40\\b",
+  h2: "\\fs34\\b",
+  h3: "\\fs30\\b",
+  h4: "\\fs28\\b",
+  quote: "\\i",
+};
+
 function paragraphRtf(p) {
-  const { align, body } = extractAlign(p);
+  const { style, body: afterStyle } = extractStyle(p);
+  const { align, body } = extractAlign(afterStyle);
   const alignCw = RTF_ALIGN[align] || "\\ql";
-  return `\\pard${alignCw} ` + body.split("\n").map(lineRtf).join("\\line\n");
+  const styleCw = RTF_STYLE[style];
+  const content = body.split("\n").map(lineRtf).join("\\line\n");
+  return `\\pard${alignCw} ` + (styleCw ? `{${styleCw} ${content}}` : content);
 }
 
 export function toRtf(text) {
