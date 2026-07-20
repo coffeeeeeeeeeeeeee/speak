@@ -906,11 +906,23 @@ body {
   .actions .save-state { text-align: left; }
   .actions .export-wrap { width: 100%; }
   .actions .export-menu:not([hidden]) { position: static; margin-top: 0.3rem; box-shadow: none; }
+  /* Los botones son solo-ícono en el encabezado normal (title/aria-label
+     como único texto, ver README); en el acordeón hay lugar de sobra y
+     quedan sin contexto si solo se ve el ícono, así que acá se muestra
+     también el texto (mismo string que title, puesto en data-label por
+     setTitle() en app.js). */
+  .actions .action::after {
+    content: attr(data-label);
+  }
 }
 
 @media (max-width: 540px) {
   .topbar { padding: 0.5rem 1rem; }
   .edit-toolbar { padding: 0.4rem 1rem; }
+  /* En el acordeón de acciones ya apretado, "guardando…"/"guardado" no
+     aporta tanto como para ocupar una fila entera — se saca en
+     pantallas chicas (el guardado en sí sigue funcionando igual). */
+  .save-state { display: none; }
   .sheet { padding: 1rem 0.6rem; }
   .sheet-column {
     padding: 2rem 1.4rem 4rem;

@@ -150,6 +150,11 @@ function initApp() {
   function setTitle(btn, text) {
     btn.title = text;
     btn.setAttribute("aria-label", text);
+    // Los botones son solo-ícono en el encabezado normal, pero en el
+    // acordeón de pantallas chicas (.actions.is-open bajo 720px) se
+    // muestra este mismo texto al lado del ícono (ver .action::after
+    // en el CSS) — sin esto, ahí también quedarían solo íconos.
+    btn.dataset.label = text;
   }
   function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -202,6 +207,13 @@ function initApp() {
   // "Tema" que definiría esta constante donde se usa.
   const CUSTOMIZE_KEY = "__customize__";
 
+  // Guarda el ESTADO de guardado (no el texto ya traducido), así
+  // applyUiStrings() puede re-renderizarlo en el idioma nuevo sin
+  // esperar al próximo cambio de guardado. Declarado temprano por lo
+  // mismo que CUSTOMIZE_KEY: setSaveState() se llama durante el resto
+  // de initApp(), antes de donde vivía esta declaración.
+  let saveStateKind = "blank";
+
   // --- Documentos: varios en localStorage, uno abierto a la vez ---
   const docs = new DocStore();
   let currentDocId = docs.available ? docs.currentId() || docs.create("") : null;
@@ -218,15 +230,15 @@ function initApp() {
       els.count.textContent = String(editor.getWordCount());
       els.charCount.textContent = String(editor.getCharCount());
       if (docs.available && currentDocId) {
-        setSaveState(t.savingState);
-        docs.saveDebounced(currentDocId, editor.getText(), () => setSaveState(t.savedState));
+        setSaveState("saving");
+        docs.saveDebounced(currentDocId, editor.getText(), () => setSaveState("saved"));
       }
     },
   });
 
   const savedText = docs.available ? docs.load(currentDocId) : "";
   if (savedText) editor.setText(savedText);
-  setSaveState(docs.available ? (savedText ? t.savedState : "") : t.noSaveState);
+  setSaveState(docs.available ? (savedText ? "saved" : "blank") : "none");
 
   // --- Barra de formato: oculta por default, el usuario la despliega
   // con el ícono "type" del encabezado (editToolbarToggle, en
@@ -294,7 +306,7 @@ function initApp() {
     editor.setText(docs.load(id));
     history.clear();
     engine.resetFormatState();
-    setSaveState(t.savedState);
+    setSaveState("saved");
   }
 
   function createDocument() {
@@ -409,11 +421,13 @@ function initApp() {
     document.title = t.title;
     els.langTag.title = `${capitalize(t.langLabel)}: ${family().label}`;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
+    els.langTag.dataset.label = els.langTag.title;
     buildLangMenu();
 
     const v = variant();
     els.variantTag.title = `${capitalize(t.variantLabel)}: ${v.label}`;
     els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
+    els.variantTag.dataset.label = els.variantTag.title;
     els.variantTag.hidden = family().variants.length <= 1;
     buildVariantMenu();
 
@@ -444,6 +458,7 @@ function initApp() {
       const opt = els.styleSelect.querySelector(`option[value="${value}"]`);
       if (opt) opt.textContent = label;
     }
+    renderSaveState();
   }
   applyUiStrings();
 
@@ -459,7 +474,11 @@ function initApp() {
   function buildLangMenu() {
     renderMenuItems(
       els.langMenu,
-      familyKeys.map((key) => ({ key, label: config.families[key].label })),
+      familyKeys.map((key) => ({
+        key,
+        label: config.families[key].label,
+        title: config.families[key].labelEn,
+      })),
       {
         isCurrent: (key) => key === familyKey,
         onSelect: (key) => {
@@ -476,7 +495,7 @@ function initApp() {
   function buildVariantMenu() {
     renderMenuItems(
       els.variantMenu,
-      family().variants.map((v, i) => ({ key: String(i), label: v.label })),
+      family().variants.map((v, i) => ({ key: String(i), label: v.label, title: v.labelEn })),
       {
         isCurrent: (key) => Number(key) === variantIndex,
         onSelect: (key) => {
@@ -538,7 +557,15 @@ function initApp() {
     }
   }
 
-  function setSaveState(text) {
+  function setSaveState(kind) {
+    saveStateKind = kind;
+    renderSaveState();
+  }
+  function renderSaveState() {
+    const text =
+      { saving: t.savingState, saved: t.savedState, none: t.noSaveState, blank: "" }[
+        saveStateKind
+      ] ?? "";
     els.saveState.textContent = text;
   }
 
