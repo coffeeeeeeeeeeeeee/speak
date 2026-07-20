@@ -68,6 +68,15 @@ export const fr = {
     "souligné": "++",
   },
 
+  // Alignement de paragraphe (voir textAlign.js) : se dit UNE fois au
+  // début du paragraphe, pas d'ouverture/fermeture comme "formatting".
+  align: {
+    "centrer": "[center]",
+    "justifier": "[justify]",
+    "aligner à droite": "[right]",
+    "aligner à gauche": "[left]",
+  },
+
   // Changer de langue de dictée à la voix (phrase distincte à dessein,
   // pour ne pas se déclencher si le nom d'une langue apparaît dans une
   // phrase normale). La valeur est la clé de famille dans config.js.

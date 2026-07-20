@@ -70,6 +70,18 @@ export const es = {
     "subrayado": "++",
   },
 
+  // Alineado de párrafo (ver textAlign.js). A diferencia de "formatting"
+  // no es apertura/cierre: se dice UNA vez al empezar el párrafo y
+  // afecta solo a ese párrafo. El marcador insertado es en inglés
+  // ([center]/[right]/[left]/[justify]) a propósito, igual que **/~~/++
+  // — es sintaxis propia de la app, no cambia según el idioma dictado.
+  align: {
+    "centrar": "[center]",
+    "justificar": "[justify]",
+    "alinear a la derecha": "[right]",
+    "alinear a la izquierda": "[left]",
+  },
+
   // Cambiar el idioma de dictado dictando (frase distintiva a propósito,
   // para no dispararse si el nombre del idioma aparece en una oración
   // normal). El valor es la clave de familia en config.js.

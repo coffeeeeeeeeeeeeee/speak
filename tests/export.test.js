@@ -2,6 +2,7 @@ import { test, assertEqual, assertTrue } from "./tiny-test.js";
 import { toTxt } from "../js/export/txt.js";
 import { toHtml, esc } from "../js/export/html.js";
 import { toRtf } from "../js/export/rtf.js";
+import { extractAlign } from "../js/textAlign.js";
 
 // --- txt ---
 
@@ -53,12 +54,52 @@ test("toHtml: texto vacío no rompe (sin párrafos)", () => {
   assertEqual((html.match(/<p>/g) || []).length, 0);
 });
 
+test("toHtml: [center] al inicio de párrafo agrega style y no deja el marcador", () => {
+  const html = toHtml("[center]Hola mundo.");
+  assertTrue(html.includes('<p style="text-align:center">'), "agrega el style de alineado");
+  assertTrue(!html.includes("[center]"), "no deja el marcador visible");
+  assertTrue(html.includes("Hola mundo."), "conserva el texto del párrafo");
+});
+
+test("toHtml: párrafo sin marcador de alineado no agrega style", () => {
+  const html = toHtml("Hola mundo.");
+  assertTrue(html.includes("<p>\n"), "sin style cuando no hay marcador");
+});
+
+// --- textAlign ---
+
+test("extractAlign: reconoce [center]/[right]/[left]/[justify] al inicio", () => {
+  assertEqual(extractAlign("[center]Hola").align, "center");
+  assertEqual(extractAlign("[right]Hola").align, "right");
+  assertEqual(extractAlign("[left]Hola").align, "left");
+  assertEqual(extractAlign("[justify]Hola").align, "justify");
+  assertEqual(extractAlign("[center]Hola").body, "Hola");
+});
+
+test("extractAlign: sin marcador, align null y body sin tocar", () => {
+  const r = extractAlign("Hola [center] mundo");
+  assertEqual(r.align, null);
+  assertEqual(r.body, "Hola [center] mundo");
+});
+
 // --- rtf ---
 
 test("toRtf: separa párrafos con \\par y saltos sueltos con \\line", () => {
   const rtf = toRtf("Uno\nDos\n\nTres.");
   assertTrue(rtf.includes("Uno\\line\nDos"), "usa \\line dentro del párrafo");
-  assertTrue(rtf.includes("Dos\\par\nTres."), "usa \\par entre párrafos");
+  assertTrue(rtf.includes("Dos\\par\n\\pard\\ql Tres."), "usa \\par entre párrafos");
+});
+
+test("toRtf: cada párrafo arranca con \\pard\\ql por defecto (sin alineado explícito)", () => {
+  const rtf = toRtf("Hola.");
+  assertTrue(rtf.includes("\\pard\\ql Hola."), "alinea a la izquierda por defecto");
+});
+
+test("toRtf: [center]/[right]/[justify] al inicio de párrafo traducen a \\qc/\\qr/\\qj", () => {
+  assertTrue(toRtf("[center]Hola").includes("\\pard\\qc Hola"), "centra");
+  assertTrue(toRtf("[right]Hola").includes("\\pard\\qr Hola"), "alinea a la derecha");
+  assertTrue(toRtf("[justify]Hola").includes("\\pard\\qj Hola"), "justifica");
+  assertTrue(!toRtf("[center]Hola").includes("[center]"), "no deja el marcador en el texto");
 });
 
 test("toRtf: caracteres no-ASCII se escapan como \\uN?", () => {

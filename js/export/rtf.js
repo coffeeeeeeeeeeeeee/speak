@@ -8,12 +8,16 @@
 // La negrita/cursiva/tachado/subrayado en vivo de la hoja (**/*/~~/
 // ++, ver markdownInline.js) se traduce acá a los control words
 // \b/\i/\strike/\ul reales, cada uno en su propio grupo {…} para que
-// el formato no se filtre al texto que sigue.
+// el formato no se filtre al texto que sigue. El alineado por párrafo
+// ([center] y cía., ver textAlign.js) se traduce a \qc/\qr/\ql/\qj,
+// con \pard al inicio de cada párrafo para que no se herede el
+// alineado del anterior.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
 import { parseInline } from "../markdownInline.js";
+import { extractAlign } from "../textAlign.js";
 
 function escapeRtfChars(s) {
   let out = "";
@@ -45,8 +49,12 @@ function lineRtf(line) {
     .join("");
 }
 
+const RTF_ALIGN = { center: "\\qc", right: "\\qr", left: "\\ql", justify: "\\qj" };
+
 function paragraphRtf(p) {
-  return p.split("\n").map(lineRtf).join("\\line\n");
+  const { align, body } = extractAlign(p);
+  const alignCw = RTF_ALIGN[align] || "\\ql";
+  return `\\pard${alignCw} ` + body.split("\n").map(lineRtf).join("\\line\n");
 }
 
 export function toRtf(text) {

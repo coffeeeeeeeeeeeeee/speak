@@ -6,12 +6,16 @@
 //
 // La negrita/cursiva/tachado/subrayado en vivo de la hoja
 // (**/*/~~/++, ver markdownInline.js) se traduce acá a <strong>/<em>/
-// <s>/<u> reales.
+// <s>/<u> reales, y el alineado por párrafo ([center] y cía., ver
+// textAlign.js) a `style="text-align:…"` en el <p> — a diferencia del
+// overlay en vivo, acá el marcador NO se muestra: es la versión
+// "limpia" del documento.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
 import { parseInline } from "../markdownInline.js";
+import { extractAlign } from "../textAlign.js";
 
 export function esc(s) {
   return s
@@ -32,7 +36,6 @@ function lineHtml(line) {
     .join("");
 }
 
-// La reusa print.js para armar la hoja imprimible sin duplicar esta lógica.
 export function paragraphHtml(p) {
   return p
     .split("\n")
@@ -40,10 +43,22 @@ export function paragraphHtml(p) {
     .join("<br>\n      ");
 }
 
+// La reusa print.js para armar cada <p> (con su alineado) sin duplicar la lógica.
+export function paragraphBlock(p) {
+  const { align, body } = extractAlign(p);
+  const styleAttr = align ? ` style="text-align:${align}"` : "";
+  return { styleAttr, html: paragraphHtml(body) };
+}
+
 export function toHtml(text, { lang = "es", title = "speakly" } = {}) {
   const paragraphs = splitParagraphs(text);
   const body = paragraphs.length
-    ? paragraphs.map((p) => `  <p>\n      ${paragraphHtml(p)}\n  </p>`).join("\n")
+    ? paragraphs
+        .map((p) => {
+          const { styleAttr, html } = paragraphBlock(p);
+          return `  <p${styleAttr}>\n      ${html}\n  </p>`;
+        })
+        .join("\n")
     : "";
   return `<!DOCTYPE html>
 <html lang="${esc(lang)}">

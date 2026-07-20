@@ -44,6 +44,7 @@ export function createParser(lexicon) {
   };
   add(lexicon.punctuation, "insert");
   add(lexicon.formatting || {}, "insert");
+  add(lexicon.align || {}, "insert");
   add(lexicon.editing, "command");
   add(lexicon.casing, "command");
   add(lexicon.history, "command");

@@ -245,6 +245,10 @@ body {
 .md-italic { font-style: italic; }
 .md-strike { text-decoration: line-through; }
 .md-underline { text-decoration: underline; }
+/* Un <div> por párrafo (ver markdownOverlay.js): margin:0 para que la
+   altura total siga siendo la suma exacta de sus contenidos, igual
+   que el textarea de abajo, que es un solo bloque de texto plano. */
+.md-para { margin: 0; }
 
 .editor {
   position: relative;

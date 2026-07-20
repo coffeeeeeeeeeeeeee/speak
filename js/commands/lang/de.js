@@ -63,6 +63,15 @@ export const de = {
     "unterstrichen": "++",
   },
 
+  // Absatzausrichtung (siehe textAlign.js): wird EINMAL am Anfang des
+  // Absatzes gesagt, kein Öffnen/Schließen wie bei "formatting".
+  align: {
+    "zentrieren": "[center]",
+    "blocksatz": "[justify]",
+    "rechtsbündig": "[right]",
+    "linksbündig": "[left]",
+  },
+
   // Diktiersprache per Sprachbefehl wechseln (bewusst eine markante
   // Phrase, damit sie nicht auslöst, nur weil ein Sprachname in einem
   // normalen Satz vorkommt). Der Wert ist der Familienschlüssel aus

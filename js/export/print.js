@@ -8,7 +8,7 @@
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
-import { paragraphHtml } from "./html.js";
+import { paragraphBlock } from "./html.js";
 
 export function printPdf(text, { title } = {}) {
   const sheet = document.getElementById("printSheet");
@@ -16,7 +16,12 @@ export function printPdf(text, { title } = {}) {
 
   const paragraphs = splitParagraphs(text);
   sheet.innerHTML = paragraphs.length
-    ? paragraphs.map((p) => `<p>${paragraphHtml(p)}</p>`).join("\n")
+    ? paragraphs
+        .map((p) => {
+          const { styleAttr, html } = paragraphBlock(p);
+          return `<p${styleAttr}>${html}</p>`;
+        })
+        .join("\n")
     : "";
 
   const previousTitle = document.title;

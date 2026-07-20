@@ -72,6 +72,16 @@ export const en = {
     "underline": "++",
   },
 
+  // Paragraph alignment (see textAlign.js). Unlike "formatting" this
+  // isn't open/close: said ONCE at the start of a paragraph, affects
+  // only that paragraph.
+  align: {
+    "center": "[center]",
+    "justify": "[justify]",
+    "align right": "[right]",
+    "align left": "[left]",
+  },
+
   // Switch dictation language by voice (deliberately a distinctive
   // phrase, so it doesn't fire just because a language name shows up
   // in normal speech). Value is the family key in config.js.

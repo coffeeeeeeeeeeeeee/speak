@@ -63,6 +63,15 @@ export const it = {
     "sottolineato": "++",
   },
 
+  // Allineamento del paragrafo (vedi textAlign.js): detto UNA volta
+  // all'inizio del paragrafo, non è apertura/chiusura come "formatting".
+  align: {
+    "centra": "[center]",
+    "giustifica": "[justify]",
+    "allinea a destra": "[right]",
+    "allinea a sinistra": "[left]",
+  },
+
   // Cambia lingua di dettatura a voce (frase distintiva apposta, per
   // non attivarsi solo perché il nome di una lingua compare in una
   // frase normale). Il valore è la chiave di famiglia in config.js.

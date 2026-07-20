@@ -66,6 +66,15 @@ export const pt = {
     "sublinhado": "++",
   },
 
+  // Alinhamento de parágrafo (ver textAlign.js): dito UMA vez no
+  // início do parágrafo, sem abrir/fechar como "formatting".
+  align: {
+    "centralizar": "[center]",
+    "justificar": "[justify]",
+    "alinhar à direita": "[right]",
+    "alinhar à esquerda": "[left]",
+  },
+
   // Trocar o idioma de ditado por voz (frase distinta de propósito,
   // para não disparar se o nome do idioma aparecer numa frase normal).
   // O valor é a chave da família em config.js.
