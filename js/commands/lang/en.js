@@ -61,6 +61,17 @@ export const en = {
     "redo": "redo",
   },
 
+  // Sheet formatting (live bold/italic/strikethrough/underline, see
+  // markdownInline.js). Each phrase inserts the Markdown marker and
+  // gets said TWICE, to open and to close — same as "quote".
+  formatting: {
+    "bold": "**",
+    "italic": "*",
+    "strikethrough": "~~",
+    "strike through": "~~",
+    "underline": "++",
+  },
+
   // Switch dictation language by voice (deliberately a distinctive
   // phrase, so it doesn't fire just because a language name shows up
   // in normal speech). Value is the family key in config.js.

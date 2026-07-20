@@ -34,6 +34,7 @@ export function createHelp({ lexicon, t, families, els }) {
 
     const sections = [
       { title: t.helpSections.punctuation, map: lexicon.punctuation, desc: symbolLabel },
+      { title: t.helpSections.formatting, map: lexicon.formatting || {}, desc: symbolLabel },
       { title: t.helpSections.editing, map: lexicon.editing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.casing, map: lexicon.casing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.history, map: lexicon.history, desc: (v) => t.actionLabels[v] },

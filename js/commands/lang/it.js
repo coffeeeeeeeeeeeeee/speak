@@ -52,6 +52,17 @@ export const it = {
     "ripristina": "redo",
   },
 
+  // Formattazione del foglio (grassetto/corsivo/barrato/sottolineato
+  // dal vivo, vedi markdownInline.js). Ogni frase inserisce il
+  // marcatore Markdown e va detta DUE volte, per aprire e chiudere —
+  // come "virgolette".
+  formatting: {
+    "grassetto": "**",
+    "corsivo": "*",
+    "barrato": "~~",
+    "sottolineato": "++",
+  },
+
   // Cambia lingua di dettatura a voce (frase distintiva apposta, per
   // non attivarsi solo perché il nome di una lingua compare in una
   // frase normale). Il valore è la chiave di famiglia in config.js.

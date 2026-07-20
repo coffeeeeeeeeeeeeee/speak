@@ -56,6 +56,16 @@ export const pt = {
     "refazer": "redo",
   },
 
+  // Formatação da folha (negrito/itálico/tachado/sublinhado ao vivo,
+  // ver markdownInline.js). Cada frase insere o marcador de Markdown
+  // e se diz DUAS vezes, para abrir e para fechar — igual "aspas".
+  formatting: {
+    "negrito": "**",
+    "itálico": "*",
+    "tachado": "~~",
+    "sublinhado": "++",
+  },
+
   // Trocar o idioma de ditado por voz (frase distinta de propósito,
   // para não disparar se o nome do idioma aparecer numa frase normal).
   // O valor é a chave da família em config.js.

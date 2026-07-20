@@ -172,6 +172,9 @@ abre/cierra paréntesis.
 **Mayúsculas:** mayúscula (la siguiente palabra) · minúscula · todo mayúsculas ·
 fin mayúsculas.
 
+**Formato:** negrita · cursiva · tachado · subrayado (se dicen dos veces,
+para abrir y cerrar — igual que «comillas»).
+
 **Historial:** deshacer · rehacer (también `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Idiomas:** cambiar a inglés · cambiar a francés · cambiar a portugués ·
@@ -190,6 +193,9 @@ mark · open/close parenthesis.
 
 **Casing:** capitalize / capital (next word) · lowercase · all caps / caps on ·
 caps off / end caps.
+
+**Formatting:** bold · italic · strikethrough / strike through · underline
+(said twice, to open and close — same as «quote»).
 
 **History:** undo · redo (also `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -210,6 +216,9 @@ supprime/efface tout · sélectionne tout.
 
 **Majuscules :** majuscule (le mot suivant) · minuscule · tout en majuscules ·
 fin des majuscules.
+
+**Mise en forme :** gras · italique · barré · souligné (se disent deux fois,
+pour ouvrir et fermer — comme « guillemet »).
 
 **Historique :** annuler · rétablir (aussi `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -232,6 +241,9 @@ selecionar tudo.
 **Maiúsculas:** maiúscula (a próxima palavra) · minúscula · tudo em
 maiúsculas · fim das maiúsculas.
 
+**Formatação:** negrito · itálico · tachado · sublinhado (ditos duas vezes,
+para abrir e fechar — igual "aspas").
+
 **Histórico:** desfazer · refazer (também `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Idiomas:** mudar para espanhol · mudar para inglês · mudar para francês ·
@@ -251,6 +263,9 @@ anführungszeichen · klammer auf/zu.
 
 **Groß-/Kleinschreibung:** großschreiben (nächstes Wort) · kleinschreiben ·
 alles großschreiben · großschreibung beenden.
+
+**Formatierung:** fett · kursiv · durchgestrichen · unterstrichen (zweimal
+gesagt, zum Öffnen und Schließen — wie „anführungszeichen").
 
 **Verlauf:** rückgängig · wiederholen (auch `Strg+Z` / `Strg+Umschalt+Z`).
 
@@ -273,6 +288,9 @@ tutto.
 **Maiuscole:** maiuscola (la parola successiva) · minuscola · tutto
 maiuscolo · fine maiuscolo.
 
+**Formattazione:** grassetto · corsivo · barrato · sottolineato (dette due
+volte, per aprire e chiudere — come «virgolette»).
+
 **Cronologia:** annulla · ripristina (anche `Ctrl+Z` / `Ctrl+Maiusc+Z`).
 
 **Lingue:** passa a spagnolo · passa a inglese · passa a francese · passa a
@@ -291,6 +309,9 @@ di paragrafo è automatica.
 **大小写**（主要用于混入的拉丁字母/英文词）**：** 首字母大写 · 首字母小写 ·
 全部大写 · 取消大写。
 
+**格式：** 粗体 · 斜体 · 删除线 · 下划线（说两次，一次开始一次结束——跟
+"左引号/右引号"不同，这几个用同一个词）。
+
 **历史记录：** 撤销 · 重做（也可用 `Ctrl+Z` / `Ctrl+Shift+Z`）。
 
 **语言：** 切换到西班牙语 · 切换到英语 · 切换到法语 · 切换到葡萄牙语 ·
@@ -307,6 +328,9 @@ di paragrafo è automatica.
 
 **大文字/小文字**（主に混在するラテン文字・英単語向け）**：** 大文字にする ·
 小文字にする · すべて大文字 · 大文字終わり。
+
+**書式：** 太字 · 斜体 · 取り消し線 · 下線（開始と終了で2回言います。
+「かぎ括弧開く/閉じる」とは違い、同じ語を2回使います）。
 
 **履歴：** 元に戻す · やり直す（`Ctrl+Z` / `Ctrl+Shift+Z` も使えます）。
 

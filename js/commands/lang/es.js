@@ -60,6 +60,16 @@ export const es = {
     "rehacer": "redo",
   },
 
+  // Formato de la hoja (negrita/cursiva/tachado/subrayado en vivo, ver
+  // markdownInline.js). Cada frase inserta el marcador de Markdown y
+  // se dice DOS veces, para abrir y para cerrar — igual que "comillas".
+  formatting: {
+    "negrita": "**",
+    "cursiva": "*",
+    "tachado": "~~",
+    "subrayado": "++",
+  },
+
   // Cambiar el idioma de dictado dictando (frase distintiva a propósito,
   // para no dispararse si el nombre del idioma aparece en una oración
   // normal). El valor es la clave de familia en config.js.

@@ -52,6 +52,17 @@ export const de = {
     "wiederholen": "redo",
   },
 
+  // Formatierung des Blatts (Fett/Kursiv/Durchgestrichen/Unterstrichen
+  // live, siehe markdownInline.js). Jede Phrase fügt das Markdown-
+  // Zeichen ein und wird ZWEIMAL gesagt, zum Öffnen und Schließen —
+  // wie "anführungszeichen".
+  formatting: {
+    "fett": "**",
+    "kursiv": "*",
+    "durchgestrichen": "~~",
+    "unterstrichen": "++",
+  },
+
   // Diktiersprache per Sprachbefehl wechseln (bewusst eine markante
   // Phrase, damit sie nicht auslöst, nur weil ein Sprachname in einem
   // normalen Satz vorkommt). Der Wert ist der Familienschlüssel aus

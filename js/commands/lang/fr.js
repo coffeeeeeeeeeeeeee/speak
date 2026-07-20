@@ -57,6 +57,17 @@ export const fr = {
     "rétablir": "redo",
   },
 
+  // Mise en forme de la feuille (gras/italique/barré/souligné en
+  // direct, voir markdownInline.js). Chaque phrase insère le
+  // marqueur Markdown et se dit DEUX fois, pour ouvrir et fermer —
+  // comme "guillemet".
+  formatting: {
+    "gras": "**",
+    "italique": "*",
+    "barré": "~~",
+    "souligné": "++",
+  },
+
   // Changer de langue de dictée à la voix (phrase distincte à dessein,
   // pour ne pas se déclencher si le nom d'une langue apparaît dans une
   // phrase normale). La valeur est la clé de famille dans config.js.
