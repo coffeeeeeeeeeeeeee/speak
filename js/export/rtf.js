@@ -4,10 +4,16 @@
 // ninguna librería. Cada carácter no-ASCII (tildes, CJK, etc.) se
 // escapa como \uN? (entero con signo de 16 bits + carácter de
 // respaldo), que es como RTF representa Unicode desde siempre.
+//
+// La negrita/cursiva/tachado/subrayado en vivo de la hoja (**/*/~~/
+// ++, ver markdownInline.js) se traduce acá a los control words
+// \b/\i/\strike/\ul reales, cada uno en su propio grupo {…} para que
+// el formato no se filtre al texto que sigue.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
+import { parseInline } from "../markdownInline.js";
 
 function escapeRtfChars(s) {
   let out = "";
@@ -27,8 +33,20 @@ function escapeRtfChars(s) {
   return out;
 }
 
+const RTF_ON = { bold: "\\b", italic: "\\i", strike: "\\strike", underline: "\\ul" };
+
+function lineRtf(line) {
+  return parseInline(line)
+    .map((tok) =>
+      tok.type === "text"
+        ? escapeRtfChars(tok.content)
+        : `{${RTF_ON[tok.type]} ${escapeRtfChars(tok.content)}}`
+    )
+    .join("");
+}
+
 function paragraphRtf(p) {
-  return p.split("\n").map(escapeRtfChars).join("\\line\n");
+  return p.split("\n").map(lineRtf).join("\\line\n");
 }
 
 export function toRtf(text) {

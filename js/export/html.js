@@ -3,10 +3,15 @@
 // Documento HTML autocontenido: un párrafo por <p>, los saltos de
 // línea sueltos ("nueva línea") como <br>. Sin dependencias de la app
 // (fuentes del sistema) para que se vea bien abierto suelto.
+//
+// La negrita/cursiva/tachado/subrayado en vivo de la hoja
+// (**/*/~~/++, ver markdownInline.js) se traduce acá a <strong>/<em>/
+// <s>/<u> reales.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
+import { parseInline } from "../markdownInline.js";
 
 export function esc(s) {
   return s
@@ -15,11 +20,23 @@ export function esc(s) {
     .replace(/>/g, "&gt;");
 }
 
-// La reusa print.js para armar la hoja imprimible sin duplicar el escapado.
+const TAG_BY_TYPE = { bold: "strong", italic: "em", strike: "s", underline: "u" };
+
+function lineHtml(line) {
+  return parseInline(line)
+    .map((tok) => {
+      if (tok.type === "text") return esc(tok.content);
+      const tag = TAG_BY_TYPE[tok.type];
+      return `<${tag}>${esc(tok.content)}</${tag}>`;
+    })
+    .join("");
+}
+
+// La reusa print.js para armar la hoja imprimible sin duplicar esta lógica.
 export function paragraphHtml(p) {
   return p
     .split("\n")
-    .map(esc)
+    .map(lineHtml)
     .join("<br>\n      ");
 }
 

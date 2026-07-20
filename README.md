@@ -85,6 +85,12 @@ selección nativa). Por eso los marcadores no se ocultan, solo se atenúan
 (`.md-mark`): si desaparecieran, el overlay tendría menos caracteres que el
 textarea y el ajuste de línea de los dos dejaría de coincidir.
 
+El reconocimiento de esa sintaxis vive en `js/markdownInline.js`, compartido
+con la exportación: **HTML** y **PDF** (que arma su hoja imprimible con las
+mismas funciones que HTML) la traducen a `<strong>/<em>/<s>/<u>` reales, y
+**RTF** a los control words `\b/\i/\strike/\ul`. **MD** no necesita traducir
+nada — ya es la sintaxis de origen.
+
 ### Otras acciones
 
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
@@ -350,7 +356,8 @@ js/
                      los desplegables de Exportar/Idioma/Región/Tema
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
-  markdownOverlay.js negrita/cursiva/tachado/subrayado en vivo (**/*/~~/++)
+  markdownInline.js  reconoce **/*/~~/++ — lo comparten el overlay y export/
+  markdownOverlay.js negrita/cursiva/tachado/subrayado en vivo sobre la hoja
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
   storage.js        autoguardado genérico (localStorage) — clave/valor simple
