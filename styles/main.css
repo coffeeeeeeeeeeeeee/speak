@@ -480,18 +480,21 @@ body {
 }
 .mic .icon { width: 1.1rem; height: 1.1rem; }
 .mic:hover { background: var(--mic, var(--accent)); color: #fff; }
-/* Escuchando: color pleno (relleno sólido) con el color de RESALTE
-   (--accent-2, el mismo que usa el punto de estado), no el color
-   propio de "Dictar" — así el estado "encendido" es inconfundible,
-   sin depender de leer el ícono. --mic-active-ink cubre temas donde
-   ese resalte es muy claro (ej. "neon": amarillo) y el blanco por
-   defecto no tendría contraste suficiente. */
+/* Escuchando: color pleno (relleno sólido), no el color propio de
+   "Dictar" — así el estado "encendido" es inconfundible, sin depender
+   de leer el ícono. Por default es el mismo color de RESALTE que usa
+   el punto de estado (--accent-2); --mic-active permite que un tema
+   le dé a "Dictar" un resalte PROPIO, distinto del resto de la
+   interfaz (ej. "neon": amarillo solo acá, --accent-2 en todo lo
+   demás pasa a ser cian). --mic-active-ink cubre temas donde ese
+   resalte es muy claro y el blanco por defecto no tendría contraste
+   suficiente. */
 .mic[aria-pressed="true"] {
-  background: var(--accent-2, var(--accent));
+  background: var(--mic-active, var(--accent-2, var(--accent)));
   color: var(--mic-active-ink, #fff);
 }
 .mic[aria-pressed="true"]:hover {
-  background: var(--accent-2, var(--accent));
+  background: var(--mic-active, var(--accent-2, var(--accent)));
   opacity: 0.9;
 }
 .mic:disabled { opacity: 0.4; cursor: not-allowed; }

@@ -10,12 +10,17 @@
 // colores base (ej. var(--mic, var(--accent))):
 //   - accent2/accent3: para temas con más de un color de acento (ej.
 //     "neon"), o el color de "resaltado" (dot al escuchar, medidor
-//     de audio, y el botón Dictar mientras escucha).
+//     de audio, y el botón Dictar mientras escucha si no define
+//     mic-active).
 //   - mic: color propio del botón "Dictar" en reposo, distinto del
 //     acento genérico de la interfaz.
+//   - mic-active: color de "Dictar" mientras escucha, si un tema
+//     quiere que sea DISTINTO del resaltado general (accent2) — ej.
+//     "neon" deja el amarillo exclusivo de Dictar y usa cian en todo
+//     lo demás que antes compartía ese resaltado.
 //   - mic-active-ink: color del ícono de "Dictar" mientras escucha,
-//     cuando el color de resaltado (accent2) es muy claro y el blanco
-//     por defecto no alcanzaría de contraste.
+//     cuando mic-active (o accent2, sin mic-active) es muy claro y el
+//     blanco por defecto no alcanzaría de contraste.
 //   - bar/bar-ink/bar-btn/bar-btn-hover/bar-btn-ink: para temas donde
 //     la barra superior e inferior necesitan un color propio distinto
 //     de la hoja (fondo/texto/fondo-de-botón/hover-de-botón/ícono-de-
@@ -72,15 +77,20 @@ export const themes = {
       ghost: "#9AA3D6",
       line: "#E4E7F5",
       accent: "#FF2FD4", // magenta/fucsia
-      "accent-2": "#FFE600", // amarillo: color de resaltado (dot, mic al escuchar, etc.)
-      "accent-3": "#FFE600", // amarillo también acá (medidor de audio)
+      "accent-2": "#00E5FF", // cian: color de resaltado general (punto de estado, etc.)
+      "accent-3": "#00E5FF", // cian también acá (medidor de audio)
       "accent-dim": "rgba(255, 47, 212, 0.18)",
       danger: "#FF4D6D",
       bar: "#FF2FD4", // barras (topbar/hud): magenta pleno
       "bar-ink": "#FFFFFF", // texto de las barras (ej. "speakly", contador): blanco
-      "bar-btn": "#FFE600", // fondo de los botones: amarillo
-      "bar-btn-hover": "#FFF066", // variante clara para el hover
+      "bar-btn": "#00E5FF", // fondo de los botones: cian
+      "bar-btn-hover": "#66F2FF", // variante clara para el hover
       "bar-btn-ink": "#101B4D", // ícono de los botones: mismo azul oscuro que la letra de la hoja (--ink)
+      // El amarillo queda EXCLUSIVO del botón "Dictar" mientras escucha
+      // (--mic-active): en vez de compartir el resaltado general
+      // (--accent-2, cian acá), así "encendido" solo tiene un color en
+      // toda la interfaz.
+      "mic-active": "#FFE600",
       "mic-active-ink": "#101B4D", // ícono oscuro sobre el amarillo pleno al escuchar
     },
     fonts: {
