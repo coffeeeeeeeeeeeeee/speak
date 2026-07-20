@@ -284,27 +284,45 @@
       <form class="theme-editor-form" id="themeEditorForm">
         <label class="theme-editor-row">
           <span data-color-label="paper">Hoja</span>
-          <input type="color" data-color-input="paper" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="paper" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="paper" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <label class="theme-editor-row">
           <span data-color-label="canvas">Fondo</span>
-          <input type="color" data-color-input="canvas" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="canvas" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="canvas" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <label class="theme-editor-row">
           <span data-color-label="ink">Texto</span>
-          <input type="color" data-color-input="ink" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="ink" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="ink" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <label class="theme-editor-row">
           <span data-color-label="accent">Acento</span>
-          <input type="color" data-color-input="accent" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="accent" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="accent" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <label class="theme-editor-row">
           <span data-color-label="mic">Dictar</span>
-          <input type="color" data-color-input="mic" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="mic" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="mic" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <label class="theme-editor-row">
           <span data-color-label="danger">Alerta</span>
-          <input type="color" data-color-input="danger" required />
+          <span class="theme-editor-swatch">
+            <input type="color" data-color-input="danger" required />
+            <input type="text" class="theme-editor-hex" data-color-hex="danger" maxlength="7" pattern="#[0-9A-Fa-f]{6}" spellcheck="false" autocomplete="off" />
+          </span>
         </label>
         <button class="theme-editor-save" id="themeEditorSave" type="submit">Guardar</button>
       </form>

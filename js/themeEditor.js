@@ -9,6 +9,8 @@
 
 import { EDITABLE_KEYS } from "./customTheme.js";
 
+const HEX_RE = /^#[0-9a-fA-F]{6}$/;
+
 export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
   let lastFocus = null;
 
@@ -27,7 +29,33 @@ export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
     const colors = getPrefillColors();
     for (const key of EDITABLE_KEYS) {
       const input = els.form.querySelector(`[data-color-input="${key}"]`);
+      const hex = els.form.querySelector(`[data-color-hex="${key}"]`);
       if (input) input.value = colors[key];
+      if (hex) hex.value = colors[key].toUpperCase();
+    }
+  }
+
+  // El swatch nativo (<input type="color">) abre el selector del
+  // sistema, que en Linux/GTK suele arrancar en sliders RGB en vez de
+  // hex — así que el valor "de verdad" es el campo de texto de al
+  // lado, sincronizado en los dos sentidos con el swatch (ver
+  // main.css). Se conecta una sola vez acá, no en cada open()/prefill().
+  function wireHexSync() {
+    for (const key of EDITABLE_KEYS) {
+      const input = els.form.querySelector(`[data-color-input="${key}"]`);
+      const hex = els.form.querySelector(`[data-color-hex="${key}"]`);
+      if (!input || !hex) continue;
+      input.addEventListener("input", () => {
+        hex.value = input.value.toUpperCase();
+      });
+      hex.addEventListener("input", () => {
+        if (HEX_RE.test(hex.value)) input.value = hex.value;
+      });
+      // Al salir del campo, si quedó algo inválido (o a medio escribir),
+      // volvemos a mostrar el último valor válido en vez de dejarlo así.
+      hex.addEventListener("blur", () => {
+        hex.value = input.value.toUpperCase();
+      });
     }
   }
 
@@ -66,6 +94,7 @@ export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
   }
 
   function wire() {
+    wireHexSync();
     els.closeBtn.addEventListener("click", close);
     els.overlay.addEventListener("click", (e) => {
       if (e.target.hasAttribute("data-close")) close();

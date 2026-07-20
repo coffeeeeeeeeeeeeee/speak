@@ -208,6 +208,13 @@ transparencia (`js/customTheme.js`), el mismo criterio que usa **Alto
 contraste** a mano en `js/themes.js` — así el usuario no tiene que picker-ear
 9+ colores para terminar con un tema coherente.
 
+Cada color tiene, además del swatch nativo (`<input type="color">`), un campo
+de texto hex al lado, sincronizado en los dos sentidos: el selector nativo en
+Linux/GTK suele abrir en la pestaña de sliders RGB en vez de hex, así que el
+campo de texto es la forma directa de escribir el valor sin depender de eso.
+Un hex inválido/a medio escribir no se aplica al swatch hasta que sea válido,
+y se corrige solo al salir del campo (`js/themeEditor.js`).
+
 ## Comandos de voz
 
 Se detectan automáticamente mientras dictás. Para escribir una palabra-comando

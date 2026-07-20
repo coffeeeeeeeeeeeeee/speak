@@ -710,7 +710,7 @@ body {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 20rem;
+  max-width: 22rem;
   background: var(--paper);
   border-radius: 6px;
   padding: 1.75rem;
@@ -738,8 +738,18 @@ body {
   font-size: 0.85rem;
   color: var(--ink);
 }
+/* Swatch + campo de texto: el <input type="color"> nativo abre el
+   selector del sistema (en Linux/GTK suele arrancar en la pestaña de
+   sliders RGB, no hex), así que el valor "de verdad" que se lee/edita
+   es el campo de texto hex de al lado — el swatch queda como atajo
+   visual, sincronizado en los dos sentidos (ver themeEditor.js). */
+.theme-editor-swatch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 .theme-editor-row input[type="color"] {
-  width: 2.4rem;
+  width: 1.8rem;
   height: 1.8rem;
   padding: 0;
   border: 1px solid var(--line);
@@ -747,6 +757,20 @@ body {
   background: transparent;
   cursor: pointer;
 }
+.theme-editor-hex {
+  width: 5.2rem;
+  height: 1.8rem;
+  padding: 0 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+.theme-editor-hex:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
+.theme-editor-hex:invalid { color: var(--danger); }
 .theme-editor-save {
   margin-top: 0.6rem;
   align-self: flex-start;
