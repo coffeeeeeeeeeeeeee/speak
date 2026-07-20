@@ -120,7 +120,7 @@ pliegan en un acordeón: el botón **▾** las muestra apiladas.
 El botón de tema (en el encabezado) abre un desplegable (igual que
 "Exportar") con los 6 temas: **Claro**,
 **Oscuro**, **Neón** (magenta de acento, amarillo como color de resaltado,
-letra blanca sobre hoja violeta casi negra, celeste en el fondo detrás de
+hoja blanca con letra azul oscuro, mismo azul oscuro de fondo detrás de
 la hoja, tipografía mono para todo), **Sepia** (lectura cálida, serif
 clásica), **Alto contraste**
 (blanco y negro puros, sin grises intermedios, sans del sistema) y

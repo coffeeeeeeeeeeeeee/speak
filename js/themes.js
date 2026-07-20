@@ -65,12 +65,12 @@ export const themes = {
   neon: {
     label: "Neón",
     colors: {
-      paper: "#150A24", // hoja: violeta casi negro
-      canvas: "#22E6E6", // fondo detrás de la hoja: celeste llamativo
-      ink: "#FFFFFF", // letra de la hoja: blanco
-      "ink-soft": "#8FDDE0",
-      ghost: "#6E5B9E",
-      line: "#3A2A5C",
+      paper: "#FFFFFF", // hoja: blanca
+      canvas: "#101B4D", // fondo detrás de la hoja: azul oscuro
+      ink: "#101B4D", // letra de la hoja: mismo azul oscuro que el fondo
+      "ink-soft": "#4A5590",
+      ghost: "#9AA3D6",
+      line: "#E4E7F5",
       accent: "#FF2FD4", // magenta/fucsia
       "accent-2": "#FFE600", // amarillo: color de resaltado (dot, mic al escuchar, etc.)
       "accent-3": "#FFE600", // amarillo también acá (medidor de audio)
@@ -80,8 +80,8 @@ export const themes = {
       "bar-ink": "#FFFFFF", // texto de las barras (ej. "speakly", contador): blanco
       "bar-btn": "#FFE600", // fondo de los botones: amarillo
       "bar-btn-hover": "#FFF066", // variante clara para el hover
-      "bar-btn-ink": "#150A24", // ícono de los botones: mismo azul oscuro que la hoja (--paper)
-      "mic-active-ink": "#150A24", // ícono oscuro sobre el amarillo pleno al escuchar
+      "bar-btn-ink": "#101B4D", // ícono de los botones: mismo azul oscuro que la letra de la hoja (--ink)
+      "mic-active-ink": "#101B4D", // ícono oscuro sobre el amarillo pleno al escuchar
     },
     fonts: {
       // Todo en mono, con look de terminal — ver "no contornos" en

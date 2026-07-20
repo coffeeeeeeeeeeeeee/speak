@@ -98,10 +98,18 @@ body {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--serif);
   font-size: 1.05rem;
   letter-spacing: 0.01em;
   color: var(--bar-ink, var(--ink));
+}
+.brand-icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  flex: 0 0 auto;
 }
 
 

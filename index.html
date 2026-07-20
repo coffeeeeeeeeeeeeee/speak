@@ -18,7 +18,7 @@
       var PAPER_INK = {
         light: ["#F2F3F0", "#1B1C1E"],
         dark: ["#242524", "#ECEDE9"],
-        neon: ["#150A24", "#FFFFFF"],
+        neon: ["#FFFFFF", "#101B4D"],
         sepia: ["#F4ECD8", "#3B2F22"],
         highContrast: ["#FFFFFF", "#000000"],
         natural: ["#E7F0DC", "#16240F"],
@@ -68,7 +68,10 @@
 
   <div class="app" id="app">
     <header class="topbar">
-      <span class="brand">speakly</span>
+      <span class="brand">
+        <img class="brand-icon" src="icons/icon.svg" alt="" aria-hidden="true" />
+        speakly
+      </span>
       <button
         class="action icon-btn topbar-toggle"
         id="topbarToggle"
