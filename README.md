@@ -73,6 +73,18 @@ El botón **Documentos** abre un panel con todos los documentos guardados
 uno existente, se crea uno nuevo o se borra uno (con confirmación). Cambiar
 de documento resetea el deshacer/rehacer del anterior.
 
+### Formato
+
+La hoja reconoce una sintaxis liviana tipo Markdown y la pinta en vivo
+mientras se escribe: `**negrita**`, `*cursiva*`, `~~tachado~~` y
+`++subrayado++`. Sigue siendo texto plano por debajo (nada de
+`contentEditable`): `js/markdownOverlay.js` convierte ese texto a HTML y lo
+pinta en una capa (`.editor-overlay`) pegada detrás del `<textarea>` real,
+que queda con el texto transparente (solo se ven ahí el cursor y la
+selección nativa). Por eso los marcadores no se ocultan, solo se atenúan
+(`.md-mark`): si desaparecieran, el overlay tendría menos caracteres que el
+textarea y el ajuste de línea de los dos dejaría de coincidir.
+
 ### Otras acciones
 
 **Leer**, al lado del botón **Dictar** (mismo grupo en el pie de la hoja),
@@ -338,6 +350,7 @@ js/
                      los desplegables de Exportar/Idioma/Región/Tema
   recognition.js    Web Speech API + auto-reinicio
   editor.js         hoja (textarea) + render
+  markdownOverlay.js negrita/cursiva/tachado/subrayado en vivo (**/*/~~/++)
   text-ops.js       operaciones puras de texto (testeable)
   history.js        deshacer / rehacer
   storage.js        autoguardado genérico (localStorage) — clave/valor simple

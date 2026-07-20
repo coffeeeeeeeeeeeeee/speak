@@ -2,14 +2,20 @@
 // export/markdown.js
 // Markdown a mano: el texto es prosa dictada, no Markdown de origen,
 // así que solo hace falta escapar lo que dispararía sintaxis por
-// accidente (numeral/guion/cita al inicio de línea, énfasis inline).
+// accidente (numeral/guion/cita al inicio de línea, marcado inline
+// que el usuario no haya escrito a propósito).
+//
+// `*`/`**`/`~~` NO se escapan: son la sintaxis de negrita/cursiva/
+// tachado que ya reconoce el overlay en vivo (ver markdownOverlay.js)
+// — si se escaparan acá, exportar a .md rompería el formato que el
+// usuario sí quiso escribir.
 // ============================================================
 
 import { splitParagraphs } from "../text-ops.js";
 import { downloadBlob, defaultName } from "./download.js";
 
 function escapeInline(s) {
-  return s.replace(/[\\`*_[\]]/g, "\\$&");
+  return s.replace(/[\\`_[\]]/g, "\\$&");
 }
 
 function escapeLineStart(line) {

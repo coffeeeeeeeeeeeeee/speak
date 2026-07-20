@@ -10,6 +10,7 @@
 // ============================================================
 
 import * as ops from "./text-ops.js";
+import { renderOverlayHtml } from "./markdownOverlay.js";
 
 export class Editor {
   constructor(textarea, opts = {}) {
@@ -21,6 +22,10 @@ export class Editor {
     // generaba por sí sola.
     this.onBeforeManualEdit = opts.onBeforeManualEdit || (() => {});
     this.scrollEl = opts.scrollEl || null;
+    // Capa detrás del textarea que pinta negrita/cursiva/tachado/
+    // subrayado en vivo — ver markdownOverlay.js. Opcional: sin ella
+    // el editor funciona igual, solo texto plano.
+    this.overlayEl = opts.overlayEl || null;
 
     this.text = "";     // texto confirmado
     this.caret = 0;     // posición de inserción dentro de `text`
@@ -35,6 +40,7 @@ export class Editor {
       this.text = this.el.value;
       this.caret = this.el.selectionStart;
       this._autoGrow();
+      this._updateOverlay();
       this.onChange();
     });
 
@@ -65,6 +71,7 @@ export class Editor {
     this._programmatic = false;
 
     this._autoGrow();
+    this._updateOverlay();
     if (ensureVisible) this._ensureVisible(this.caret + this.interim.length);
     this.onChange();
   }
@@ -72,6 +79,11 @@ export class Editor {
   _autoGrow() {
     this.el.style.height = "auto";
     this.el.style.height = this.el.scrollHeight + "px";
+  }
+
+  _updateOverlay() {
+    if (!this.overlayEl) return;
+    this.overlayEl.innerHTML = renderOverlayHtml(this._value());
   }
 
   // Desplaza el contenedor SOLO si `pos` quedó fuera de la vista. Genérico
@@ -211,6 +223,10 @@ export class Editor {
   getWordCount() {
     const t = this.text.trim();
     return t ? t.split(/\s+/).length : 0;
+  }
+
+  getCharCount() {
+    return this.text.length;
   }
 
   focus() {

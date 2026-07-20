@@ -69,7 +69,14 @@
   <div class="app" id="app">
     <header class="topbar">
       <span class="brand">
-        <img class="brand-icon" src="icons/icon.svg" alt="" aria-hidden="true" />
+        <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+            <rect x="7.7" y="2.8" width="6" height="13" rx="3" fill="currentColor" stroke="none" />
+            <path d="M17.7 10.8v2a7 7 0 0 1-14 0v-2" />
+            <path d="M10.7 19.8v3" />
+          </g>
+          <circle cx="18.7" cy="5.3" r="1.5" style="fill: var(--accent)" />
+        </svg>
         speakly
       </span>
       <button
@@ -140,15 +147,22 @@
 
     <main class="sheet" id="sheet">
       <div class="sheet-column">
-        <textarea
-          id="editor"
-          class="editor"
-          aria-label="Hoja de escritura por voz"
-          placeholder="Pulsá «Dictar» y empezá a hablar. El texto aparece acá."
-          spellcheck="true"
-          autocomplete="off"
-          autocapitalize="off"
-        ></textarea>
+        <div class="editor-wrap">
+          <!-- Pinta en vivo la negrita/cursiva/tachado/subrayado
+               (**/*/~~/++) detrás del textarea real, que queda con el
+               texto transparente (solo cursor y selección visibles) —
+               ver js/markdownOverlay.js. -->
+          <div class="editor-overlay" id="editorOverlay" aria-hidden="true"></div>
+          <textarea
+            id="editor"
+            class="editor"
+            aria-label="Hoja de escritura por voz"
+            placeholder="Pulsá «Dictar» y empezá a hablar. El texto aparece acá."
+            spellcheck="true"
+            autocomplete="off"
+            autocapitalize="off"
+          ></textarea>
+        </div>
       </div>
     </main>
 
@@ -160,14 +174,16 @@
 
       <div class="hud-meta">
         <span class="count" id="count" data-label="palabras">0</span>
+        <span class="count" id="charCount" data-label="caracteres">0</span>
       </div>
+
+      <button class="action icon-btn hud-read" id="readBtn" type="button" title="Leer" aria-label="Leer"></button>
 
       <div class="mic-level" id="micLevel" aria-hidden="true">
         <span class="mic-level-bar" id="micLevelBar"></span>
       </div>
 
       <div class="hud-buttons">
-        <button class="action icon-btn" id="readBtn" type="button" title="Leer" aria-label="Leer"></button>
         <button class="mic icon-btn" id="micBtn" type="button" aria-pressed="false" title="Dictar" aria-label="Dictar"></button>
       </div>
     </footer>
