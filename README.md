@@ -126,14 +126,15 @@ título 1-4 bajan un nivel a h2-h5 para no competir con él), **RTF** usa
 equivalente en Markdown, queda en cursiva).
 
 Todo lo anterior también se puede aplicar con clic desde una **barra de
-formato** arriba de la hoja, oculta por default: el botón **▾** (arriba del
-`<textarea>`, fuera de `.editor-wrap` para no desalinear el overlay) la
-despliega. Negrita/cursiva/tachado/subrayado insertan la misma marca que su
-comando de voz equivalente (`editor.insertAtCaret()`); alineado y estilo
-reemplazan el marcador de ESE párrafo (`setParagraphAlign()`/
-`setParagraphStyle()`) en vez de solo insertar — así conviven entre sí sin
-apilarse ni dejar un espacio suelto que rompa el reconocimiento del segundo
-marcador.
+formato** (`.edit-toolbar-bar`), oculta por default: el botón **▾** la
+despliega. Es estática, no parte de la hoja — vive en `.app` como hermana
+de `.topbar`/`.sheet`/`.hud`, así que queda fija debajo del encabezado y no
+se mueve con el scroll de la página (`.sheet` es lo único que hace scroll).
+Negrita/cursiva/tachado/subrayado insertan la misma marca que su comando de
+voz equivalente (`editor.insertAtCaret()`); alineado y estilo reemplazan el
+marcador de ESE párrafo (`setParagraphAlign()`/`setParagraphStyle()`) en vez
+de solo insertar — así conviven entre sí sin apilarse ni dejar un espacio
+suelto que rompa el reconocimiento del segundo marcador.
 
 ### Otras acciones
 

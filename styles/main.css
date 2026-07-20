@@ -220,12 +220,18 @@ body {
 }
 
 /* ---------- Barra de formato ---------- */
-/* Oculta por default: solo el botón "▾" queda a la vista arriba del
-   editor (ver js/app.js). Vive fuera de .editor-wrap a propósito: si
-   entrara ahí, empujaría el textarea hacia abajo sin mover al overlay
-   (que es position:absolute; inset:0 relativo a .editor-wrap),
-   desalineando las dos capas. */
-.edit-toolbar-handle { display: flex; justify-content: center; margin-bottom: 0.2rem; }
+/* Estática debajo del encabezado: .edit-toolbar-bar vive en .app,
+   fuera de .sheet (lo único que hace scroll — ver más abajo), así no
+   se va con la página ni con el editor. Mismo fondo que .topbar/.hud
+   (var(--bar, var(--paper))): visualmente extiende el encabezado en
+   vez de mezclarse con la hoja. Oculta por default: solo el botón "▾"
+   queda a la vista (ver js/app.js). */
+.edit-toolbar-bar {
+  flex: 0 0 auto;
+  background: var(--bar, var(--paper));
+  padding: 0.3rem 1.5rem;
+}
+.edit-toolbar-handle { display: flex; justify-content: center; }
 .edit-toolbar-toggle .icon { transition: transform 0.15s ease; }
 .edit-toolbar-toggle[aria-expanded="true"] .icon { transform: rotate(180deg); }
 
@@ -234,8 +240,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.15rem;
-  margin-bottom: 1rem;
+  padding-top: 0.3rem;
 }
 .edit-toolbar-sep {
   flex: 0 0 auto;
@@ -250,15 +257,18 @@ body {
   padding: 0 0.4rem;
   border: none;
   border-radius: 4px;
-  background: transparent;
-  color: var(--ink-soft);
+  background: var(--bar-btn, transparent);
+  color: var(--bar-btn-ink, var(--bar-ink, var(--ink-soft)));
   font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.02em;
   cursor: pointer;
 }
 .edit-toolbar-style:hover,
-.edit-toolbar-style:focus-visible { color: var(--ink); background: var(--accent-dim); }
+.edit-toolbar-style:focus-visible {
+  color: var(--bar-btn-ink, var(--bar-ink, var(--ink)));
+  background: var(--bar-btn-hover, var(--accent-dim));
+}
 
 /* Envoltorio de la hoja: .editor-overlay pinta negrita/cursiva/
    tachado/subrayado en vivo detrás del textarea real (ver
@@ -893,6 +903,7 @@ body {
 
 @media (max-width: 540px) {
   .topbar { padding: 0.5rem 1rem; }
+  .edit-toolbar-bar { padding: 0.3rem 1rem; }
   .sheet { padding: 1rem 0.6rem; }
   .sheet-column {
     padding: 2rem 1.4rem 4rem;
