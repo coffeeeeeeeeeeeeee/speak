@@ -67,6 +67,8 @@ function initApp() {
     alignCenterBtn: document.getElementById("alignCenterBtn"),
     alignRightBtn: document.getElementById("alignRightBtn"),
     alignJustifyBtn: document.getElementById("alignJustifyBtn"),
+    toolbarUndoBtn: document.getElementById("toolbarUndoBtn"),
+    toolbarRedoBtn: document.getElementById("toolbarRedoBtn"),
     sheet: document.getElementById("sheet"),
     dot: document.getElementById("dot"),
     statusText: document.getElementById("statusText"),
@@ -142,6 +144,8 @@ function initApp() {
     alignCenterBtn: "align-center",
     alignRightBtn: "align-right",
     alignJustifyBtn: "align-justify",
+    toolbarUndoBtn: "undo-2",
+    toolbarRedoBtn: "redo-2",
   };
   for (const [key, icon] of Object.entries(BUTTON_ICONS)) {
     prependIcon(els[key], icon);
@@ -233,6 +237,7 @@ function initApp() {
         setSaveState("saving");
         docs.saveDebounced(currentDocId, editor.getText(), () => setSaveState("saved"));
       }
+      updateUndoRedoState();
     },
   });
 
@@ -299,6 +304,27 @@ function initApp() {
     onSwitchLanguage: (familyCode) => switchFamily(familyCode),
   });
 
+  // Deshacer/rehacer en la barra de formato: mismo historial que
+  // Ctrl+Z/Ctrl+Shift+Z y «deshacer»/«rehacer» por voz (history.js vía
+  // engine). Se deshabilitan cuando no hay nada que deshacer/rehacer —
+  // updateUndoRedoState() se llama en cada cambio de contenido y de
+  // documento, no solo al hacer clic.
+  function updateUndoRedoState() {
+    els.toolbarUndoBtn.disabled = !engine.canUndo();
+    els.toolbarRedoBtn.disabled = !engine.canRedo();
+  }
+  els.toolbarUndoBtn.addEventListener("click", () => {
+    engine.undo();
+    updateUndoRedoState();
+    editor.focus();
+  });
+  els.toolbarRedoBtn.addEventListener("click", () => {
+    engine.redo();
+    updateUndoRedoState();
+    editor.focus();
+  });
+  updateUndoRedoState();
+
   // --- Panel de documentos ---
   function loadDocument(id) {
     currentDocId = id;
@@ -307,6 +333,7 @@ function initApp() {
     history.clear();
     engine.resetFormatState();
     setSaveState("saved");
+    updateUndoRedoState();
   }
 
   function createDocument() {
@@ -453,6 +480,8 @@ function initApp() {
     setTitle(els.alignCenterBtn, t.editAlignCenter);
     setTitle(els.alignRightBtn, t.editAlignRight);
     setTitle(els.alignJustifyBtn, t.editAlignJustify);
+    setTitle(els.toolbarUndoBtn, t.editUndo);
+    setTitle(els.toolbarRedoBtn, t.editRedo);
     setTitle(els.styleSelect, t.editStyleLabel);
     for (const [value, label] of Object.entries(t.editStyleOptions)) {
       const opt = els.styleSelect.querySelector(`option[value="${value}"]`);
@@ -703,11 +732,13 @@ function initApp() {
       if (engine.canUndo()) {
         e.preventDefault();
         engine.undo();
+        updateUndoRedoState();
       }
     } else if (ctrl && (key === "y" || (key === "z" && e.shiftKey))) {
       if (engine.canRedo()) {
         e.preventDefault();
         engine.redo();
+        updateUndoRedoState();
       }
     }
   });

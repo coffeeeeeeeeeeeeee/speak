@@ -60,6 +60,8 @@ export const strings = {
     editAlignCenter: "Centrar",
     editAlignRight: "Alinear a la derecha",
     editAlignJustify: "Justificar",
+    editUndo: "Deshacer",
+    editRedo: "Rehacer",
     editStyleLabel: "Estilo de párrafo",
     editStyleOptions: {
       "": "Texto",
@@ -172,6 +174,8 @@ export const strings = {
     editAlignCenter: "Center",
     editAlignRight: "Align right",
     editAlignJustify: "Justify",
+    editUndo: "Undo",
+    editRedo: "Redo",
     editStyleLabel: "Paragraph style",
     editStyleOptions: {
       "": "Text",
@@ -285,6 +289,8 @@ export const strings = {
     editAlignCenter: "Centrer",
     editAlignRight: "Aligner à droite",
     editAlignJustify: "Justifier",
+    editUndo: "Annuler",
+    editRedo: "Rétablir",
     editStyleLabel: "Style de paragraphe",
     editStyleOptions: {
       "": "Texte",
@@ -400,6 +406,8 @@ export const strings = {
     editAlignCenter: "Centralizar",
     editAlignRight: "Alinhar à direita",
     editAlignJustify: "Justificar",
+    editUndo: "Desfazer",
+    editRedo: "Refazer",
     editStyleLabel: "Estilo de parágrafo",
     editStyleOptions: {
       "": "Texto",
@@ -514,6 +522,8 @@ export const strings = {
     editAlignCenter: "Zentrieren",
     editAlignRight: "Rechtsbündig",
     editAlignJustify: "Blocksatz",
+    editUndo: "Rückgängig",
+    editRedo: "Wiederholen",
     editStyleLabel: "Absatzstil",
     editStyleOptions: {
       "": "Text",
@@ -629,6 +639,8 @@ export const strings = {
     editAlignCenter: "Centra",
     editAlignRight: "Allinea a destra",
     editAlignJustify: "Giustifica",
+    editUndo: "Annulla",
+    editRedo: "Ripristina",
     editStyleLabel: "Stile del paragrafo",
     editStyleOptions: {
       "": "Testo",
@@ -742,6 +754,8 @@ export const strings = {
     editAlignCenter: "居中",
     editAlignRight: "右对齐",
     editAlignJustify: "两端对齐",
+    editUndo: "撤销",
+    editRedo: "重做",
     editStyleLabel: "段落样式",
     editStyleOptions: {
       "": "正文",
@@ -852,6 +866,8 @@ export const strings = {
     editAlignCenter: "中央揃え",
     editAlignRight: "右揃え",
     editAlignJustify: "両端揃え",
+    editUndo: "元に戻す",
+    editRedo: "やり直す",
     editStyleLabel: "段落スタイル",
     editStyleOptions: {
       "": "本文",

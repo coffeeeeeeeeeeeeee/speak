@@ -135,7 +135,10 @@ Negrita/cursiva/tachado/subrayado insertan la misma marca que su comando de
 voz equivalente (`editor.insertAtCaret()`); alineado y estilo reemplazan el
 marcador de ESE párrafo (`setParagraphAlign()`/`setParagraphStyle()`) en vez
 de solo insertar — así conviven entre sí sin apilarse ni dejar un espacio
-suelto que rompa el reconocimiento del segundo marcador.
+suelto que rompa el reconocimiento del segundo marcador. Al final hay
+**Deshacer**/**Rehacer**, sobre el mismo historial que `Ctrl+Z`/
+`Ctrl+Shift+Z` y los comandos de voz «deshacer»/«rehacer» — se deshabilitan
+solos cuando no hay nada que deshacer/rehacer.
 
 ### Otras acciones
 
