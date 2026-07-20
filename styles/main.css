@@ -45,6 +45,23 @@
 
 * { box-sizing: border-box; }
 
+/* Scrollbar: mismo criterio que el resto del diseño (sin contorno,
+   separación por color en vez de líneas) — se camufla con el tema
+   activo en vez de mostrar el scrollbar por defecto del sistema. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ghost) transparent;
+}
+*::-webkit-scrollbar { width: 0.7rem; height: 0.7rem; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--ghost);
+  border-radius: 999px;
+  border: 0.2rem solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+
 html, body {
   margin: 0;
   height: 100%;
@@ -313,8 +330,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.9rem;
-  height: 2.9rem;
+  width: 2.6rem;
+  height: 2.6rem;
   /* Resalta aparte del resto de la interfaz: color propio por tema
      (mic en themes.js), con fallback al acento general si el tema no
      lo define (ver neon/highContrast). */
@@ -325,7 +342,7 @@ body {
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
-.mic .icon { width: 1.2rem; height: 1.2rem; }
+.mic .icon { width: 1.1rem; height: 1.1rem; }
 .mic:hover { background: var(--mic, var(--accent)); color: #fff; }
 /* Escuchando: color pleno (relleno sólido) con el color de RESALTE
    (--accent-2, el mismo que usa el punto de estado), no el color
