@@ -71,10 +71,29 @@ export const fr = {
   // Alignement de paragraphe (voir textAlign.js) : se dit UNE fois au
   // début du paragraphe, pas d'ouverture/fermeture comme "formatting".
   align: {
-    "centrer": "[center]",
-    "justifier": "[justify]",
-    "aligner à droite": "[right]",
-    "aligner à gauche": "[left]",
+    "centrer": "center",
+    "justifier": "justify",
+    "aligner à droite": "right",
+    "aligner à gauche": "left",
+  },
+
+  // Style de paragraphe (voir textStyle.js et le menu de la barre
+  // d'édition). Comme "align" : se dit UNE fois, remplace le style
+  // précédent. "texte normal"/"supprimer le style" l'enlèvent.
+  style: {
+    "titre principal": "title",
+    "sous-titre": "subtitle",
+    "titre un": "h1",
+    "titre 1": "h1",
+    "titre deux": "h2",
+    "titre 2": "h2",
+    "titre trois": "h3",
+    "titre 3": "h3",
+    "titre quatre": "h4",
+    "titre 4": "h4",
+    "citation": "quote",
+    "texte normal": "",
+    "supprimer le style": "",
   },
 
   // Changer de langue de dictée à la voix (phrase distincte à dessein,

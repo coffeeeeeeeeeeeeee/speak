@@ -66,10 +66,29 @@ export const de = {
   // Absatzausrichtung (siehe textAlign.js): wird EINMAL am Anfang des
   // Absatzes gesagt, kein Öffnen/Schließen wie bei "formatting".
   align: {
-    "zentrieren": "[center]",
-    "blocksatz": "[justify]",
-    "rechtsbündig": "[right]",
-    "linksbündig": "[left]",
+    "zentrieren": "center",
+    "blocksatz": "justify",
+    "rechtsbündig": "right",
+    "linksbündig": "left",
+  },
+
+  // Absatzstil (siehe textStyle.js und das Dropdown der Bearbeitungs-
+  // leiste). Wie "align": wird EINMAL gesagt, ersetzt den vorherigen
+  // Stil. "normaler text"/"formatierung entfernen" entfernen ihn.
+  style: {
+    "haupttitel": "title",
+    "untertitel": "subtitle",
+    "überschrift eins": "h1",
+    "überschrift 1": "h1",
+    "überschrift zwei": "h2",
+    "überschrift 2": "h2",
+    "überschrift drei": "h3",
+    "überschrift 3": "h3",
+    "überschrift vier": "h4",
+    "überschrift 4": "h4",
+    "zitat": "quote",
+    "normaler text": "",
+    "formatierung entfernen": "",
   },
 
   // Diktiersprache per Sprachbefehl wechseln (bewusst eine markante

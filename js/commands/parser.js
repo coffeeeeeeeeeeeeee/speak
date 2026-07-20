@@ -2,7 +2,9 @@
 // commands/parser.js
 // Segmenta un transcript final en una secuencia de tokens:
 //   { type: "text",    value: "hola mundo" }   // dictado (texto original)
-//   { type: "insert",  value: "." }             // puntuación
+//   { type: "insert",  value: "." }             // puntuación / formato inline
+//   { type: "align",   value: "center" }         // alineado de párrafo
+//   { type: "style",   value: "title" }          // estilo de párrafo ("" = quitar)
 //   { type: "command", action: "deleteWord" }   // acción de edición
 //
 // Robustez de la detección automática (sin palabra clave):
@@ -44,7 +46,8 @@ export function createParser(lexicon) {
   };
   add(lexicon.punctuation, "insert");
   add(lexicon.formatting || {}, "insert");
-  add(lexicon.align || {}, "insert");
+  add(lexicon.align || {}, "align");
+  add(lexicon.style || {}, "style");
   add(lexicon.editing, "command");
   add(lexicon.casing, "command");
   add(lexicon.history, "command");
@@ -106,6 +109,10 @@ export function createParser(lexicon) {
           tokens.push({ type: "insert", value: entry.value });
         } else if (entry.kind === "language") {
           tokens.push({ type: "language", value: entry.value });
+        } else if (entry.kind === "align") {
+          tokens.push({ type: "align", value: entry.value });
+        } else if (entry.kind === "style") {
+          tokens.push({ type: "style", value: entry.value });
         } else {
           tokens.push({ type: "command", action: entry.value });
         }

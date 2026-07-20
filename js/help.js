@@ -32,10 +32,22 @@ export function createHelp({ lexicon, t, families, els }) {
     els.intro.innerHTML = t.helpIntroHtml;
     els.closeBtn.setAttribute("aria-label", t.helpCloseAria);
 
+    const alignLabels = {
+      left: t.editAlignLeft,
+      center: t.editAlignCenter,
+      right: t.editAlignRight,
+      justify: t.editAlignJustify,
+    };
+
     const sections = [
       { title: t.helpSections.punctuation, map: lexicon.punctuation, desc: symbolLabel },
       { title: t.helpSections.formatting, map: lexicon.formatting || {}, desc: symbolLabel },
-      { title: t.helpSections.align, map: lexicon.align || {}, desc: symbolLabel },
+      { title: t.helpSections.align, map: lexicon.align || {}, desc: (v) => alignLabels[v] ?? v },
+      {
+        title: t.editStyleLabel,
+        map: lexicon.style || {},
+        desc: (v) => t.editStyleOptions[v] ?? t.editStyleOptions[""],
+      },
       { title: t.helpSections.editing, map: lexicon.editing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.casing, map: lexicon.casing, desc: (v) => t.actionLabels[v] },
       { title: t.helpSections.history, map: lexicon.history, desc: (v) => t.actionLabels[v] },

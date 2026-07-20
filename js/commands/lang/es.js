@@ -72,14 +72,34 @@ export const es = {
 
   // Alineado de párrafo (ver textAlign.js). A diferencia de "formatting"
   // no es apertura/cierre: se dice UNA vez al empezar el párrafo y
-  // afecta solo a ese párrafo. El marcador insertado es en inglés
-  // ([center]/[right]/[left]/[justify]) a propósito, igual que **/~~/++
-  // — es sintaxis propia de la app, no cambia según el idioma dictado.
+  // afecta solo a ese párrafo. El valor es la palabra clave que espera
+  // editor.js#setParagraphAlign (que arma el marcador [center]/etc. y
+  // reemplaza cualquier alineado previo del párrafo en vez de apilarlo).
   align: {
-    "centrar": "[center]",
-    "justificar": "[justify]",
-    "alinear a la derecha": "[right]",
-    "alinear a la izquierda": "[left]",
+    "centrar": "center",
+    "justificar": "justify",
+    "alinear a la derecha": "right",
+    "alinear a la izquierda": "left",
+  },
+
+  // Estilo de párrafo (ver textStyle.js y el desplegable de la barra de
+  // edición). Igual que "align": se dice UNA vez, reemplaza cualquier
+  // estilo previo del párrafo. "texto normal"/"quitar estilo" quitan el
+  // estilo (valor "" -> editor.js#setParagraphStyle(null)).
+  style: {
+    "título general": "title",
+    "subtítulo": "subtitle",
+    "título uno": "h1",
+    "título 1": "h1",
+    "título dos": "h2",
+    "título 2": "h2",
+    "título tres": "h3",
+    "título 3": "h3",
+    "título cuatro": "h4",
+    "título 4": "h4",
+    "cita": "quote",
+    "texto normal": "",
+    "quitar estilo": "",
   },
 
   // Cambiar el idioma de dictado dictando (frase distintiva a propósito,

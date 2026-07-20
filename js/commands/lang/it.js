@@ -66,10 +66,29 @@ export const it = {
   // Allineamento del paragrafo (vedi textAlign.js): detto UNA volta
   // all'inizio del paragrafo, non è apertura/chiusura come "formatting".
   align: {
-    "centra": "[center]",
-    "giustifica": "[justify]",
-    "allinea a destra": "[right]",
-    "allinea a sinistra": "[left]",
+    "centra": "center",
+    "giustifica": "justify",
+    "allinea a destra": "right",
+    "allinea a sinistra": "left",
+  },
+
+  // Stile di paragrafo (vedi textStyle.js e il menu della barra di
+  // modifica). Come "align": detto UNA volta, sostituisce lo stile
+  // precedente. "testo normale"/"rimuovi stile" lo tolgono.
+  style: {
+    "titolo generale": "title",
+    "sottotitolo": "subtitle",
+    "titolo uno": "h1",
+    "titolo 1": "h1",
+    "titolo due": "h2",
+    "titolo 2": "h2",
+    "titolo tre": "h3",
+    "titolo 3": "h3",
+    "titolo quattro": "h4",
+    "titolo 4": "h4",
+    "citazione": "quote",
+    "testo normale": "",
+    "rimuovi stile": "",
   },
 
   // Cambia lingua di dettatura a voce (frase distintiva apposta, per

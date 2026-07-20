@@ -69,10 +69,29 @@ export const pt = {
   // Alinhamento de parágrafo (ver textAlign.js): dito UMA vez no
   // início do parágrafo, sem abrir/fechar como "formatting".
   align: {
-    "centralizar": "[center]",
-    "justificar": "[justify]",
-    "alinhar à direita": "[right]",
-    "alinhar à esquerda": "[left]",
+    "centralizar": "center",
+    "justificar": "justify",
+    "alinhar à direita": "right",
+    "alinhar à esquerda": "left",
+  },
+
+  // Estilo de parágrafo (ver textStyle.js e o menu da barra de edição).
+  // Igual "align": dito UMA vez, substitui o estilo anterior. "texto
+  // normal"/"remover estilo" removem.
+  style: {
+    "título geral": "title",
+    "subtítulo": "subtitle",
+    "título um": "h1",
+    "título 1": "h1",
+    "título dois": "h2",
+    "título 2": "h2",
+    "título três": "h3",
+    "título 3": "h3",
+    "título quatro": "h4",
+    "título 4": "h4",
+    "citação": "quote",
+    "texto normal": "",
+    "remover estilo": "",
   },
 
   // Trocar o idioma de ditado por voz (frase distinta de propósito,

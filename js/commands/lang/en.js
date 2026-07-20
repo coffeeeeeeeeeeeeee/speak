@@ -74,12 +74,34 @@ export const en = {
 
   // Paragraph alignment (see textAlign.js). Unlike "formatting" this
   // isn't open/close: said ONCE at the start of a paragraph, affects
-  // only that paragraph.
+  // only that paragraph. Value is the keyword editor.js#setParagraphAlign
+  // expects (it builds the [center]/etc. marker and replaces any
+  // previous alignment on the paragraph instead of stacking it).
   align: {
-    "center": "[center]",
-    "justify": "[justify]",
-    "align right": "[right]",
-    "align left": "[left]",
+    "center": "center",
+    "justify": "justify",
+    "align right": "right",
+    "align left": "left",
+  },
+
+  // Paragraph style (see textStyle.js and the formatting bar dropdown).
+  // Same as "align": said ONCE, replaces any previous style on the
+  // paragraph. "normal text"/"remove style" clear it (value "" ->
+  // editor.js#setParagraphStyle(null)).
+  style: {
+    "main title": "title",
+    "subtitle": "subtitle",
+    "heading one": "h1",
+    "heading 1": "h1",
+    "heading two": "h2",
+    "heading 2": "h2",
+    "heading three": "h3",
+    "heading 3": "h3",
+    "heading four": "h4",
+    "heading 4": "h4",
+    "block quote": "quote",
+    "normal text": "",
+    "remove style": "",
   },
 
   // Switch dictation language by voice (deliberately a distinctive

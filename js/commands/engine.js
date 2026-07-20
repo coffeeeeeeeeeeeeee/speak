@@ -34,6 +34,15 @@ export class CommandEngine {
       } else if (t.type === "insert") {
         this._snapshot();
         this.editor.insertAtCaret(t.value);
+      } else if (t.type === "align") {
+        // reemplaza el marcador del párrafo (no insertAtCaret) para
+        // convivir con un estilo de párrafo ya aplicado — ver
+        // editor.js#setParagraphAlign.
+        this._snapshot();
+        this.editor.setParagraphAlign(t.value);
+      } else if (t.type === "style") {
+        this._snapshot();
+        this.editor.setParagraphStyle(t.value || null);
       } else if (t.type === "command") {
         this._runCommand(t.action);
       } else if (t.type === "language") {

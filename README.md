@@ -242,6 +242,11 @@ para abrir y cerrar — igual que «comillas»).
 **Alineado:** centrar · justificar · alinear a la derecha · alinear a la
 izquierda (se dice UNA vez, al empezar el párrafo — afecta solo a ese párrafo).
 
+**Estilo de párrafo:** título general · subtítulo · título uno/1 · título
+dos/2 · título tres/3 · título cuatro/4 · cita · texto normal/quitar estilo
+(igual que «Alineado»: se dice UNA vez, reemplaza el estilo previo del
+párrafo sin apilarse con el alineado).
+
 **Historial:** deshacer · rehacer (también `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Idiomas:** cambiar a inglés · cambiar a francés · cambiar a portugués ·
@@ -266,6 +271,11 @@ caps off / end caps.
 
 **Alignment:** center · justify · align right · align left (said ONCE, at
 the start of the paragraph — affects only that paragraph).
+
+**Paragraph style:** main title · subtitle · heading one/1 · heading two/2 ·
+heading three/3 · heading four/4 · block quote · normal text/remove style
+(same as «Alignment»: said ONCE, replaces the paragraph's previous style
+without stacking with alignment).
 
 **History:** undo · redo (also `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -292,6 +302,11 @@ pour ouvrir et fermer — comme « guillemet »).
 
 **Alignement :** centrer · justifier · aligner à droite · aligner à gauche
 (se dit UNE fois, au début du paragraphe — n'affecte que ce paragraphe).
+
+**Style de paragraphe :** titre principal · sous-titre · titre un/1 · titre
+deux/2 · titre trois/3 · titre quatre/4 · citation · texte normal/supprimer
+le style (comme « Alignement » : se dit UNE fois, remplace le style
+précédent sans s'empiler avec l'alignement).
 
 **Historique :** annuler · rétablir (aussi `Ctrl+Z` / `Ctrl+Shift+Z`).
 
@@ -320,6 +335,11 @@ para abrir e fechar — igual "aspas").
 **Alinhamento:** centralizar · justificar · alinhar à direita · alinhar à
 esquerda (dito UMA vez, no início do parágrafo — afeta só esse parágrafo).
 
+**Estilo de parágrafo:** título geral · subtítulo · título um/1 · título
+dois/2 · título três/3 · título quatro/4 · citação · texto normal/remover
+estilo (igual "Alinhamento": dito UMA vez, substitui o estilo anterior sem
+se empilhar com o alinhamento).
+
 **Histórico:** desfazer · refazer (também `Ctrl+Z` / `Ctrl+Shift+Z`).
 
 **Idiomas:** mudar para espanhol · mudar para inglês · mudar para francês ·
@@ -345,6 +365,11 @@ gesagt, zum Öffnen und Schließen — wie „anführungszeichen").
 
 **Ausrichtung:** zentrieren · blocksatz · rechtsbündig · linksbündig (EINMAL
 gesagt, am Anfang des Absatzes — betrifft nur diesen Absatz).
+
+**Absatzstil:** haupttitel · untertitel · überschrift eins/1 · überschrift
+zwei/2 · überschrift drei/3 · überschrift vier/4 · zitat · normaler
+text/formatierung entfernen (wie „Ausrichtung": EINMAL gesagt, ersetzt den
+vorherigen Stil, ohne sich mit der Ausrichtung zu stapeln).
 
 **Verlauf:** rückgängig · wiederholen (auch `Strg+Z` / `Strg+Umschalt+Z`).
 
@@ -373,6 +398,11 @@ volte, per aprire e chiudere — come «virgolette»).
 **Allineamento:** centra · giustifica · allinea a destra · allinea a
 sinistra (detto UNA volta, all'inizio del paragrafo — vale solo per quello).
 
+**Stile di paragrafo:** titolo generale · sottotitolo · titolo uno/1 ·
+titolo due/2 · titolo tre/3 · titolo quattro/4 · citazione · testo
+normale/rimuovi stile (come «Allineamento»: detto UNA volta, sostituisce lo
+stile precedente senza impilarsi con l'allineamento).
+
 **Cronologia:** annulla · ripristina (anche `Ctrl+Z` / `Ctrl+Maiusc+Z`).
 
 **Lingue:** passa a spagnolo · passa a inglese · passa a francese · passa a
@@ -397,6 +427,9 @@ di paragrafo è automatica.
 **对齐：** 居中 · 两端对齐 · 右对齐 · 左对齐（只说一次，在段落开头——
 只影响那一段）。
 
+**段落样式：** 总标题 · 副标题 · 标题一 · 标题二 · 标题三 · 标题四 ·
+引用 · 正文（跟"对齐"一样：只说一次，替换该段落之前的样式，不会跟对齐叠加）。
+
 **历史记录：** 撤销 · 重做（也可用 `Ctrl+Z` / `Ctrl+Shift+Z`）。
 
 **语言：** 切换到西班牙语 · 切换到英语 · 切换到法语 · 切换到葡萄牙语 ·
@@ -419,6 +452,10 @@ di paragrafo è automatica.
 
 **配置：** 中央揃え · 両端揃え · 右揃え · 左揃え（段落の先頭で1回だけ
 言います。その段落だけに効きます）。
+
+**段落のスタイル：** メインタイトル · サブタイトル · 見出し1 · 見出し2 ·
+見出し3 · 見出し4 · 引用 · 本文（「配置」と同じく1回だけ言い、前のスタイル
+を置き換えます。配置とは重なって共存します）。
 
 **履歴：** 元に戻す · やり直す（`Ctrl+Z` / `Ctrl+Shift+Z` も使えます）。
 
