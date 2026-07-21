@@ -106,6 +106,9 @@ export const strings = {
     switchLangDesc: "cambia el idioma a",
     variantLabel: "región",
     variantSwitchAria: "Cambiar variante regional",
+    voiceLabel: "voz",
+    voiceSwitchAria: "Cambiar voz de lectura",
+    voiceSystemDefault: "Predeterminada del sistema",
     actionLabels: {
       deleteWord: "borra la última palabra",
       deleteSentence: "borra la última oración",
@@ -219,6 +222,9 @@ export const strings = {
     switchLangDesc: "switches the language to",
     variantLabel: "region",
     variantSwitchAria: "Change regional variant",
+    voiceLabel: "voice",
+    voiceSwitchAria: "Change reading voice",
+    voiceSystemDefault: "System default",
     actionLabels: {
       deleteWord: "deletes the last word",
       deleteSentence: "deletes the last sentence",
@@ -335,6 +341,9 @@ export const strings = {
     switchLangDesc: "change la langue vers",
     variantLabel: "région",
     variantSwitchAria: "Changer de variante régionale",
+    voiceLabel: "voix",
+    voiceSwitchAria: "Changer la voix de lecture",
+    voiceSystemDefault: "Voix par défaut du système",
     actionLabels: {
       deleteWord: "supprime le dernier mot",
       deleteSentence: "supprime la dernière phrase",
@@ -450,6 +459,9 @@ export const strings = {
     switchLangDesc: "muda o idioma para",
     variantLabel: "região",
     variantSwitchAria: "Trocar variante regional",
+    voiceLabel: "voz",
+    voiceSwitchAria: "Trocar voz de leitura",
+    voiceSystemDefault: "Padrão do sistema",
     actionLabels: {
       deleteWord: "apaga a última palavra",
       deleteSentence: "apaga a última frase",
@@ -566,6 +578,9 @@ export const strings = {
     switchLangDesc: "wechselt die Sprache zu",
     variantLabel: "Region",
     variantSwitchAria: "Regionale Variante wechseln",
+    voiceLabel: "Stimme",
+    voiceSwitchAria: "Vorlesestimme wechseln",
+    voiceSystemDefault: "Systemstandard",
     actionLabels: {
       deleteWord: "löscht das letzte Wort",
       deleteSentence: "löscht den letzten Satz",
@@ -682,6 +697,9 @@ export const strings = {
     switchLangDesc: "cambia la lingua a",
     variantLabel: "regione",
     variantSwitchAria: "Cambia variante regionale",
+    voiceLabel: "voce",
+    voiceSwitchAria: "Cambia voce di lettura",
+    voiceSystemDefault: "Predefinita di sistema",
     actionLabels: {
       deleteWord: "cancella l'ultima parola",
       deleteSentence: "cancella l'ultima frase",
@@ -793,6 +811,9 @@ export const strings = {
     switchLangDesc: "切换语言为",
     variantLabel: "地区",
     variantSwitchAria: "切换地区口音",
+    voiceLabel: "语音",
+    voiceSwitchAria: "切换朗读语音",
+    voiceSystemDefault: "系统默认",
     actionLabels: {
       deleteWord: "删除最后一个词",
       deleteSentence: "删除最后一句",
@@ -906,6 +927,9 @@ export const strings = {
     switchLangDesc: "言語をこれに切り替えます：",
     variantLabel: "地域",
     variantSwitchAria: "地域バリエーションを切り替え",
+    voiceLabel: "音声",
+    voiceSwitchAria: "読み上げ音声を切り替え",
+    voiceSystemDefault: "システムのデフォルト",
     actionLabels: {
       deleteWord: "最後の単語を削除します",
       deleteSentence: "最後の文を削除します",

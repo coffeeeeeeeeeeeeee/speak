@@ -20,6 +20,15 @@ export function isTtsSupported() {
   return "speechSynthesis" in window;
 }
 
+// Lista de voces instaladas (varía por sistema/navegador). Puede venir
+// vacía la primera vez que se llama: en varios navegadores se cargan
+// de forma asincrónica, recién disponibles tras el evento
+// `voiceschanged` — quien la usa (app.js) debe escuchar ese evento y
+// volver a pedirla.
+export function getVoices() {
+  return isTtsSupported() ? window.speechSynthesis.getVoices() : [];
+}
+
 // Palabras por segundo a velocidad normal (rate=1): estimación gruesa
 // de una lectura en voz alta pausada, no una medida exacta de ninguna
 // voz en particular.
@@ -30,6 +39,13 @@ export class Reader {
     this.onState = onState || (() => {});
     this.onBoundary = onBoundary || (() => {});
     this._timer = null;
+    this.voice = null; // null = voz por defecto del navegador para `lang`
+  }
+
+  // `voice` es un SpeechSynthesisVoice de getVoices(), o null para
+  // volver a la voz por defecto del sistema para el idioma leído.
+  setVoice(voice) {
+    this.voice = voice || null;
   }
 
   speak(text, lang) {
@@ -37,6 +53,7 @@ export class Reader {
     this.stop();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
+    if (this.voice) u.voice = this.voice;
     u.onstart = () => this._simulateBoundaries(text, u.rate || 1);
     u.onend = () => {
       this._clearTimer();

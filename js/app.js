@@ -27,7 +27,7 @@ import { createExportMenu } from "./export/menu.js";
 import { createHelp } from "./help.js";
 import { tidy, wordSpanAt } from "./text-ops.js";
 import { AudioMeter } from "./audioMeter.js";
-import { Reader } from "./tts.js";
+import { Reader, getVoices, isTtsSupported } from "./tts.js";
 import { DocStore } from "./docs.js";
 import { createDocsPanel } from "./docsPanel.js";
 import { currentTheme, setTheme, themeLabel, applyCustomTheme } from "./theme.js";
@@ -81,6 +81,8 @@ function initApp() {
     variantMenu: document.getElementById("variantMenu"),
     themeBtn: document.getElementById("themeBtn"),
     themeMenu: document.getElementById("themeMenu"),
+    voiceBtn: document.getElementById("voiceBtn"),
+    voiceMenu: document.getElementById("voiceMenu"),
     themeColorMeta: document.getElementById("themeColorMeta"),
     themeEditor: document.getElementById("themeEditor"),
     themeEditorForm: document.getElementById("themeEditorForm"),
@@ -127,6 +129,7 @@ function initApp() {
     langTag: "languages",
     variantTag: "map-pin",
     themeBtn: "palette",
+    voiceBtn: "audio-lines",
     fullscreenBtn: "maximize",
     micBtn: "mic",
     docsNew: "plus",
@@ -559,6 +562,9 @@ function initApp() {
           applyUiStrings();
           speech.setLang(variant().code);
           persistLanguage();
+          buildVoiceMenu();
+          applyVoiceSelection();
+          updateVoiceTag();
         },
       }
     );
@@ -579,6 +585,9 @@ function initApp() {
     speech.setLang(variant().code);
     setStatus(speech.listening ? "listening" : "idle");
     persistLanguage();
+    buildVoiceMenu();
+    applyVoiceSelection();
+    updateVoiceTag();
   }
 
   // --- Estados ---
@@ -702,6 +711,76 @@ function initApp() {
     },
   });
   buildThemeMenu();
+
+  // --- Selector de voz de lectura: desplegable con las voces
+  // instaladas para el idioma activo (getVoices() puede tardar en
+  // llenarse — algunos navegadores solo la disparan tras el evento
+  // `voiceschanged`, por eso se reconstruye también ahí). "Predeterminada
+  // del sistema" (key "") es siempre la primera opción, y significa "no
+  // fijar ninguna": el navegador elige la voz por defecto para `lang`. Se
+  // guarda una voz por CÓDIGO exacto de variante (bossa:voices), no por
+  // idioma general, porque dos variantes del mismo idioma (ej. es-ES/
+  // es-AR) suelen tener voces instaladas distintas. ---
+  const voiceStorage = new Storage({ key: "bossa:voices" });
+  function loadVoicePrefs() {
+    try {
+      return JSON.parse(voiceStorage.load() || "{}");
+    } catch (_) {
+      return {};
+    }
+  }
+  const voicePrefs = loadVoicePrefs();
+  let voices = [];
+
+  function voicesForCurrentLang() {
+    const prefix = variant().code.slice(0, 2).toLowerCase();
+    const matched = voices.filter((v) => v.lang && v.lang.toLowerCase().startsWith(prefix));
+    return matched.length ? matched : voices;
+  }
+  function selectedVoice() {
+    const uri = voicePrefs[variant().code];
+    if (!uri) return null;
+    return voices.find((v) => v.voiceURI === uri) || null;
+  }
+  function applyVoiceSelection() {
+    reader.setVoice(selectedVoice());
+  }
+  function updateVoiceTag() {
+    const v = selectedVoice();
+    const label = v ? `${v.name}${v.lang ? ` (${v.lang})` : ""}` : t.voiceSystemDefault;
+    els.voiceBtn.dataset.tip = `${capitalize(t.voiceLabel)}: ${label}`;
+    els.voiceBtn.setAttribute("aria-label", t.voiceSwitchAria);
+    els.voiceBtn.dataset.label = els.voiceBtn.dataset.tip;
+  }
+
+  const voiceDropdown = createDropdown({ toggle: els.voiceBtn, menu: els.voiceMenu, returnFocusTo: els.editor });
+  function buildVoiceMenu() {
+    const items = [{ key: "", label: t.voiceSystemDefault }].concat(
+      voicesForCurrentLang().map((v) => ({ key: v.voiceURI, label: v.name }))
+    );
+    renderMenuItems(els.voiceMenu, items, {
+      isCurrent: (key) => key === (voicePrefs[variant().code] || ""),
+      onSelect: (key) => {
+        voiceDropdown.close();
+        if (key) voicePrefs[variant().code] = key;
+        else delete voicePrefs[variant().code];
+        voiceStorage.save(JSON.stringify(voicePrefs));
+        applyVoiceSelection();
+        updateVoiceTag();
+      },
+    });
+  }
+  function refreshVoices() {
+    voices = getVoices();
+    buildVoiceMenu();
+    applyVoiceSelection();
+    updateVoiceTag();
+  }
+  els.voiceBtn.hidden = !isTtsSupported();
+  if (isTtsSupported()) {
+    refreshVoices();
+    window.speechSynthesis.onvoiceschanged = refreshVoices;
+  }
 
   // --- Acordeón de acciones (pantallas chicas) ---
   els.topbarToggle.addEventListener("click", () => {
