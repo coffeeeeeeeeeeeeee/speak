@@ -6,14 +6,16 @@
 // igual que el reconocimiento depende del servicio de Google.
 //
 // `onBoundary` va marcando qué palabra se está leyendo para que quien
-// nos usa (app.js) resalte el texto a medida que avanza. NO usamos el
-// evento nativo `boundary` de SpeechSynthesis para esto: además de
-// venir con soporte disparejo por voz/navegador (algunas solo marcan
-// límites de oración, no de cada palabra), en Chrome/Chromium sobre
-// Linux directamente no llega nunca. En su lugar simulamos el avance
-// con un temporizador, estimando cuánto tarda cada palabra según su
-// longitud y la velocidad de la voz — menos preciso que un evento
-// real, pero funciona igual en cualquier navegador/voz/sistema.
+// nos usa (app.js) resalte el texto a medida que avanza. Preferimos el
+// evento nativo `boundary` de SpeechSynthesis cuando el navegador/voz
+// lo dispara de verdad (ahí la sincronía es exacta), pero no podemos
+// depender solo de él: el soporte es disparejo por voz/navegador
+// (algunas solo marcan límites de oración, no de cada palabra) y en
+// Chrome/Chromium sobre Linux directamente no llega nunca. Si no
+// aparece ningún evento real al arrancar, simulamos el avance con un
+// temporizador propio, estimando cuánto tarda cada palabra según su
+// longitud (con una pausa extra tras signos de puntuación, para no
+// perder sincronía en textos largos) y la velocidad de la voz.
 // ============================================================
 
 export function isTtsSupported() {
@@ -29,10 +31,23 @@ export function getVoices() {
   return isTtsSupported() ? window.speechSynthesis.getVoices() : [];
 }
 
-// Palabras por segundo a velocidad normal (rate=1): estimación gruesa
-// de una lectura en voz alta pausada, no una medida exacta de ninguna
-// voz en particular.
+// Caracteres por segundo a velocidad normal (rate=1): estimación
+// gruesa de una lectura en voz alta pausada, no una medida exacta de
+// ninguna voz en particular.
 const CHARS_PER_SECOND = 14;
+
+// Pausa extra (segundos) tras una palabra que termina en signo de
+// puntuación fuerte/débil — sin esto, la simulación va acumulando
+// atraso frente al audio real a medida que el texto tiene más comas y
+// puntos (cada uno es una micro-pausa real que la sola cuenta de
+// caracteres no ve).
+const PAUSE_STRONG = 0.35; // . ! ? … y sus variantes con comillas/paréntesis
+const PAUSE_SOFT = 0.15; // , ; :
+
+// Cuánto esperar desde que arranca la utterance antes de asumir que
+// el navegador NO va a mandar el evento `boundary` real (en los que sí
+// lo mandan, el primero llega casi de inmediato).
+const REAL_BOUNDARY_GRACE_MS = 300;
 
 export class Reader {
   constructor({ onState, onBoundary } = {}) {
@@ -54,7 +69,19 @@ export class Reader {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
     if (this.voice) u.voice = this.voice;
-    u.onstart = () => this._simulateBoundaries(text, u.rate || 1);
+
+    let realBoundarySeen = false;
+    u.onboundary = (e) => {
+      realBoundarySeen = true;
+      this._clearTimer(); // si había arrancado la simulación, se descarta
+      if (e.charIndex == null) return;
+      this.onBoundary({ charIndex: e.charIndex, charLength: e.charLength || 0 });
+    };
+    u.onstart = () => {
+      this._timer = setTimeout(() => {
+        if (!realBoundarySeen) this._simulateBoundaries(text, u.rate || 1);
+      }, REAL_BOUNDARY_GRACE_MS);
+    };
     u.onend = () => {
       this._clearTimer();
       this.onState("idle");
@@ -69,8 +96,8 @@ export class Reader {
 
   // Encadena un setTimeout por palabra en vez de un solo setInterval:
   // así el retraso de cada paso depende de la palabra QUE ACABA de
-  // marcarse (más larga, más tiempo hasta la próxima), no de un tic
-  // fijo que perdería sincronía con palabras cortas o largas.
+  // marcarse (más larga, o seguida de puntuación, más tiempo hasta la
+  // próxima), no de un tic fijo que perdería sincronía enseguida.
   _simulateBoundaries(text, rate) {
     const words = [...text.matchAll(/\S+/g)];
     if (!words.length) return;
@@ -80,7 +107,7 @@ export class Reader {
       if (i >= words.length) return;
       const w = words[i];
       this.onBoundary({ charIndex: w.index, charLength: w[0].length });
-      const seconds = Math.max(0.12, w[0].length / charsPerSecond);
+      const seconds = Math.max(0.12, w[0].length / charsPerSecond) + pauseAfter(w[0]) / rate;
       i++;
       this._timer = setTimeout(step, seconds * 1000);
     };
@@ -102,4 +129,10 @@ export class Reader {
   get speaking() {
     return isTtsSupported() && window.speechSynthesis.speaking;
   }
+}
+
+function pauseAfter(word) {
+  if (/[.!?…]["')\]]*$/.test(word)) return PAUSE_STRONG;
+  if (/[,;:]["')\]]*$/.test(word)) return PAUSE_SOFT;
+  return 0;
 }
