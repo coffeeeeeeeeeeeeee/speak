@@ -152,7 +152,10 @@ function initApp() {
   }
 
   function setTitle(btn, text) {
-    btn.title = text;
+    // data-tip, no title: el tooltip nativo del navegador no se puede
+    // customizar (fuente/color/fondo del sistema, sin seguir el tema
+    // activo) — ver [data-tip] en main.css, que dibuja uno propio.
+    btn.dataset.tip = text;
     btn.setAttribute("aria-label", text);
     // Los botones son solo-ícono en el encabezado normal, pero en el
     // acordeón de pantallas chicas (.actions.is-open bajo 720px) se
@@ -446,15 +449,15 @@ function initApp() {
   // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
   function applyUiStrings() {
     document.title = t.title;
-    els.langTag.title = `${capitalize(t.langLabel)}: ${family().label}`;
+    els.langTag.dataset.tip = `${capitalize(t.langLabel)}: ${family().label}`;
     els.langTag.setAttribute("aria-label", t.langSwitchAria);
-    els.langTag.dataset.label = els.langTag.title;
+    els.langTag.dataset.label = els.langTag.dataset.tip;
     buildLangMenu();
 
     const v = variant();
-    els.variantTag.title = `${capitalize(t.variantLabel)}: ${v.label}`;
+    els.variantTag.dataset.tip = `${capitalize(t.variantLabel)}: ${v.label}`;
     els.variantTag.setAttribute("aria-label", t.variantSwitchAria);
-    els.variantTag.dataset.label = els.variantTag.title;
+    els.variantTag.dataset.label = els.variantTag.dataset.tip;
     els.variantTag.hidden = family().variants.length <= 1;
     buildVariantMenu();
 
@@ -468,8 +471,8 @@ function initApp() {
     updateFullscreenBtn();
     els.editor.placeholder = t.editorPlaceholder;
     els.editor.setAttribute("aria-label", t.editorAriaLabel);
-    els.count.dataset.label = t.wordsLabel;
-    els.charCount.dataset.label = t.charsLabel;
+    els.count.dataset.tip = t.wordsLabel;
+    els.charCount.dataset.tip = t.charsLabel;
     els.toastClose.setAttribute("aria-label", t.toastCloseAria);
     updateToolbarToggleTitle();
     setTitle(els.fmtBold, t.editBold);
@@ -482,7 +485,11 @@ function initApp() {
     setTitle(els.alignJustifyBtn, t.editAlignJustify);
     setTitle(els.toolbarUndoBtn, t.editUndo);
     setTitle(els.toolbarRedoBtn, t.editRedo);
-    setTitle(els.styleSelect, t.editStyleLabel);
+    // <select> no admite ::before/::after (elemento reemplazado): acá
+    // sí se usa title nativo en vez de data-tip, es la única forma de
+    // mostrar un tooltip sobre un <select> cerrado.
+    els.styleSelect.title = t.editStyleLabel;
+    els.styleSelect.setAttribute("aria-label", t.editStyleLabel);
     for (const [value, label] of Object.entries(t.editStyleOptions)) {
       const opt = els.styleSelect.querySelector(`option[value="${value}"]`);
       if (opt) opt.textContent = label;

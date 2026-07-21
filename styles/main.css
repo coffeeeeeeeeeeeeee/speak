@@ -104,10 +104,14 @@ body {
 }
 /* El wordmark ya trae el texto dibujado (ver index.html): el tamaño se
    fija por altura y el ancho sigue el aspect ratio del viewBox
-   (95.3x24). */
+   (95.3x24). Margen vertical negativo a propósito: agranda el logo más
+   allá de lo que entraría en el padding vertical de .topbar sin
+   estirar la barra (el fondo de .topbar sigue cubriendo esa franja, no
+   se nota el "desborde"). */
 .brand-logo {
-  height: 1.4rem;
+  height: 2rem;
   width: auto;
+  margin: -0.2rem 0;
   flex: 0 0 auto;
 }
 
@@ -188,12 +192,76 @@ body {
 .action .icon { width: 0.95rem; height: 0.95rem; }
 
 /* Botones solo-ícono: cuadrados, centrados. El texto (qué hace cada
-   uno) va en title/aria-label, no visible — ver js/app.js. */
+   uno) va en data-tip/aria-label, no visible — ver js/app.js. */
 .icon-btn {
   padding: 0.4rem;
   gap: 0;
 }
 .icon-btn .icon { width: 1.05rem; height: 1.05rem; }
+
+/* ---------- Tooltips propios (reemplazan title="") ---------- */
+/* El tooltip nativo de title="" lo pinta el sistema operativo: no se
+   le puede cambiar tipografía/color/fondo ni seguir el tema activo.
+   [data-tip] arma uno propio con el mismo look que el resto de la
+   interfaz. Usa ::before (no ::after) para no chocar con
+   .actions .action::after, que muestra el mismo texto como label
+   visible en el acordeón de pantallas chicas.
+   Excepción: <select> (styleSelect) no soporta ::before/::after por
+   ser un elemento reemplazado — ahí se sigue usando title nativo. */
+[data-tip] {
+  position: relative;
+}
+[data-tip]::before {
+  content: attr(data-tip);
+  /* display:none por default, no solo opacity:0: un elemento con
+     opacity 0 sigue generando su caja y cuenta para el overflow del
+     documento — un tooltip de texto largo cerca del borde podía
+     agrandar el ancho de la página (y aparecer una barra de scroll)
+     aunque fuera invisible. Con display:none no hay caja que contar
+     hasta que hace falta. */
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-top: 0.45rem;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 0.3rem 0.55rem;
+  border-radius: 4px;
+  box-shadow: 0 0.35rem 0.9rem rgba(27, 28, 30, 0.22);
+  pointer-events: none;
+  z-index: 60;
+}
+/* Lo que cuelga del pie de página (.hud) no tiene lugar debajo: el
+   tooltip se abre hacia arriba, sobre la hoja. */
+.hud [data-tip]::before {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.45rem;
+}
+/* Centrado (left:50% + translateX(-50%)) está bien para botones lejos
+   del borde, pero .actions y .hud-buttons quedan pegados al borde
+   derecho (justify-content/flex-end) — ahí un tooltip centrado se sale
+   de la pantalla al aparecer y vuelve a agrandar el ancho de la
+   página. Se alinean al borde derecho DEL BOTÓN en vez de centrarse,
+   así crecen hacia adentro (izquierda), nunca hacia afuera. */
+.actions [data-tip]::before,
+.hud-buttons [data-tip]::before,
+.topbar-toggle[data-tip]::before {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+[data-tip]:hover::before,
+[data-tip]:focus-visible::before {
+  display: block;
+}
 
 /* ---------- Hoja de escritura ---------- */
 .sheet {
@@ -357,7 +425,6 @@ body {
 
 /* ---------- HUD inferior (telemetría) ---------- */
 .hud {
-  position: relative; /* ancla a .hud-read, centrado absoluto */
   height: var(--hud-h);
   flex: 0 0 auto;
   display: flex;
@@ -365,15 +432,6 @@ body {
   gap: 1.25rem;
   padding: 0 1.5rem;
   background: var(--bar, var(--paper));
-}
-
-/* Centrado sobre la barra entera (no del espacio libre entre los
-   otros elementos), independiente de cuánto midan a los costados. */
-.hud-read {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .hud-status {
@@ -418,15 +476,14 @@ body {
   align-items: center;
   gap: 0.9rem;
 }
+/* Solo el número: la etiqueta ("palabras"/"caracteres") vive en el
+   title (tooltip nativo), no como texto visible — ver applyUiStrings()
+   en app.js. */
 .count {
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--bar-ink, var(--ink-soft));
   letter-spacing: 0.03em;
-}
-.count::after {
-  content: " " attr(data-label);
-  color: var(--bar-ink, var(--ghost));
 }
 
 /* ---------- Medidor de nivel de audio ---------- */
@@ -931,12 +988,7 @@ body {
   .editor, .editor-overlay { font-size: 1.18rem; }
   .hud { gap: 0.6rem; padding: 0 1rem; }
   .hud-status { min-width: auto; }
-  /* El centrado absoluto de "Leer" (.hud-read) asume que sobra espacio
-     a los costados; en pantallas chicas .hud-meta puede crecer hasta
-     ahí y superponerse. Se vuelve a flujo normal del flex row. */
-  .hud-read { position: static; transform: none; }
   .mic-level { display: none; } /* prioridad al botón de dictar */
-  .count::after { content: ""; } /* solo el número en pantallas chicas */
   .help-panel, .docs-panel, .theme-editor-panel { padding: 1.25rem; }
   .cmd { flex-direction: column; gap: 0.15rem; }
   .cmd-desc { text-align: left; }

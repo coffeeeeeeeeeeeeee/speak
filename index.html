@@ -118,14 +118,14 @@
         type="button"
         aria-expanded="false"
         aria-controls="actions"
-        title="Mostrar acciones"
+        data-tip="Mostrar acciones"
         aria-label="Mostrar acciones"
       ></button>
       <div class="actions" id="actions">
         <span class="save-state" id="saveState" role="status" aria-live="polite"></span>
-        <button class="action icon-btn" id="docsBtn" type="button" aria-haspopup="dialog" title="Documentos" aria-label="Documentos"></button>
-        <button class="action icon-btn" id="helpBtn" type="button" aria-haspopup="dialog" title="Comandos" aria-label="Comandos"></button>
-        <button class="action icon-btn" id="copyBtn" type="button" title="Copiar" aria-label="Copiar"></button>
+        <button class="action icon-btn" id="docsBtn" type="button" aria-haspopup="dialog" data-tip="Documentos" aria-label="Documentos"></button>
+        <button class="action icon-btn" id="helpBtn" type="button" aria-haspopup="dialog" data-tip="Comandos" aria-label="Comandos"></button>
+        <button class="action icon-btn" id="copyBtn" type="button" data-tip="Copiar" aria-label="Copiar"></button>
         <div class="export-wrap">
           <button
             class="action icon-btn"
@@ -133,7 +133,7 @@
             type="button"
             aria-haspopup="menu"
             aria-expanded="false"
-            title="Exportar"
+            data-tip="Exportar"
             aria-label="Exportar"
           ></button>
           <ul class="export-menu" id="exportMenu" role="menu" hidden></ul>
@@ -145,7 +145,7 @@
             type="button"
             aria-haspopup="menu"
             aria-expanded="false"
-            title="Idioma: Español"
+            data-tip="Idioma: Español"
             aria-label="Cambiar idioma de dictado"
           ></button>
           <ul class="export-menu" id="langMenu" role="menu" hidden></ul>
@@ -157,7 +157,7 @@
             type="button"
             aria-haspopup="menu"
             aria-expanded="false"
-            title="Región: España"
+            data-tip="Región: España"
             aria-label="Cambiar variante regional"
           ></button>
           <ul class="export-menu" id="variantMenu" role="menu" hidden></ul>
@@ -169,7 +169,7 @@
             type="button"
             aria-haspopup="menu"
             aria-expanded="false"
-            title="Claro"
+            data-tip="Claro"
             aria-label="Cambiar tema"
           ></button>
           <ul class="export-menu" id="themeMenu" role="menu" hidden></ul>
@@ -180,10 +180,10 @@
           type="button"
           aria-expanded="false"
           aria-controls="editToolbar"
-          title="Mostrar barra de formato"
+          data-tip="Mostrar barra de formato"
           aria-label="Mostrar barra de formato"
         ></button>
-        <button class="action icon-btn" id="fullscreenBtn" type="button" title="Completa" aria-label="Completa"></button>
+        <button class="action icon-btn" id="fullscreenBtn" type="button" data-tip="Completa" aria-label="Completa"></button>
       </div>
     </header>
 
@@ -208,18 +208,18 @@
         <option value="quote">Cita</option>
       </select>
       <span class="edit-toolbar-sep" aria-hidden="true"></span>
-      <button class="action icon-btn" id="fmtBold" type="button" title="Negrita" aria-label="Negrita"></button>
-      <button class="action icon-btn" id="fmtItalic" type="button" title="Cursiva" aria-label="Cursiva"></button>
-      <button class="action icon-btn" id="fmtStrike" type="button" title="Tachado" aria-label="Tachado"></button>
-      <button class="action icon-btn" id="fmtUnderline" type="button" title="Subrayado" aria-label="Subrayado"></button>
+      <button class="action icon-btn" id="fmtBold" type="button" data-tip="Negrita" aria-label="Negrita"></button>
+      <button class="action icon-btn" id="fmtItalic" type="button" data-tip="Cursiva" aria-label="Cursiva"></button>
+      <button class="action icon-btn" id="fmtStrike" type="button" data-tip="Tachado" aria-label="Tachado"></button>
+      <button class="action icon-btn" id="fmtUnderline" type="button" data-tip="Subrayado" aria-label="Subrayado"></button>
       <span class="edit-toolbar-sep" aria-hidden="true"></span>
-      <button class="action icon-btn" id="alignLeftBtn" type="button" title="Alinear a la izquierda" aria-label="Alinear a la izquierda"></button>
-      <button class="action icon-btn" id="alignCenterBtn" type="button" title="Centrar" aria-label="Centrar"></button>
-      <button class="action icon-btn" id="alignRightBtn" type="button" title="Alinear a la derecha" aria-label="Alinear a la derecha"></button>
-      <button class="action icon-btn" id="alignJustifyBtn" type="button" title="Justificar" aria-label="Justificar"></button>
+      <button class="action icon-btn" id="alignLeftBtn" type="button" data-tip="Alinear a la izquierda" aria-label="Alinear a la izquierda"></button>
+      <button class="action icon-btn" id="alignCenterBtn" type="button" data-tip="Centrar" aria-label="Centrar"></button>
+      <button class="action icon-btn" id="alignRightBtn" type="button" data-tip="Alinear a la derecha" aria-label="Alinear a la derecha"></button>
+      <button class="action icon-btn" id="alignJustifyBtn" type="button" data-tip="Justificar" aria-label="Justificar"></button>
       <span class="edit-toolbar-sep" aria-hidden="true"></span>
-      <button class="action icon-btn" id="toolbarUndoBtn" type="button" title="Deshacer" aria-label="Deshacer"></button>
-      <button class="action icon-btn" id="toolbarRedoBtn" type="button" title="Rehacer" aria-label="Rehacer"></button>
+      <button class="action icon-btn" id="toolbarUndoBtn" type="button" data-tip="Deshacer" aria-label="Deshacer"></button>
+      <button class="action icon-btn" id="toolbarRedoBtn" type="button" data-tip="Rehacer" aria-label="Rehacer"></button>
     </div>
 
     <main class="sheet" id="sheet">
@@ -250,18 +250,17 @@
       </div>
 
       <div class="hud-meta">
-        <span class="count" id="count" data-label="palabras">0</span>
-        <span class="count" id="charCount" data-label="caracteres">0</span>
+        <span class="count" id="count" data-tip="palabras">0</span>
+        <span class="count" id="charCount" data-tip="caracteres">0</span>
       </div>
-
-      <button class="action icon-btn hud-read" id="readBtn" type="button" title="Leer" aria-label="Leer"></button>
 
       <div class="mic-level" id="micLevel" aria-hidden="true">
         <span class="mic-level-bar" id="micLevelBar"></span>
       </div>
 
       <div class="hud-buttons">
-        <button class="mic icon-btn" id="micBtn" type="button" aria-pressed="false" title="Dictar" aria-label="Dictar"></button>
+        <button class="action icon-btn" id="readBtn" type="button" data-tip="Leer" aria-label="Leer"></button>
+        <button class="mic icon-btn" id="micBtn" type="button" aria-pressed="false" data-tip="Dictar" aria-label="Dictar"></button>
       </div>
     </footer>
   </div>
@@ -278,7 +277,7 @@
     <div class="help-panel">
       <div class="help-head">
         <h2 id="helpTitle">Comandos de voz</h2>
-        <button class="action icon-btn help-close" id="helpClose" type="button" title="Cerrar" aria-label="Cerrar panel"></button>
+        <button class="action icon-btn help-close" id="helpClose" type="button" data-tip="Cerrar" aria-label="Cerrar panel"></button>
       </div>
       <p class="help-intro" id="helpIntro">
         Se detectan automáticamente mientras dictás. Para escribir una
@@ -297,8 +296,8 @@
     <div class="docs-panel">
       <div class="docs-head">
         <h2 id="docsTitle">Documentos</h2>
-        <button class="action icon-btn" id="docsNew" type="button" title="Nuevo" aria-label="Nuevo"></button>
-        <button class="action icon-btn docs-close" id="docsClose" type="button" title="Cerrar" aria-label="Cerrar"></button>
+        <button class="action icon-btn" id="docsNew" type="button" data-tip="Nuevo" aria-label="Nuevo"></button>
+        <button class="action icon-btn docs-close" id="docsClose" type="button" data-tip="Cerrar" aria-label="Cerrar"></button>
       </div>
       <ul class="docs-list" id="docsList"></ul>
     </div>
@@ -310,7 +309,7 @@
     <div class="theme-editor-panel">
       <div class="theme-editor-head">
         <h2 id="themeEditorTitle">Personalizar tema</h2>
-        <button class="action icon-btn" id="themeEditorClose" type="button" title="Cerrar" aria-label="Cerrar"></button>
+        <button class="action icon-btn" id="themeEditorClose" type="button" data-tip="Cerrar" aria-label="Cerrar"></button>
       </div>
       <form class="theme-editor-form" id="themeEditorForm">
         <label class="theme-editor-row">
@@ -363,7 +362,7 @@
   <!-- Aviso efímero -->
   <div class="toast" id="toast" hidden role="status" aria-live="polite">
     <span class="toast-msg" id="toastMsg"></span>
-    <button class="toast-close icon-btn" id="toastClose" type="button" title="Cerrar" aria-label="Cerrar aviso"></button>
+    <button class="toast-close icon-btn" id="toastClose" type="button" data-tip="Cerrar" aria-label="Cerrar aviso"></button>
   </div>
 </body>
 </html>
