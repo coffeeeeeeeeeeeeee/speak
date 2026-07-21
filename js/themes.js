@@ -159,4 +159,25 @@ export const themes = {
       mic: "#C98A2B",
     },
   },
+
+  matrix: {
+    label: "Matrix",
+    colors: {
+      paper: "#0B0F0C", // hoja: casi negro, no negro puro (deja ver la textura del papel)
+      canvas: "#040604",
+      ink: "#00FF66", // verde brillante clásico
+      "ink-soft": "#00B84B",
+      ghost: "#046B29",
+      line: "#0E2A16",
+      accent: "#00FF66",
+      "accent-dim": "rgba(0, 255, 102, 0.16)",
+      danger: "#FF3B3B",
+      mic: "#39FF7A",
+    },
+    fonts: {
+      // Mono también en la serif: el look "terminal" es el punto del tema.
+      serif: "\"JetBrains Mono\", ui-monospace, \"SFMono-Regular\", Menlo, monospace",
+      mono: "\"JetBrains Mono\", ui-monospace, \"SFMono-Regular\", Menlo, monospace",
+    },
+  },
 };

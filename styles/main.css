@@ -334,7 +334,7 @@ body {
    del desplegable nativo las pinta el sistema operativo con SU propio
    fondo (normalmente blanco), no con --bar-btn. En temas oscuros eso
    deja texto claro sobre fondo claro. Se fuerzan fondo/texto legibles
-   con --paper/--ink (que sí están definidos en los 7 temas, a
+   con --paper/--ink (que sí están definidos en los 8 temas, a
    diferencia de --bar-*, pensados solo para la barra). */
 .edit-toolbar-style option {
   background: var(--paper);
