@@ -963,6 +963,28 @@ body {
 .export-item:focus-visible { background: var(--accent-dim); }
 .export-item.is-current { color: var(--accent); }
 
+/* ---------- Grupos de acciones ("Archivo"/"Preferencias") ---------- */
+/* Mismo desplegable que .export-menu (mismo createDropdown, ver
+   js/app.js), pero en vez de una lista de texto contiene una fila de
+   botones-ícono ya existentes (Documentos/Comandos/Copiar/Exportar,
+   Idioma/Región/Tema/Voz) — agrupados para no tener 10 íconos sueltos
+   en la barra superior. */
+.action-group { position: relative; }
+.action-group-menu[hidden] { display: none; }
+.action-group-menu:not([hidden]) {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  background: var(--paper);
+  border-radius: 6px;
+  box-shadow: 0 0.75rem 2rem rgba(27, 28, 30, 0.18);
+}
+
 /* ---------- Toast de avisos ---------- */
 .toast[hidden] { display: none; }
 .toast:not([hidden]) {
@@ -1032,6 +1054,14 @@ body {
   .actions .save-state { text-align: left; }
   .actions .export-wrap { width: 100%; }
   .actions .export-menu:not([hidden]) { position: static; margin-top: 0.3rem; box-shadow: none; }
+  .actions .action-group { width: 100%; }
+  .actions .action-group-menu:not([hidden]) {
+    position: static;
+    margin-top: 0.3rem;
+    flex-direction: column;
+    align-items: stretch;
+    box-shadow: none;
+  }
   /* Los botones son solo-ícono en el encabezado normal (title/aria-label
      como único texto, ver README); en el acordeón hay lugar de sobra y
      quedan sin contexto si solo se ve el ícono, así que acá se muestra

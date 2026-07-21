@@ -109,6 +109,8 @@ export const strings = {
     voiceLabel: "voz",
     voiceSwitchAria: "Cambiar voz de lectura",
     voiceSystemDefault: "Predeterminada del sistema",
+    fileGroupLabel: "Archivo",
+    prefsGroupLabel: "Preferencias",
     actionLabels: {
       deleteWord: "borra la última palabra",
       deleteSentence: "borra la última oración",
@@ -225,6 +227,8 @@ export const strings = {
     voiceLabel: "voice",
     voiceSwitchAria: "Change reading voice",
     voiceSystemDefault: "System default",
+    fileGroupLabel: "File",
+    prefsGroupLabel: "Preferences",
     actionLabels: {
       deleteWord: "deletes the last word",
       deleteSentence: "deletes the last sentence",
@@ -344,6 +348,8 @@ export const strings = {
     voiceLabel: "voix",
     voiceSwitchAria: "Changer la voix de lecture",
     voiceSystemDefault: "Voix par défaut du système",
+    fileGroupLabel: "Fichier",
+    prefsGroupLabel: "Préférences",
     actionLabels: {
       deleteWord: "supprime le dernier mot",
       deleteSentence: "supprime la dernière phrase",
@@ -462,6 +468,8 @@ export const strings = {
     voiceLabel: "voz",
     voiceSwitchAria: "Trocar voz de leitura",
     voiceSystemDefault: "Padrão do sistema",
+    fileGroupLabel: "Arquivo",
+    prefsGroupLabel: "Preferências",
     actionLabels: {
       deleteWord: "apaga a última palavra",
       deleteSentence: "apaga a última frase",
@@ -581,6 +589,8 @@ export const strings = {
     voiceLabel: "Stimme",
     voiceSwitchAria: "Vorlesestimme wechseln",
     voiceSystemDefault: "Systemstandard",
+    fileGroupLabel: "Datei",
+    prefsGroupLabel: "Einstellungen",
     actionLabels: {
       deleteWord: "löscht das letzte Wort",
       deleteSentence: "löscht den letzten Satz",
@@ -700,6 +710,8 @@ export const strings = {
     voiceLabel: "voce",
     voiceSwitchAria: "Cambia voce di lettura",
     voiceSystemDefault: "Predefinita di sistema",
+    fileGroupLabel: "File",
+    prefsGroupLabel: "Preferenze",
     actionLabels: {
       deleteWord: "cancella l'ultima parola",
       deleteSentence: "cancella l'ultima frase",
@@ -814,6 +826,8 @@ export const strings = {
     voiceLabel: "语音",
     voiceSwitchAria: "切换朗读语音",
     voiceSystemDefault: "系统默认",
+    fileGroupLabel: "文件",
+    prefsGroupLabel: "偏好设置",
     actionLabels: {
       deleteWord: "删除最后一个词",
       deleteSentence: "删除最后一句",
@@ -930,6 +944,8 @@ export const strings = {
     voiceLabel: "音声",
     voiceSwitchAria: "読み上げ音声を切り替え",
     voiceSystemDefault: "システムのデフォルト",
+    fileGroupLabel: "ファイル",
+    prefsGroupLabel: "設定",
     actionLabels: {
       deleteWord: "最後の単語を削除します",
       deleteSentence: "最後の文を削除します",

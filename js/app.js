@@ -92,6 +92,10 @@ function initApp() {
     fullscreenBtn: document.getElementById("fullscreenBtn"),
     topbarToggle: document.getElementById("topbarToggle"),
     actions: document.getElementById("actions"),
+    fileGroupToggle: document.getElementById("fileGroupToggle"),
+    fileGroup: document.getElementById("fileGroup"),
+    prefsGroupToggle: document.getElementById("prefsGroupToggle"),
+    prefsGroup: document.getElementById("prefsGroup"),
     saveState: document.getElementById("saveState"),
     copyBtn: document.getElementById("copyBtn"),
     readBtn: document.getElementById("readBtn"),
@@ -130,6 +134,8 @@ function initApp() {
     variantTag: "map-pin",
     themeBtn: "palette",
     voiceBtn: "audio-lines",
+    fileGroupToggle: "folder",
+    prefsGroupToggle: "sliders-horizontal",
     fullscreenBtn: "maximize",
     micBtn: "mic",
     docsNew: "plus",
@@ -488,6 +494,8 @@ function initApp() {
     setTitle(els.docsBtn, t.docs);
     setTitle(els.helpBtn, t.help);
     setTitle(els.copyBtn, t.copy);
+    setTitle(els.fileGroupToggle, t.fileGroupLabel);
+    setTitle(els.prefsGroupToggle, t.prefsGroupLabel);
     setTitle(els.readBtn, reader.speaking ? t.stop : t.read);
     setTitle(els.exportBtn, t.export);
     updateFullscreenBtn();
@@ -781,6 +789,22 @@ function initApp() {
     refreshVoices();
     window.speechSynthesis.onvoiceschanged = refreshVoices;
   }
+
+  // --- Grupos de acciones ("Archivo"/"Preferencias") ---
+  // Mismo createDropdown que Exportar/Idioma/Tema/etc., pero el
+  // "menú" es una fila de botones-ícono ya existentes en vez de una
+  // lista armada por renderMenuItems (ver index.html). "Archivo" se
+  // cierra solo al elegir una acción (Documentos/Comandos/Copiar/un
+  // formato de Exportar) — son todas acciones de una vez. "Preferencias"
+  // NO se cierra sola al elegir un idioma/tema/voz: el usuario suele
+  // querer ajustar varias seguidas; se cierra con click afuera, Escape
+  // o el propio botón, igual que cualquier otro desplegable.
+  const fileGroupDropdown = createDropdown({ toggle: els.fileGroupToggle, menu: els.fileGroup, returnFocusTo: els.editor });
+  createDropdown({ toggle: els.prefsGroupToggle, menu: els.prefsGroup, returnFocusTo: els.editor });
+  els.docsBtn.addEventListener("click", () => fileGroupDropdown.close());
+  els.helpBtn.addEventListener("click", () => fileGroupDropdown.close());
+  els.copyBtn.addEventListener("click", () => fileGroupDropdown.close());
+  els.exportMenu.addEventListener("click", () => fileGroupDropdown.close());
 
   // --- Acordeón de acciones (pantallas chicas) ---
   els.topbarToggle.addEventListener("click", () => {
