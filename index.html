@@ -250,8 +250,7 @@
       </div>
 
       <div class="hud-meta">
-        <span class="count" id="count" data-tip="palabras">0</span>
-        <span class="count" id="charCount" data-tip="caracteres">0</span>
+        <span class="count" id="count" data-tip="palabras">0</span><span class="count-sep" aria-hidden="true">·</span><span class="count" id="charCount" data-tip="caracteres">0</span>
       </div>
 
       <div class="mic-level" id="micLevel" aria-hidden="true">
@@ -260,9 +259,12 @@
 
       <div class="hud-buttons">
         <button class="action icon-btn" id="readBtn" type="button" data-tip="Leer" aria-label="Leer"></button>
-        <button class="mic icon-btn" id="micBtn" type="button" aria-pressed="false" data-tip="Dictar" aria-label="Dictar"></button>
       </div>
     </footer>
+
+    <!-- Dictar flota sobre la hoja, fuera de la barra inferior: sigue
+         siendo la acción principal aunque el .hud se haya achicado. -->
+    <button class="mic mic-float icon-btn" id="micBtn" type="button" aria-pressed="false" data-tip="Dictar" aria-label="Dictar"></button>
   </div>
 
   <!-- Hoja imprimible para "PDF": la arma export/print.js justo antes de

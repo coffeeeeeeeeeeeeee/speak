@@ -39,7 +39,7 @@
   /* Métricas */
   --measure: 38rem;     /* ancho de columna de lectura (~68ch) */
   --page-width: 46rem;  /* ancho de la hoja (texto + márgenes internos) */
-  --hud-h: 3.25rem;
+  --hud-h: 2.35rem;
   --top-h: 2.75rem;
 }
 
@@ -474,16 +474,23 @@ body {
   flex: 1 1 auto;
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 0.35rem;
 }
 /* Solo el número: la etiqueta ("palabras"/"caracteres") vive en el
    title (tooltip nativo), no como texto visible — ver applyUiStrings()
-   en app.js. */
+   en app.js. Van pegadas con un separador ("120 · 640") en vez de dos
+   grupos con su propio espaciado, para que la barra ocupe menos ancho
+   y pueda bajar de altura sin verse apretada. */
 .count {
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--bar-ink, var(--ink-soft));
   letter-spacing: 0.03em;
+}
+.count-sep {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ghost);
 }
 
 /* ---------- Medidor de nivel de audio ---------- */
@@ -508,7 +515,6 @@ body {
   transition: transform 0.08s linear;
 }
 
-/* Agrupa "Leer" y "Dictar": Leer queda al lado del botón principal. */
 .hud-buttons {
   flex: 0 0 auto;
   display: flex;
@@ -517,6 +523,34 @@ body {
 }
 
 /* ---------- Botón de micrófono ---------- */
+/* Flota sobre la hoja en vez de vivir dentro de .hud: sigue siendo la
+   acción principal de la app aunque la barra inferior se haya
+   achicado. z-index por debajo de los tooltips (60) y por encima del
+   resto del contenido de la hoja. */
+.mic-float {
+  position: fixed;
+  right: 1.5rem;
+  bottom: calc(var(--hud-h) + 1.1rem);
+  width: 3.4rem;
+  height: 3.4rem;
+  box-shadow: 0 0.5rem 1.4rem rgba(27, 28, 30, 0.28);
+  z-index: 50;
+}
+.mic-float .icon { width: 1.35rem; height: 1.35rem; }
+/* El tooltip de un botón fixed no tiene un .hud/.actions "de al lado"
+   que lo empuje del borde — se alinea solo (ver [data-tip] genérico),
+   pero como el propio botón ya está pegado al borde derecho, hay que
+   sumarlo al mismo grupo de tooltips alineados a la derecha. */
+.mic-float[data-tip]::before {
+  left: auto;
+  right: 0;
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 0.45rem;
+  transform: none;
+}
+
 .mic {
   flex: 0 0 auto;
   display: inline-flex;
@@ -554,6 +588,19 @@ body {
   opacity: 0.9;
 }
 .mic:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Al flotar sobre el papel/lienzo en vez de vivir dentro de una barra
+   con su propio color de fondo, el relleno neutro (--line) de arriba
+   se funde con el fondo en temas donde --line/--canvas/--paper son
+   parecidos entre sí (Sepia, Naturaleza, Alto contraste: ahí "Dictar"
+   quedaba invisible). En reposo usa el color propio a pleno (mismo
+   aspecto que ya tenía el estado :hover), que por diseño es siempre un
+   acento saturado distinto de los neutros de la hoja. */
+.mic-float {
+  background: var(--mic, var(--accent));
+  color: #fff;
+}
+.mic-float:hover { opacity: 0.9; }
 
 /* Estado "activo" genérico para botones de ícono que alternan on/off
    (ej. "Leer" mientras lee) — más sutil que .mic, que es la acción
@@ -989,6 +1036,7 @@ body {
   .hud { gap: 0.6rem; padding: 0 1rem; }
   .hud-status { min-width: auto; }
   .mic-level { display: none; } /* prioridad al botón de dictar */
+  .mic-float { right: 1rem; width: 3rem; height: 3rem; }
   .help-panel, .docs-panel, .theme-editor-panel { padding: 1.25rem; }
   .cmd { flex-direction: column; gap: 0.15rem; }
   .cmd-desc { text-align: left; }
