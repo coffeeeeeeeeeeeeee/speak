@@ -63,7 +63,7 @@ export function paragraphBlock(p) {
   return { tag, classAttr, styleAttr, html: paragraphHtml(body) };
 }
 
-export function toHtml(text, { lang = "es", title = "speakly" } = {}) {
+export function toHtml(text, { lang = "es", title = "Bossa Studio" } = {}) {
   const paragraphs = splitParagraphs(text);
   const body = paragraphs.length
     ? paragraphs

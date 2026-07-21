@@ -16,7 +16,7 @@
 import { themes } from "./themes.js";
 import { loadCustomTheme, saveCustomTheme } from "./customTheme.js";
 
-const KEY = "speakly:theme";
+const KEY = "bossa:theme";
 const CUSTOM_ID = "custom";
 const CUSTOM_LABEL = "Personalizado";
 

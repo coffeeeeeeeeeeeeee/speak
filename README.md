@@ -1,4 +1,4 @@
-# speakly
+# Bossa Studio
 
 Voz a texto para escritores. Una hoja infinita a pantalla completa donde se
 transcribe en vivo lo que decís por el micrófono, con comandos verbales de

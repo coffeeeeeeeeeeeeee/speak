@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>speakly — voz a texto para escritores</title>
+  <title>Bossa Studio — voz a texto para escritores</title>
 
   <!-- Aplica el tema guardado ANTES del primer pintado, para que no
        parpadee del tema del sistema al elegido. Es un adelanto chico
@@ -24,12 +24,12 @@
         natural: ["#E7F0DC", "#16240F"],
       };
       try {
-        var t = localStorage.getItem("speakly:theme");
+        var t = localStorage.getItem("bossa:theme");
         var pair = PAPER_INK[t];
         // "custom" no tiene un par fijo acá (es dato del usuario, no de
         // diseño): lo leemos de su propio registro si ya existe uno.
         if (!pair && t === "custom") {
-          var saved = JSON.parse(localStorage.getItem("speakly:customTheme") || "null");
+          var saved = JSON.parse(localStorage.getItem("bossa:customTheme") || "null");
           if (saved) pair = [saved.paper, saved.ink];
         }
         if (pair) {
@@ -83,7 +83,7 @@
           </g>
           <circle cx="18.7" cy="5.3" r="1.5" style="fill: var(--accent)" />
         </svg>
-        speakly
+        Bossa Studio
       </span>
       <button
         class="action icon-btn topbar-toggle"

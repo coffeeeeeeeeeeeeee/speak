@@ -82,7 +82,7 @@ export const themes = {
       "accent-dim": "rgba(255, 47, 212, 0.18)",
       danger: "#FF4D6D",
       bar: "#FF2FD4", // barras (topbar/hud): magenta pleno
-      "bar-ink": "#FFFFFF", // texto de las barras (ej. "speakly", contador): blanco
+      "bar-ink": "#FFFFFF", // texto de las barras (ej. "Bossa Studio", contador): blanco
       "bar-btn": "#00E5FF", // fondo de los botones: cian
       "bar-btn-hover": "#66F2FF", // variante clara para el hover
       "bar-btn-ink": "#101B4D", // ícono de los botones: mismo azul oscuro que la letra de la hoja (--ink)

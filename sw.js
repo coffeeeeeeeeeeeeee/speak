@@ -1,6 +1,6 @@
 // ============================================================
 // sw.js
-// Service worker mínimo para instalar speakly como app y poder
+// Service worker mínimo para instalar Bossa Studio como app y poder
 // abrirla sin conexión (el dictado en sí siempre necesita internet:
 // SpeechRecognition manda el audio a un servicio en la nube).
 //
@@ -11,7 +11,7 @@
 // ============================================================
 
 const CACHE_VERSION = "v1";
-const CACHE_NAME = `speakly-${CACHE_VERSION}`;
+const CACHE_NAME = `bossa-${CACHE_VERSION}`;
 
 const PRECACHE_URLS = [
   "./",

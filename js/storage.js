@@ -8,7 +8,7 @@
 // persistencia.
 // ============================================================
 
-const KEY = "speakly:document";
+const KEY = "bossa:document";
 
 export class Storage {
   constructor({ key = KEY, debounceMs = 600 } = {}) {
@@ -20,7 +20,7 @@ export class Storage {
 
   _check() {
     try {
-      const probe = "__speakly_probe__";
+      const probe = "__bossa_probe__";
       localStorage.setItem(probe, "1");
       localStorage.removeItem(probe);
       return true;

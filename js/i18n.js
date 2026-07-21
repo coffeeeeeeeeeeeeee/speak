@@ -10,7 +10,7 @@
 
 export const strings = {
   es: {
-    title: "speakly — voz a texto para escritores",
+    title: "Bossa Studio — voz a texto para escritores",
     unsupported:
       "Tu navegador no soporta el reconocimiento de voz. Usá Chrome o Edge de escritorio para dictar.",
     langLabel: "idioma",
@@ -124,7 +124,7 @@ export const strings = {
   },
 
   en: {
-    title: "speakly — voice to text for writers",
+    title: "Bossa Studio — voice to text for writers",
     unsupported:
       "Your browser doesn't support speech recognition. Use desktop Chrome or Edge to dictate.",
     langLabel: "language",
@@ -238,7 +238,7 @@ export const strings = {
   },
 
   fr: {
-    title: "speakly — dictée vocale pour écrivains",
+    title: "Bossa Studio — dictée vocale pour écrivains",
     unsupported:
       "Votre navigateur ne prend pas en charge la reconnaissance vocale. " +
       "Utilisez Chrome ou Edge sur ordinateur pour dicter.",
@@ -355,7 +355,7 @@ export const strings = {
   },
 
   pt: {
-    title: "speakly — voz em texto para escritores",
+    title: "Bossa Studio — voz em texto para escritores",
     unsupported:
       "Seu navegador não é compatível com o reconhecimento de voz. Use o " +
       "Chrome ou o Edge no computador para ditar.",
@@ -471,7 +471,7 @@ export const strings = {
   },
 
   de: {
-    title: "speakly — Diktieren für Schreibende",
+    title: "Bossa Studio — Diktieren für Schreibende",
     unsupported:
       "Ihr Browser unterstützt keine Spracherkennung. Verwenden Sie Chrome " +
       "oder Edge am Computer zum Diktieren.",
@@ -588,7 +588,7 @@ export const strings = {
   },
 
   it: {
-    title: "speakly — voce in testo per chi scrive",
+    title: "Bossa Studio — voce in testo per chi scrive",
     unsupported:
       "Il tuo browser non supporta il riconoscimento vocale. Usa Chrome o " +
       "Edge da computer per dettare.",
@@ -705,7 +705,7 @@ export const strings = {
   },
 
   zh: {
-    title: "speakly — 面向写作者的语音转文字",
+    title: "Bossa Studio — 面向写作者的语音转文字",
     unsupported: "你的浏览器不支持语音识别，请在电脑上使用 Chrome 或 Edge 进行口述。",
     langLabel: "语言",
     langSwitchAria: "切换口述语言",
@@ -817,7 +817,7 @@ export const strings = {
   },
 
   ja: {
-    title: "speakly — 書き手のための音声入力",
+    title: "Bossa Studio — 書き手のための音声入力",
     unsupported: "お使いのブラウザは音声認識に対応していません。ディクテーションにはパソコンの Chrome か Edge を使ってください。",
     langLabel: "言語",
     langSwitchAria: "ディクテーション言語を切り替え",

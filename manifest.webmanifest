@@ -1,6 +1,6 @@
 {
-  "name": "speakly — voz a texto para escritores",
-  "short_name": "speakly",
+  "name": "Bossa Studio — voz a texto para escritores",
+  "short_name": "Bossa Studio",
   "description": "Dictado por voz con comandos hablados, en 8 idiomas, con exportación a varios formatos.",
   "start_url": "./index.html",
   "scope": "./",

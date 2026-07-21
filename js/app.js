@@ -173,12 +173,12 @@ function initApp() {
 
   // --- Idioma activo: familia (léxico/interfaz) + variante regional
   // (solo cambia el código que recibe SpeechRecognition). Persistidos
-  // por separado: la variante exacta ("speakly:lang") y, por familia,
-  // la última variante elegida ("speakly:variants"), para que volver a
+  // por separado: la variante exacta ("bossa:lang") y, por familia,
+  // la última variante elegida ("bossa:variants"), para que volver a
   // un idioma no resetee la región que ya habías elegido ahí. ---
   const familyKeys = Object.keys(config.families);
-  const langStorage = new Storage({ key: "speakly:lang" });
-  const variantStorage = new Storage({ key: "speakly:variants" });
+  const langStorage = new Storage({ key: "bossa:lang" });
+  const variantStorage = new Storage({ key: "bossa:variants" });
 
   function loadVariantPrefs() {
     try {

@@ -6,17 +6,17 @@
 // la vez. El título se deriva automáticamente de la primera línea no
 // vacía del texto (no hay rename manual, para mantener esto simple).
 //
-// Migra en el primer uso el autoguardado de la versión anterior de
-// speakly (un solo documento en "speakly:document") a un documento
-// real de esta lista, así nadie pierde lo que ya tenía escrito.
+// Migra en el primer uso el autoguardado de la versión de un solo
+// documento (bajo "bossa:document") a un documento real de esta
+// lista, así nadie pierde lo que ya tenía escrito.
 // ============================================================
 
-const INDEX_KEY = "speakly:docs";
-const CURRENT_KEY = "speakly:currentDoc";
-const LEGACY_KEY = "speakly:document";
+const INDEX_KEY = "bossa:docs";
+const CURRENT_KEY = "bossa:currentDoc";
+const LEGACY_KEY = "bossa:document";
 
 function docKey(id) {
-  return `speakly:doc:${id}`;
+  return `bossa:doc:${id}`;
 }
 
 function newId() {
@@ -30,7 +30,7 @@ export function titleFrom(text) {
 
 function storageAvailable() {
   try {
-    const probe = "__speakly_probe__";
+    const probe = "__bossa_probe__";
     localStorage.setItem(probe, "1");
     localStorage.removeItem(probe);
     return true;

@@ -38,7 +38,7 @@ test("EDITABLE_KEYS: son exactamente los seis colores que elige el usuario", () 
 });
 
 test("saveCustomTheme/loadCustomTheme: guarda y relee del localStorage", () => {
-  localStorage.removeItem("speakly:customTheme");
+  localStorage.removeItem("bossa:customTheme");
   assertEqual(loadCustomTheme(), null);
   const saved = saveCustomTheme({
     paper: "#FFFFFF",
@@ -52,5 +52,5 @@ test("saveCustomTheme/loadCustomTheme: guarda y relee del localStorage", () => {
   assertTrue(reloaded !== null, "debería haber quedado guardado");
   assertEqual(reloaded, saved);
   assertEqual(reloaded.paper, "#FFFFFF");
-  localStorage.removeItem("speakly:customTheme");
+  localStorage.removeItem("bossa:customTheme");
 });

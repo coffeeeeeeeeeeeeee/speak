@@ -48,7 +48,7 @@ export async function copyText(text) {
 function defaultName() {
   const d = new Date();
   const p = (n) => String(n).padStart(2, "0");
-  return `speakly-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(
+  return `bossa-${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(
     d.getHours()
   )}${p(d.getMinutes())}.txt`;
 }

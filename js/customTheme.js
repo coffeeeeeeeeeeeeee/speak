@@ -8,7 +8,7 @@
 // elegir 9+ colores para terminar con un tema coherente.
 // ============================================================
 
-const KEY = "speakly:customTheme";
+const KEY = "bossa:customTheme";
 
 // Los únicos colores que el usuario elige a mano en el editor de tema.
 export const EDITABLE_KEYS = ["paper", "canvas", "ink", "accent", "mic", "danger"];
