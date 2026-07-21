@@ -54,13 +54,22 @@ export class Reader {
     this.onState = onState || (() => {});
     this.onBoundary = onBoundary || (() => {});
     this._timer = null;
-    this.voice = null; // null = voz por defecto del navegador para `lang`
+    this.voiceURI = null; // null = voz por defecto del navegador para `lang`
   }
 
   // `voice` es un SpeechSynthesisVoice de getVoices(), o null para
-  // volver a la voz por defecto del sistema para el idioma leído.
+  // volver a la voz por defecto del sistema para el idioma leído. Se
+  // guarda solo su identificador (voiceURI), no el objeto en sí: si el
+  // navegador vuelve a poblar la lista de voces entre que se elige acá
+  // y que se llama a speak() (pasa seguido — getVoices() se recarga
+  // sola, sobre todo la primera vez tras el evento `voiceschanged`),
+  // ese objeto SpeechSynthesisVoice queda "viejo" y Chrome directamente
+  // no dice nada al pedirle leer con él: cancela en silencio, sin
+  // disparar ni onstart ni onerror, así que ni la lectura ni el error
+  // se notaban. Buscar el voiceURI en getVoices() recién al hablar
+  // evita depender de esa referencia guardada.
   setVoice(voice) {
-    this.voice = voice || null;
+    this.voiceURI = voice ? voice.voiceURI : null;
   }
 
   speak(text, lang) {
@@ -68,7 +77,16 @@ export class Reader {
     this.stop();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
-    if (this.voice) u.voice = this.voice;
+    if (this.voiceURI) {
+      const voice = getVoices().find((v) => v.voiceURI === this.voiceURI);
+      // Si la voz elegida ya no existe (lista recargada, dispositivo
+      // distinto), sigue con la voz por defecto de `lang` en vez de
+      // quedarse muda.
+      if (voice) {
+        u.voice = voice;
+        u.lang = voice.lang;
+      }
+    }
 
     let realBoundarySeen = false;
     u.onboundary = (e) => {
