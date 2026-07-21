@@ -8,9 +8,7 @@
 
 import { iconMarkup } from "./icons.js";
 
-export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate, onRemove }) {
-  let lastFocus = null;
-
+export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate, onRemove, returnFocusTo }) {
   function fmtDate(ts) {
     return new Date(ts).toLocaleString(undefined, {
       day: "2-digit",
@@ -22,9 +20,10 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
 
   function build(currentId) {
     els.title.textContent = t.docsTitle;
-    els.newBtn.title = t.docsNew;
+    els.newBtn.dataset.tip = t.docsNew;
     els.newBtn.setAttribute("aria-label", t.docsNew);
     els.closeBtn.setAttribute("aria-label", t.docsCloseAria);
+    els.closeBtn.dataset.tip = t.docsCloseAria;
 
     els.list.textContent = "";
     const docsList = store.list();
@@ -76,7 +75,6 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
 
   function open(currentId) {
     build(currentId);
-    lastFocus = document.activeElement;
     els.overlay.hidden = false;
     els.closeBtn.focus();
     document.addEventListener("keydown", onKeydown, true);
@@ -85,7 +83,9 @@ export function createDocsPanel({ store, t, els, getCurrentId, onOpen, onCreate,
   function close() {
     els.overlay.hidden = true;
     document.removeEventListener("keydown", onKeydown, true);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    // El cursor siempre vuelve a la hoja al cerrar, no a lo que
+    // estuviera enfocado antes de abrir.
+    if (returnFocusTo && returnFocusTo.focus) returnFocusTo.focus();
   }
 
   function isOpen() {

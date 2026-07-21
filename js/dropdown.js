@@ -2,12 +2,16 @@
 // dropdown.js
 // Comportamiento accesible común a los menús desplegables del
 // encabezado (Exportar, Idioma, Región, Tema): abre bajo el botón,
-// cierra con click afuera o Escape, devuelve el foco al botón al
-// cerrar. Cada menú arma su propia lista de opciones (ver
-// renderMenuItems), esto solo maneja abrir/cerrar.
+// cierra con click afuera o Escape. Cada menú arma su propia lista de
+// opciones (ver renderMenuItems), esto solo maneja abrir/cerrar.
 // ============================================================
 
-export function createDropdown({ toggle, menu }) {
+/** `returnFocusTo`, si viene, es a quién vuelve el foco al cerrar en
+ * vez del elemento enfocado antes de abrir (comportamiento estándar de
+ * diálogo/menú accesible) — esta app lo usa para que el cursor
+ * siempre vuelva a la hoja de escritura pase lo que pase, no al botón
+ * que abrió el menú. */
+export function createDropdown({ toggle, menu, returnFocusTo }) {
   let isOpen = false;
   let lastFocus = null;
 
@@ -28,7 +32,8 @@ export function createDropdown({ toggle, menu }) {
     toggle.setAttribute("aria-expanded", "false");
     document.removeEventListener("click", onOutsideClick, true);
     document.removeEventListener("keydown", onKeydown, true);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    const target = returnFocusTo || lastFocus;
+    if (target && target.focus) target.focus();
   }
 
   function toggleOpen() {

@@ -16,8 +16,7 @@ function groupByValue(map) {
   return out;
 }
 
-export function createHelp({ lexicon, t, families, els }) {
-  let lastFocus = null;
+export function createHelp({ lexicon, t, families, els, returnFocusTo }) {
   build();
   wire();
 
@@ -31,6 +30,7 @@ export function createHelp({ lexicon, t, families, els }) {
     els.title.textContent = t.helpTitle;
     els.intro.innerHTML = t.helpIntroHtml;
     els.closeBtn.setAttribute("aria-label", t.helpCloseAria);
+    els.closeBtn.dataset.tip = t.helpCloseAria;
 
     const alignLabels = {
       left: t.editAlignLeft,
@@ -94,7 +94,6 @@ export function createHelp({ lexicon, t, families, els }) {
   }
 
   function open() {
-    lastFocus = document.activeElement;
     els.overlay.hidden = false;
     els.closeBtn.focus();
     document.addEventListener("keydown", onKeydown, true);
@@ -103,7 +102,10 @@ export function createHelp({ lexicon, t, families, els }) {
   function close() {
     els.overlay.hidden = true;
     document.removeEventListener("keydown", onKeydown, true);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    // El cursor siempre vuelve a la hoja al cerrar, no a lo que
+    // estuviera enfocado antes de abrir — así queda listo para seguir
+    // dictando/escribiendo pase lo que pase.
+    if (returnFocusTo && returnFocusTo.focus) returnFocusTo.focus();
   }
 
   function isOpen() {

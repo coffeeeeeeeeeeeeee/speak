@@ -11,13 +11,12 @@ import { EDITABLE_KEYS } from "./customTheme.js";
 
 const HEX_RE = /^#[0-9a-fA-F]{6}$/;
 
-export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
-  let lastFocus = null;
-
+export function createThemeEditor({ getT, els, getPrefillColors, onSave, returnFocusTo }) {
   function build() {
     const t = getT();
     els.title.textContent = t.themeEditorTitle;
     els.closeBtn.setAttribute("aria-label", t.themeEditorCloseAria);
+    els.closeBtn.dataset.tip = t.themeEditorCloseAria;
     els.saveBtn.textContent = t.themeEditorSave;
     for (const key of EDITABLE_KEYS) {
       const label = els.form.querySelector(`[data-color-label="${key}"]`);
@@ -62,7 +61,6 @@ export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
   function open() {
     build();
     prefill();
-    lastFocus = document.activeElement;
     els.overlay.hidden = false;
     els.closeBtn.focus();
     document.addEventListener("keydown", onKeydown, true);
@@ -71,7 +69,9 @@ export function createThemeEditor({ getT, els, getPrefillColors, onSave }) {
   function close() {
     els.overlay.hidden = true;
     document.removeEventListener("keydown", onKeydown, true);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    // El cursor siempre vuelve a la hoja al cerrar, no a lo que
+    // estuviera enfocado antes de abrir.
+    if (returnFocusTo && returnFocusTo.focus) returnFocusTo.focus();
   }
 
   function isOpen() {

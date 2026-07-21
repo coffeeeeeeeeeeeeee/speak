@@ -8,8 +8,8 @@
 
 import { createDropdown } from "../dropdown.js";
 
-export function createExportMenu({ formats, getText, els }) {
-  const dropdown = createDropdown({ toggle: els.toggle, menu: els.menu });
+export function createExportMenu({ formats, getText, els, returnFocusTo }) {
+  const dropdown = createDropdown({ toggle: els.toggle, menu: els.menu, returnFocusTo });
 
   function build(t) {
     els.list.textContent = "";

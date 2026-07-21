@@ -244,6 +244,45 @@ function initApp() {
     },
   });
 
+  // --- Motor de comandos ---
+  // Declarado ANTES de cargar el documento guardado (más abajo): si
+  // hay texto guardado, editor.setText() dispara onChange() de forma
+  // síncrona ya acá arriba (ver Editor#_render), y onChange() llama a
+  // updateUndoRedoState(), que usa engine — moverlo después de cargar
+  // el documento rompía con un ReferenceError de TDZ apenas alguien
+  // tenía algo guardado (con la hoja vacía en pruebas nunca se
+  // disparaba, por eso no se veía en desarrollo). Mismo patrón de bug
+  // que CUSTOMIZE_KEY/saveStateKind antes en este archivo.
+  const history = new History(editor);
+  let parser = createParser(LEXICONS[family().lexicon]);
+  const engine = new CommandEngine({
+    editor,
+    history,
+    parser,
+    onSwitchLanguage: (familyCode) => switchFamily(familyCode),
+  });
+
+  // Deshacer/rehacer en la barra de formato: mismo historial que
+  // Ctrl+Z/Ctrl+Shift+Z y «deshacer»/«rehacer» por voz (history.js vía
+  // engine). Se deshabilitan cuando no hay nada que deshacer/rehacer —
+  // updateUndoRedoState() se llama en cada cambio de contenido y de
+  // documento, no solo al hacer clic.
+  function updateUndoRedoState() {
+    els.toolbarUndoBtn.disabled = !engine.canUndo();
+    els.toolbarRedoBtn.disabled = !engine.canRedo();
+  }
+  els.toolbarUndoBtn.addEventListener("click", () => {
+    engine.undo();
+    updateUndoRedoState();
+    editor.focus();
+  });
+  els.toolbarRedoBtn.addEventListener("click", () => {
+    engine.redo();
+    updateUndoRedoState();
+    editor.focus();
+  });
+  updateUndoRedoState();
+
   const savedText = docs.available ? docs.load(currentDocId) : "";
   if (savedText) editor.setText(savedText);
   setSaveState(docs.available ? (savedText ? "saved" : "blank") : "none");
@@ -297,37 +336,6 @@ function initApp() {
     editor.focus();
   });
 
-  // --- Motor de comandos ---
-  const history = new History(editor);
-  let parser = createParser(LEXICONS[family().lexicon]);
-  const engine = new CommandEngine({
-    editor,
-    history,
-    parser,
-    onSwitchLanguage: (familyCode) => switchFamily(familyCode),
-  });
-
-  // Deshacer/rehacer en la barra de formato: mismo historial que
-  // Ctrl+Z/Ctrl+Shift+Z y «deshacer»/«rehacer» por voz (history.js vía
-  // engine). Se deshabilitan cuando no hay nada que deshacer/rehacer —
-  // updateUndoRedoState() se llama en cada cambio de contenido y de
-  // documento, no solo al hacer clic.
-  function updateUndoRedoState() {
-    els.toolbarUndoBtn.disabled = !engine.canUndo();
-    els.toolbarRedoBtn.disabled = !engine.canRedo();
-  }
-  els.toolbarUndoBtn.addEventListener("click", () => {
-    engine.undo();
-    updateUndoRedoState();
-    editor.focus();
-  });
-  els.toolbarRedoBtn.addEventListener("click", () => {
-    engine.redo();
-    updateUndoRedoState();
-    editor.focus();
-  });
-  updateUndoRedoState();
-
   // --- Panel de documentos ---
   function loadDocument(id) {
     currentDocId = id;
@@ -361,6 +369,7 @@ function initApp() {
     onOpen: loadDocument,
     onCreate: createDocument,
     onRemove: removeDocument,
+    returnFocusTo: els.editor,
     els: {
       overlay: els.docs,
       list: els.docsList,
@@ -376,6 +385,7 @@ function initApp() {
     lexicon: LEXICONS[family().lexicon],
     t,
     families: config.families,
+    returnFocusTo: els.editor,
     els: {
       overlay: els.help,
       body: els.helpBody,
@@ -394,6 +404,7 @@ function initApp() {
   const exportMenu = createExportMenu({
     formats,
     getText: () => tidy(editor.getText()),
+    returnFocusTo: els.editor,
     els: { toggle: els.exportBtn, menu: els.exportMenu, list: els.exportMenu },
   });
   exportMenu.build(t);
@@ -444,6 +455,7 @@ function initApp() {
     } else {
       reader.speak(editor.getText(), variant().code);
     }
+    editor.focus();
   });
 
   // --- Textos de interfaz (todo lo que no depende del léxico de comandos) ---
@@ -469,11 +481,11 @@ function initApp() {
     setTitle(els.readBtn, reader.speaking ? t.stop : t.read);
     setTitle(els.exportBtn, t.export);
     updateFullscreenBtn();
-    els.editor.placeholder = t.editorPlaceholder;
     els.editor.setAttribute("aria-label", t.editorAriaLabel);
     els.count.dataset.tip = t.wordsLabel;
     els.charCount.dataset.tip = t.charsLabel;
     els.toastClose.setAttribute("aria-label", t.toastCloseAria);
+    els.toastClose.dataset.tip = t.toastCloseAria;
     updateToolbarToggleTitle();
     setTitle(els.fmtBold, t.editBold);
     setTitle(els.fmtItalic, t.editItalic);
@@ -506,7 +518,7 @@ function initApp() {
 
   // --- Selector de idioma: desplegable con todas las familias, igual
   // que "Exportar" (antes ciclaba es→en→fr→...→es con cada click). ---
-  const langDropdown = createDropdown({ toggle: els.langTag, menu: els.langMenu });
+  const langDropdown = createDropdown({ toggle: els.langTag, menu: els.langMenu, returnFocusTo: els.editor });
   function buildLangMenu() {
     renderMenuItems(
       els.langMenu,
@@ -527,7 +539,7 @@ function initApp() {
 
   // --- Selector de variante regional: desplegable con las variantes
   // de la familia activa (se reconstruye al cambiar de idioma). ---
-  const variantDropdown = createDropdown({ toggle: els.variantTag, menu: els.variantMenu });
+  const variantDropdown = createDropdown({ toggle: els.variantTag, menu: els.variantMenu, returnFocusTo: els.editor });
   function buildVariantMenu() {
     renderMenuItems(
       els.variantMenu,
@@ -617,7 +629,10 @@ function initApp() {
     els.toast.hidden = true;
     clearTimeout(toastTimer);
   }
-  els.toastClose.addEventListener("click", hideToast);
+  els.toastClose.addEventListener("click", () => {
+    hideToast();
+    editor.focus();
+  });
 
   // --- Tema: desplegable con todos los temas, igual que "Exportar"
   // (antes ciclaba con cada click). Al final del menú siempre hay una
@@ -627,7 +642,7 @@ function initApp() {
     els.themeColorMeta.content = themes[currentTheme()].colors.paper;
   }
   applyThemeColorMeta();
-  const themeDropdown = createDropdown({ toggle: els.themeBtn, menu: els.themeMenu });
+  const themeDropdown = createDropdown({ toggle: els.themeBtn, menu: els.themeMenu, returnFocusTo: els.editor });
   function buildThemeMenu() {
     const items = Object.keys(themes).map((id) => ({ key: id, label: themes[id].label }));
     items.push({ key: CUSTOMIZE_KEY, label: t.themeCustomize });
@@ -653,6 +668,7 @@ function initApp() {
   // guardado para la próxima sesión. ---
   const themeEditor = createThemeEditor({
     getT: () => t,
+    returnFocusTo: els.editor,
     els: {
       overlay: els.themeEditor,
       form: els.themeEditorForm,
@@ -684,6 +700,7 @@ function initApp() {
   els.topbarToggle.addEventListener("click", () => {
     const open = els.actions.classList.toggle("is-open");
     els.topbarToggle.setAttribute("aria-expanded", String(open));
+    if (!open) editor.focus();
   });
 
   // --- Pantalla completa ---
@@ -694,6 +711,7 @@ function initApp() {
     const full = isFullscreen();
     setTitle(els.fullscreenBtn, full ? t.exitFullscreen : t.fullscreen);
     swapIcon(els.fullscreenBtn, full ? "minimize" : "maximize");
+    editor.focus();
   }
   els.fullscreenBtn.addEventListener("click", () => {
     if (isFullscreen()) document.exitFullscreen?.();
@@ -706,13 +724,14 @@ function initApp() {
   els.micBtn.addEventListener("click", () => {
     hideToast();
     speech.toggle();
-    if (speech.listening) editor.focus();
+    editor.focus();
   });
 
   // --- Copiar / Exportar (con limpieza de espaciado) ---
   els.copyBtn.addEventListener("click", async () => {
     const ok = await copyText(tidy(editor.getText()));
     showToast(ok ? t.copied : t.copyFailed);
+    editor.focus();
   });
 
   // --- Atajos de teclado ---
