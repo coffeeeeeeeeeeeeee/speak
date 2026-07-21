@@ -14,6 +14,9 @@
 //     mic-active).
 //   - mic: color propio del botón "Dictar" en reposo, distinto del
 //     acento genérico de la interfaz.
+//   - mic-ink: color del ícono de "Dictar" en reposo (flota con relleno
+//     a pleno de "mic"/accent), cuando ese color es muy claro y el
+//     blanco por defecto no alcanzaría de contraste (ej. "matrix").
 //   - mic-active: color de "Dictar" mientras escucha, si un tema
 //     quiere que sea DISTINTO del resaltado general (accent2) — ej.
 //     "neon" deja el amarillo exclusivo de Dictar y usa cian en todo
@@ -173,6 +176,7 @@ export const themes = {
       "accent-dim": "rgba(0, 255, 102, 0.16)",
       danger: "#FF3B3B",
       mic: "#39FF7A",
+      "mic-ink": "#04140A", // el blanco no alcanza de contraste sobre este verde brillante
     },
     fonts: {
       // Mono también en la serif: el look "terminal" es el punto del tema.

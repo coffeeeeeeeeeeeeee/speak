@@ -418,6 +418,26 @@ body {
   overflow: hidden; /* la altura la maneja JS (auto-grow) */
 }
 
+/* Selección nativa del <textarea> real (no el cursor de dictado): la
+   reusa Leer para marcar la palabra que va leyendo (ver
+   Editor#selectRange en editor.js). Como el texto del textarea es
+   transparente, un rectángulo semitransparente del acento del tema
+   alcanza para "iluminar" la zona — color:transparent para que no se
+   note el texto plano de abajo, el que se ve encima sigue siendo el
+   del overlay (con su negrita/cursiva/etc. intactas). */
+/* Separadas a propósito (no en una sola lista con comas): si el
+   navegador no reconoce ::-moz-selection, invalida la regla COMPLETA
+   (así es como falló la primera vez — el rectángulo no se veía en
+   Chrome porque compartía selector con ::-moz-selection). */
+.editor::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: transparent;
+}
+.editor::-moz-selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  color: transparent;
+}
+
 .editor::placeholder {
   color: var(--ghost);
   font-style: italic;
@@ -598,7 +618,10 @@ body {
    acento saturado distinto de los neutros de la hoja. */
 .mic-float {
   background: var(--mic, var(--accent));
-  color: #fff;
+  /* Blanco alcanza de contraste en casi todos los temas, pero no en
+     los que tienen un "mic" muy claro (ej. Matrix, verde brillante) —
+     ahí --mic-ink deja definir un ícono oscuro en su lugar. */
+  color: var(--mic-ink, #fff);
 }
 .mic-float:hover { opacity: 0.9; }
 

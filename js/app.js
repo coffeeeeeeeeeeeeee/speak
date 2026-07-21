@@ -431,6 +431,11 @@ function initApp() {
   // que manda el evento `boundary` son posiciones dentro del string que
   // le pasamos a speak(), y necesitamos que coincidan 1 a 1 con las
   // posiciones reales del <textarea> para poder seleccionar ahí mismo.
+  // Arranca desde el cursor, no siempre desde el principio: a speak()
+  // solo le pasamos el resto del texto desde ahí, y `readOffset` corrige
+  // los índices que manda `boundary` (relativos a ESE recorte) para que
+  // sigan apuntando a la posición real dentro del documento completo.
+  let readOffset = 0;
   const reader = new Reader({
     onState: (state) => {
       const readingNow = state === "reading";
@@ -443,17 +448,19 @@ function initApp() {
     onBoundary: ({ charIndex, charLength }) => {
       if (charIndex == null) return;
       const text = editor.getText();
+      const start = readOffset + charIndex;
       const end = charLength
-        ? charIndex + charLength
-        : wordSpanAt(text, charIndex).end;
-      editor.selectRange(charIndex, Math.min(end, text.length));
+        ? start + charLength
+        : wordSpanAt(text, start).end;
+      editor.selectRange(start, Math.min(end, text.length));
     },
   });
   els.readBtn.addEventListener("click", () => {
     if (reader.speaking) {
       reader.stop();
     } else {
-      reader.speak(editor.getText(), variant().code);
+      readOffset = editor.getCaret();
+      reader.speak(editor.getText().slice(readOffset), variant().code);
     }
     editor.focus();
   });
