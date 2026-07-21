@@ -100,15 +100,14 @@ body {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-family: var(--serif);
-  font-size: 1.05rem;
-  letter-spacing: 0.01em;
   color: var(--bar-ink, var(--ink));
 }
-.brand-icon {
-  width: 1.3rem;
-  height: 1.3rem;
+/* El wordmark ya trae el texto dibujado (ver index.html): el tamaño se
+   fija por altura y el ancho sigue el aspect ratio del viewBox
+   (95.3x24). */
+.brand-logo {
+  height: 1.4rem;
+  width: auto;
   flex: 0 0 auto;
 }
 
